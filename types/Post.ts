@@ -3,6 +3,7 @@ export interface Post {
   frontmatter: frontmatter & {
     [key: string]: any
   }
+  categoryColor: string | null
 }
 
 export type frontmatter = {

@@ -2,28 +2,19 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import { Post } from 'types/Post'
-import CategoryLabel from './CategoryLabel'
 
 type Props = {
   post: Post
 }
 
 const PostCard = ({ post }: Props) => {
-  const colorKey = {
-    JavaScript: 'ring-yellow-600',
-    PHP: 'ring-purple-600',
-    CSS: 'ring-blue-600',
-    Python: 'ring-green-600',
-    Ruby: 'ring-red-600',
-  }
-
-  const ringColor =
-    (colorKey as any)[post.frontmatter.category] || 'ring-gray-600'
-
   return (
     <Link href={`/blog/${post.slug}`} passHref>
       <a
-        className={`w-full px-10 py-6 cursor-pointer mt-6 rounded-lg focus:outline-none ${ringColor} hover:ring-2  hover:ring-offset-2 focus:ring-2  focus:ring-offset-2 transition-all duration-300 ease-in-out`}
+        className={`w-full px-10 py-6 cursor-pointer mt-6 rounded-lg hover-ring focus-ring`}
+        style={{
+          ['--tw-ring-color' as any]: post.categoryColor,
+        }}
       >
         <Image
           src={post.frontmatter.cover_image}
@@ -48,7 +39,20 @@ const PostCard = ({ post }: Props) => {
           <span className="font-light text-gray-600">
             {post.frontmatter.date}
           </span>
-          <CategoryLabel>{post.frontmatter.category}</CategoryLabel>
+
+          <Link
+            href={`/blog/category/${post.frontmatter.category.toLowerCase()}`}
+          >
+            <a
+              className={`rounded-lg px-2 py-1 text-c font-bold focus-ring hover:underline`}
+              style={{
+                ['--tw-ring-color' as any]: post.categoryColor,
+                ['color' as any]: post.categoryColor,
+              }}
+            >
+              {post.frontmatter.category}
+            </a>
+          </Link>
         </div>
         <div className="mt-2">
           <a className="text-xl text-gray-700 font-bold hover:underline">

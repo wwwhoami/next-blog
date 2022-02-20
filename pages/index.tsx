@@ -12,6 +12,7 @@ type Props = {
   posts: {
     slug: string
     frontmatter: frontmatter
+    categoryColor: string | null
   }[]
 }
 
@@ -37,6 +38,14 @@ const Home: NextPage<Props> = ({ posts }) => {
 export default Home
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
+  const colorKey = {
+    JavaScript: '#ca8a04',
+    PHP: '#9333ea',
+    CSS: '#2563eb',
+    Python: '#16a34a',
+    Ruby: '#dc2626',
+  }
+
   const files = fs.readdirSync(path.join('posts'))
 
   const posts = files.map((filename) => {
@@ -50,9 +59,13 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
     const { data } = matter(mardkDownWithMeta)
     const frontmatter = data as frontmatter
 
+    const categoryColor: string | null =
+      (colorKey as any)[frontmatter.category] || null
+
     return {
       slug,
       frontmatter,
+      categoryColor,
     }
   })
 
