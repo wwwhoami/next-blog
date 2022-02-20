@@ -15,7 +15,6 @@ const Header = (props: Props) => {
               alt="logo"
               width={100}
               height={50}
-              // layout="fill"
               className="rounded-xl"
             />
             <span className="text-xl ml-3">NextBlog</span>

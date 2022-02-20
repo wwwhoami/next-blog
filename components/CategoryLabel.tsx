@@ -7,18 +7,20 @@ type Props = {
 
 const CategoryLabel = ({ children }: Props) => {
   const colorKey = {
-    JavaScript: 'bg-yellow-600',
-    PHP: 'bg-purple-600',
-    CSS: 'bg-blue-600',
-    Python: 'bg-green-600',
-    Ruby: 'bg-red-600',
+    JavaScript: 'text-yellow-600',
+    PHP: 'text-purple-600',
+    CSS: 'text-blue-600',
+    Python: 'text-green-600',
+    Ruby: 'text-red-600',
   }
 
-  const bgColor = (colorKey as any)[children] || 'bg-neutral-600'
+  const color = (colorKey as any)[children] || 'text-gray-600'
 
   return (
-    <div className={`px-2 py-1 text-gray-100 font-bold rounded ${bgColor}`}>
-      <Link href={`/blog/category/${children.toLowerCase()}`}>{children}</Link>
+    <div className={`px-2 py-1 text-c font-bold ${color} hover:underline`}>
+      <Link href={`/blog/category/${children.toLowerCase()}`}>
+        <a>#{children}</a>
+      </Link>
     </div>
   )
 }
