@@ -13,42 +13,6 @@
   }
 }
 
-@layer components {
-  .blog-post {
-    @apply text-lg;
-  }
-
-  .blog-post p {
-    @apply my-4 leading-7;
-  }
-
-  .blog-post ul {
-    @apply text-xl leading-8 font-bold my-3 list-disc list-inside;
-  }
-
-  .blog-post ol {
-    @apply text-xl leading-8 font-bold my-3 list-decimal list-inside;
-  }
-
-  .blog-post pre {
-    @apply bg-slate-100 p-5 my-5 mx-0 leading-9 overflow-auto;
-  }
-
-  .blog-post h1 {
-    @apply text-4xl font-bold mt-6;
-  }
-
-  .blog-post h2 {
-    @apply text-3xl font-bold mt-5;
-  }
-  .blog-post h3 {
-    @apply text-2xl font-bold mt-5;
-  }
-  .blog-post h4 {
-    @apply text-xl font-bold mt-5;
-  }
-}
-
 * {
   box-sizing: border-box;
   margin: 0;

@@ -1,18 +1,13 @@
 import Layout from '@/components/Layout'
 import PostCard from '@/components/PostCard'
-import { frontmatter } from '@/types/Post'
+import { Post } from '@/types/Post'
+import { getFrontmatterFromSlug, getSlugs } from '@/utils/mdx'
 import { sortByDate } from '@/utils/post'
-import fs from 'fs'
-import matter from 'gray-matter'
 import type { GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
-import path from 'path'
 
 type Props = {
-  posts: {
-    slug: string
-    frontmatter: frontmatter
-  }[]
+  posts: Post[]
 }
 
 const Home: NextPage<Props> = ({ posts }) => {
@@ -37,24 +32,13 @@ const Home: NextPage<Props> = ({ posts }) => {
 export default Home
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  const files = fs.readdirSync(path.join('posts'))
+  const slugs = await getSlugs()
 
-  const posts = files.map((filename) => {
-    const slug = filename.slice(0, -3)
-
-    const mardkDownWithMeta = fs.readFileSync(
-      path.join('posts', filename),
-      'utf-8'
-    )
-
-    const { data } = matter(mardkDownWithMeta)
-    const frontmatter = data as frontmatter
-
-    return {
-      slug,
-      frontmatter,
-    }
-  })
+  const posts: Post[] = []
+  for (let slug of slugs) {
+    let { frontmatter } = await getFrontmatterFromSlug(slug)
+    posts.push({ frontmatter, slug })
+  }
 
   return {
     props: {

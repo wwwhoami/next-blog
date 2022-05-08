@@ -1,6 +1,6 @@
-import { getCategoryColor } from '@/utils/post'
 import Link from 'next/link'
 import React from 'react'
+import { getCategoryColor } from '@/utils/post'
 
 type Props = {
   category: string

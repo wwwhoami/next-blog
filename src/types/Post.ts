@@ -1,11 +1,11 @@
 export interface Post {
   slug: string
-  frontmatter: frontmatter & {
+  frontmatter: Frontmatter & {
     [key: string]: any
   }
 }
 
-export type frontmatter = {
+export type Frontmatter = {
   title: string
   date: string
   excerpt: string
@@ -13,4 +13,5 @@ export type frontmatter = {
   category: string
   author: string
   author_image: string
+  reading_time: string
 }
