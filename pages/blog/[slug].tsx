@@ -1,6 +1,5 @@
 import CategoryLabel from '@/components/CategoryLabel'
 import Layout from '@/components/Layout'
-import { CustomHeaders } from '@/components/PostArticle/CustomHeaders'
 import { Frontmatter } from '@/types/Post'
 import { getPostFromSlug, getSlugs } from '@/utils/mdx'
 import 'highlight.js/styles/atom-one-dark-reasonable.css'
@@ -65,7 +64,7 @@ const PostPage = ({ frontmatter, content, slug }: Props) => {
         </div>
       </header>
       {content && (
-        <article className="w-full bg-white mt-2 max-w-3xl mx-auto prose prose-lg">
+        <article className="w-full bg-white mt-2 max-w-3xl mx-auto prose prose-lg prose-a:no-underline hover:prose-a:underline prose-a:text-indigo-600">
           <MDXRemote {...content} components={{ Image }} />
         </article>
       )}

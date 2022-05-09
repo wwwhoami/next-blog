@@ -8,16 +8,12 @@ const Header = (props: Props) => {
   return (
     <header className="shadow w-full backdrop-filter backdrop-blur-xl sticky z-50 top-0 bg-white bg-opacity-60">
       <div className="container mx-auto flex flex-wrap flex-col md:flex-row items-center">
-        <Link href="/">
-          <a className="flex md:w-1/5 font-medium items-center md:justify-start md:my-2">
-            <Image
-              src="/images/logo.png"
-              alt="logo"
-              width={100}
-              height={50}
-              className="rounded-xl"
-            />
-            <span className="text-xl ml-3">NextBlog</span>
+        <Link href="/" passHref>
+          <a className="text-2xl  ml-3">
+            <span className="text-indigo-600 font-semibold hover:text-indigo-700">
+              Next
+            </span>
+            Blog
           </a>
         </Link>
         <nav className="flex flex-wrap md:w-4/5 items-center justify-end text-base md:ml-auto space-x-4">
