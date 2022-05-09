@@ -15,7 +15,7 @@ const PostCard = ({ post: { frontmatter, slug } }: Props) => {
   return (
     <Link href={`/blog/${slug}`}>
       <a
-        className={`w-full px-10 py-6 cursor-pointer mt-6 rounded-lg hover-ring focus-ring`}
+        className={`w-full px-6 py-3 cursor-pointer mt-6 rounded-lg hover-ring focus-ring`}
         style={{
           ['--tw-ring-color' as any]: categoryColor,
         }}
