@@ -1,0 +1,14 @@
+{
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 55000,
+      "driver": "PostgreSQL",
+      "name": "nextblog",
+      "database": "nextblog",
+      "username": "postgres",
+      "password": "postgrespw"
+    }
+  ]
+}

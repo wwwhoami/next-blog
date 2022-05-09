@@ -13,6 +13,7 @@ import React from 'react'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeCodeTitles from 'rehype-code-titles'
 import rehypeHighlight from 'rehype-highlight'
+import rehypeSanitize from 'rehype-sanitize'
 import rehypeSlug from 'rehype-slug'
 
 type Props = {
@@ -95,6 +96,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
   const mdxSource = await serialize(content, {
     mdxOptions: {
       rehypePlugins: [
+        rehypeSanitize,
         rehypeSlug,
         [
           rehypeAutolinkHeadings,
