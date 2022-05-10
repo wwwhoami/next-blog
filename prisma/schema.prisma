@@ -8,29 +8,41 @@ datasource db {
 }
 
 model User {
-  id    Int    @id @default(autoincrement())
-  email String @unique
-  name  String @unique
-  posts Post[]
+  id       Int    @id @default(autoincrement())
+  email    String @unique @db.VarChar()
+  password String @db.Char(60)
+  name     String @unique @db.VarChar()
+  image    String @unique @db.VarChar()
+  posts    Post[]
 }
 
 model Post {
-  id         Int      @id @default(autoincrement())
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
-  title      String
-  content    String   @db.Text
-  published  Boolean  @default(false)
-  viewCount  Int      @default(0) @map("view_count")
-  author     User     @relation(fields: [authorId], references: [id])
-  authorId   Int      @map("author_id")
-  categoryId Int      @map("category_id")
-  coverImage String   @map("cover_image")
+  id         Int              @id @default(autoincrement())
+  createdAt  DateTime         @default(now()) @map("created_at")
+  updatedAt  DateTime         @updatedAt @map("updated_at")
+  title      String           @db.VarChar()
+  content    String           @db.Text
+  published  Boolean          @default(false)
+  viewCount  Int              @default(0) @map("view_count")
+  author     User             @relation(fields: [authorId], references: [id])
+  authorId   Int              @map("author_id")
+  coverImage String           @map("cover_image")
+  categories PostToCategory[]
+}
+
+model PostToCategory {
+  post       Post     @relation(fields: [postId], references: [id])
+  postId     Int      @map("post_id")
   category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int      @map("category_id")
+
+  @@id([postId, categoryId])
 }
 
 model Category {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-  Post Post[]
+  id             Int              @id @default(autoincrement())
+  name           String           @unique @db.VarChar()
+  description    String           @db.VarChar(350)
+  hexColor       String?          @unique @map("hex_color") @db.Char(7)
+  PostToCategory PostToCategory[]
 }
