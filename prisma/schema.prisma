@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -30,6 +31,11 @@ model Post {
   authorId   Int              @map("author_id")
   coverImage String           @map("cover_image")
   categories PostToCategory[]
+
+  @@index([slug])
+  @@index([createdAt])
+  @@index([viewCount])
+  @@index([published])
 }
 
 model PostToCategory {
