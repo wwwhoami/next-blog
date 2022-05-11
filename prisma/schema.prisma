@@ -18,9 +18,11 @@ model User {
 
 model Post {
   id         Int              @id @default(autoincrement())
-  createdAt  DateTime         @default(now()) @map("created_at")
-  updatedAt  DateTime         @updatedAt @map("updated_at")
+  createdAt  DateTime         @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt  DateTime         @updatedAt @map("updated_at") @db.Timestamptz()
   title      String           @db.VarChar()
+  slug       String           @unique @db.VarChar()
+  excerpt    String           @db.VarChar()
   content    String           @db.Text
   published  Boolean          @default(false)
   viewCount  Int              @default(0) @map("view_count")
@@ -31,17 +33,16 @@ model Post {
 }
 
 model PostToCategory {
-  post       Post     @relation(fields: [postId], references: [id])
-  postId     Int      @map("post_id")
-  category   Category @relation(fields: [categoryId], references: [id])
-  categoryId Int      @map("category_id")
+  post         Post     @relation(fields: [postId], references: [id])
+  postId       Int      @map("post_id")
+  category     Category @relation(fields: [categoryName], references: [name])
+  categoryName String   @map("category_name")
 
-  @@id([postId, categoryId])
+  @@id([postId, categoryName])
 }
 
 model Category {
-  id             Int              @id @default(autoincrement())
-  name           String           @unique @db.VarChar()
+  name           String           @id @unique @db.VarChar()
   description    String           @db.VarChar(350)
   hexColor       String?          @unique @map("hex_color") @db.Char(7)
   PostToCategory PostToCategory[]

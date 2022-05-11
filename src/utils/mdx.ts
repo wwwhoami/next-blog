@@ -4,8 +4,6 @@ import matter from 'gray-matter'
 import readingTime from 'reading-time'
 import { Frontmatter } from '@/types/Post'
 
-// import { sync } from 'glob'
-
 const postsPath = path.join('data/posts')
 
 export async function getSlugs() {
@@ -40,5 +38,17 @@ export async function getPostFromSlug(slug: string) {
       ...frontmatter,
       readingTime: readingTime(source).text,
     },
+  }
+}
+
+export async function getPostFromSlugForDb(slug: string) {
+  const postDir = path.join(postsPath, `${slug}.mdx`)
+  const source = fs.readFileSync(postDir, 'utf-8')
+  const { content, data } = matter(source)
+  const frontmatter = data as Frontmatter
+
+  return {
+    content,
+    frontmatter,
   }
 }

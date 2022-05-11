@@ -12,6 +12,4 @@ export type Frontmatter = {
   cover_image: string
   category: string
   author: string
-  author_image: string
-  reading_time: string
 }
