@@ -23,13 +23,13 @@ const handler = nc<NextApiRequest, NextApiResponse>({
   },
 }).get<GetPostsRequest>(async (req, res) => {
   const { take, skip, order, orderBy, content } = req.query
-  const posts = await getPosts({
-    take: take ? parseInt(take) : undefined,
-    skip: skip ? parseInt(skip) : undefined,
+  const posts = await getPosts(
+    take ? parseInt(take) : undefined,
+    skip ? parseInt(skip) : undefined,
     order,
     orderBy,
-    content: content === 'true' || content === '1',
-  })
+    content === 'true' || content === '1'
+  )
   res.status(200).json(posts)
 })
 

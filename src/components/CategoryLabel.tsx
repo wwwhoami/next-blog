@@ -4,7 +4,7 @@ import { getCategoryColor } from '@/utils/post'
 
 type Props = {
   name: string
-  hexColor: string
+  hexColor: string | null
 }
 
 const CategoryLabel = ({ name, hexColor }: Props) => {

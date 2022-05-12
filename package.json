@@ -7,9 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "push": "dotenv -e .env.development.local --- npx prisma db push",
-    "migrate": "dotenv -e .env.development.local --- npx prisma migrate dev",
-    "seed": "npx prisma db seed"
+    "db:push": "dotenv -e .env.development.local --- npx prisma db push",
+    "db:migrate": "dotenv -e .env.development.local --- npx prisma migrate dev",
+    "db:seed": "npx prisma db seed",
+    "db:reset": "dotenv -e .env.development.local --- npx prisma migrate reset"
   },
   "dependencies": {
     "@heroicons/react": "^1.0.6",

@@ -35,13 +35,13 @@ const selectPostWithAuthorCategories = {
   },
 }
 
-export async function getPosts({
+export async function getPosts(
   take = 10,
   skip = 0,
   order = 'desc',
   orderBy = 'createdAt',
-  content = false,
-}: GetPostsQueryParams) {
+  content = false
+) {
   const posts = await prisma.post.findMany({
     select: {
       ...selectPostWithAuthorCategories,
@@ -59,10 +59,24 @@ export async function getPosts({
   return posts
 }
 
+export async function getPostsSlugs() {
+  const slugs = await prisma.post.findMany({
+    select: {
+      slug: true,
+    },
+    where: {
+      published: true,
+    },
+  })
+
+  return slugs
+}
+
 export async function getPostBySlug(slug: string) {
   const post = await prisma.post.findFirst({
     select: {
       ...selectPostWithAuthorCategories,
+      content: true,
     },
     where: {
       slug,

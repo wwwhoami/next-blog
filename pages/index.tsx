@@ -3,6 +3,7 @@ import PostCard from '@/components/PostCard'
 import { Post } from '@/types/Post'
 import type { GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
+import { getPosts } from 'services/PostService'
 
 type Props = {
   posts: Post[]
@@ -30,14 +31,10 @@ const Home: NextPage<Props> = ({ posts }) => {
 export default Home
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  const url = process.env.NEXT_PUBLIC_API_URL + '/post'
-  const res = await fetch(url)
-
-  if (!res.ok) {
-    throw new Error(await res.json())
-  }
-
-  const posts: Post[] = await res.json()
+  const posts = (await getPosts()).map((post) => ({
+    ...post,
+    createdAt: post.createdAt.toISOString(),
+  }))
 
   return {
     props: {

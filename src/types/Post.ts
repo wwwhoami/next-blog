@@ -1,13 +1,19 @@
+import { MDXRemoteSerializeResult } from 'next-mdx-remote/dist/types'
+
 export interface Post {
   createdAt: string
   title: string
   slug: string
   excerpt: string
-  content?: string
   viewCount: number
   coverImage: string
   author: Author
+  content?: string
   categories: CategoryElement[]
+}
+
+export type PostMdx = Omit<Post, 'content'> & {
+  content: MDXRemoteSerializeResult<Record<string, unknown>>
 }
 
 export interface Author {
@@ -23,7 +29,7 @@ export interface CategoryElement {
 export interface Category {
   name: string
   description?: string
-  hexColor: string
+  hexColor: string | null
 }
 
 export type Frontmatter = {

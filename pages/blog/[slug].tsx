@@ -1,10 +1,10 @@
 import CategoryLabel from '@/components/CategoryLabel'
 import Layout from '@/components/Layout'
-import { Frontmatter } from '@/types/Post'
-import { getPostFromSlug, getSlugs } from '@/utils/mdx'
+import { Post, PostMdx } from '@/types/Post'
+import dayjs from 'dayjs'
 import 'highlight.js/styles/atom-one-dark-reasonable.css'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote'
+import { MDXRemote } from 'next-mdx-remote'
 import { serialize } from 'next-mdx-remote/serialize'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -15,22 +15,20 @@ import rehypeCodeTitles from 'rehype-code-titles'
 import rehypeHighlight from 'rehype-highlight'
 import rehypeSanitize from 'rehype-sanitize'
 import rehypeSlug from 'rehype-slug'
+import { getPostBySlug, getPostsSlugs } from 'services/PostService'
 
 type Props = {
-  slug: string
-  frontmatter: Frontmatter
-  content: MDXRemoteSerializeResult<Record<string, unknown>>
+  post: PostMdx
 }
 
-const PostPage = ({ frontmatter, content, slug }: Props) => {
-  const { title, cover_image, author_image, author, date, category } =
-    frontmatter
-
+const PostPage = ({
+  post: { title, content, createdAt, coverImage, categories, author },
+}: Props) => {
   return (
     <Layout title={title}>
       <header className="w-full">
         <Image
-          src={cover_image}
+          src={coverImage}
           alt="Cover image"
           className="w-full z-1 rounded object-cover text-center"
           width={1200}
@@ -38,10 +36,10 @@ const PostPage = ({ frontmatter, content, slug }: Props) => {
         />
         <div className="my-8 max-w-3xl mx-auto">
           <div className="flex items-center gap-5 ">
-            <Link href={`/author/${author}`} passHref>
+            <Link href={`/author/${author.name}`} passHref>
               <a>
                 <Image
-                  src={author_image}
+                  src={author.image}
                   alt="Author image"
                   className="mx-4 w-10 h-10 object-cover rounded-full hidden sm:block hover:cursor-pointer"
                   width={40}
@@ -50,13 +48,21 @@ const PostPage = ({ frontmatter, content, slug }: Props) => {
               </a>
             </Link>
             <div className="flex flex-col">
-              <Link href={`/author/${author}`}>
-                <a className="text-lg font-medium">{author}</a>
+              <Link href={`/author/${author.name}`}>
+                <a className="text-lg font-medium">{author.name}</a>
               </Link>
-              <p className="text-lg font-medium text-gray-400">on {date}</p>
+              <p className="text-lg font-medium text-gray-400">
+                on {dayjs(createdAt).format('DD MMMM, YYYY')}
+              </p>
             </div>
             <div className="ml-auto">
-              <CategoryLabel category={category} />
+              {categories.map((category, index) => (
+                <CategoryLabel
+                  key={index}
+                  name={category.category.name}
+                  hexColor={category.category.hexColor}
+                />
+              ))}
             </div>
           </div>
           <h1 className="mx-auto text-5xl mb-7 font-bold mt-10 max-w-3xl">
@@ -77,12 +83,13 @@ interface Params extends ParsedUrlQuery {
   slug: string
 }
 
-export const getStaticPaths: GetStaticPaths<Params> = async () => {
-  const paths = (await getSlugs()).map((slug) => ({ params: { slug } }))
+export const getStaticPaths: GetStaticPaths = async () => {
+  const slugs = await getPostsSlugs()
+  const paths = slugs.map((slug) => ({ params: { ...slug } }))
 
   return {
     paths,
-    fallback: false,
+    fallback: 'blocking',
   }
 }
 
@@ -91,9 +98,9 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
 }) => {
   const slug = params!.slug
 
-  const { content, frontmatter } = await getPostFromSlug(slug)
+  const post = await getPostBySlug(slug)
 
-  const mdxSource = await serialize(content, {
+  const mdxSource = await serialize(post.content, {
     mdxOptions: {
       rehypePlugins: [
         rehypeSanitize,
@@ -112,9 +119,11 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
 
   return {
     props: {
-      frontmatter,
-      content: mdxSource,
-      slug,
+      post: {
+        ...post,
+        content: mdxSource,
+        createdAt: post.createdAt.toISOString(),
+      },
     },
   }
 }
