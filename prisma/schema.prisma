@@ -27,7 +27,7 @@ model Post {
   content    String           @db.Text
   published  Boolean          @default(false)
   viewCount  Int              @default(0) @map("view_count")
-  author     User             @relation(fields: [authorId], references: [id])
+  author     User             @relation(fields: [authorId], references: [id], onDelete: SetNull)
   authorId   Int              @map("author_id")
   coverImage String           @map("cover_image")
   categories PostToCategory[]
@@ -39,9 +39,9 @@ model Post {
 }
 
 model PostToCategory {
-  post         Post     @relation(fields: [postId], references: [id])
+  post         Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId       Int      @map("post_id")
-  category     Category @relation(fields: [categoryName], references: [name])
+  category     Category @relation(fields: [categoryName], references: [name], onDelete: Cascade, onUpdate: Cascade)
   categoryName String   @map("category_name")
 
   @@id([postId, categoryName])

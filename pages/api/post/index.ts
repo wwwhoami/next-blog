@@ -16,10 +16,10 @@ const handler = nc<NextApiRequest, NextApiResponse>({
   onError: (err, req, res, next) => {
     console.error(err.message)
     console.error(err.stack)
-    res.status(500).end('Internal server error')
+    res.status(500).send('Internal server error')
   },
   onNoMatch: (req, res) => {
-    res.status(404).end('Page is not found')
+    res.status(404).send('Page is not found')
   },
 }).get<GetPostsRequest>(async (req, res) => {
   const { take, skip, order, orderBy, content } = req.query

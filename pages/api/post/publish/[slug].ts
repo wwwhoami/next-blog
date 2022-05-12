@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client'
-import type { NextApiRequest, NextApiResponse } from 'next'
+import { NextApiRequest, NextApiResponse } from 'next'
 import nc from 'next-connect'
-import { deletePostBySlug, getPostBySlug } from 'services/PostService'
+import { publishPostBySlug } from 'services/PostService'
 
 const handler = nc<NextApiRequest, NextApiResponse>({
   onError: (err, req, res, next) => {
@@ -20,22 +20,13 @@ const handler = nc<NextApiRequest, NextApiResponse>({
   onNoMatch: (req, res) => {
     res.status(404).send('Page is not found')
   },
+}).put(async (req, res) => {
+  const { slug } = req.query
+  if (typeof slug === 'string') {
+    const post = await publishPostBySlug(slug)
+    res.status(204).json(post)
+  }
+  res.status(400).send('Bad Request')
 })
-  .get(async (req, res) => {
-    const { slug } = req.query
-    if (typeof slug === 'string') {
-      const post = await getPostBySlug(slug)
-      res.status(201).json(post)
-    }
-    res.status(400).send('Bad Request')
-  })
-  .delete(async (req, res) => {
-    const { slug } = req.query
-    if (typeof slug === 'string') {
-      const post = await deletePostBySlug(slug)
-      res.status(201).json(post)
-    }
-    res.status(400).send('Bad Request')
-  })
 
 export default handler
