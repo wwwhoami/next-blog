@@ -19,13 +19,15 @@ type GetPostsQueryParams = {
   skip?: number
   order?: order
   orderBy?: string
+  content?: boolean
 }
 
-export async function getPostsFrontmatter({
+export async function getPosts({
   take = 10,
   skip = 0,
   order = 'desc',
   orderBy = 'createdAt',
+  content = false,
 }: GetPostsQueryParams) {
   try {
     const posts = await prisma.post.findMany({
@@ -34,6 +36,7 @@ export async function getPostsFrontmatter({
         title: true,
         slug: true,
         excerpt: true,
+        content,
         viewCount: true,
         coverImage: true,
         author: {
