@@ -1,27 +1,35 @@
 import { Post } from '@/types/Post'
+import dayjs from 'dayjs'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
-import { getCategoryColor } from 'src/utils/post'
 import CategoryLabel from './CategoryLabel'
 
 type Props = {
   post: Post
 }
 
-const PostCard = ({ post: { frontmatter, slug } }: Props) => {
-  const categoryColor = getCategoryColor(frontmatter.category)
-
+const PostCard = ({
+  post: {
+    coverImage,
+    slug,
+    createdAt,
+    title,
+    excerpt,
+    author: { image: authorImage, name: authorName },
+    categories,
+  },
+}: Props) => {
   return (
     <Link href={`/blog/${slug}`}>
       <a
         className={`w-full px-6 py-3 cursor-pointer mt-6 rounded-lg hover-ring focus-ring`}
         style={{
-          ['--tw-ring-color' as any]: categoryColor,
+          ['--tw-ring-color' as any]: categories[0].category.hexColor,
         }}
       >
         <Image
-          src={frontmatter.cover_image}
+          src={coverImage}
           alt="cover image"
           height={420}
           width={600}
@@ -29,26 +37,34 @@ const PostCard = ({ post: { frontmatter, slug } }: Props) => {
         />
         <div className="flex items-center mt-1 gap-2">
           <Image
-            src={frontmatter.author_image}
+            src={authorImage}
             alt="author image"
             height={40}
             width={40}
             className="rounded-full mx-4 object-cover"
           />
           <a className="text-gray-700 font-semibold hover:underline">
-            {frontmatter.author}
+            {authorName}
           </a>
         </div>
         <div className="flex justify-between items-center mt-3">
-          <span className="font-light text-gray-600">{frontmatter.date}</span>
+          <span className="font-light text-gray-600">
+            {dayjs(createdAt).format('DD MMMM, YYYY')}
+          </span>
 
-          <CategoryLabel category={frontmatter.category} />
+          {categories.map((category, index) => (
+            <CategoryLabel
+              key={index}
+              name={category.category.name}
+              hexColor={category.category.hexColor}
+            />
+          ))}
         </div>
         <div className="mt-2">
           <a className="text-xl text-gray-700 font-bold hover:underline">
-            {frontmatter.title}
+            {title}
           </a>
-          <p className="mt-2 text-gray-600">{frontmatter.excerpt}</p>
+          <p className="mt-2 text-gray-600">{excerpt}</p>
         </div>
       </a>
     </Link>

@@ -1,8 +1,6 @@
 import Layout from '@/components/Layout'
 import PostCard from '@/components/PostCard'
 import { Post } from '@/types/Post'
-import { getFrontmatterFromSlug, getSlugs } from '@/utils/mdx'
-import { sortByDate } from '@/utils/post'
 import type { GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
 
@@ -32,17 +30,18 @@ const Home: NextPage<Props> = ({ posts }) => {
 export default Home
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  const slugs = await getSlugs()
+  const url = process.env.NEXT_PUBLIC_API_URL + '/post'
+  const res = await fetch(url)
 
-  const posts: Post[] = []
-  for (let slug of slugs) {
-    let { frontmatter } = await getFrontmatterFromSlug(slug)
-    posts.push({ frontmatter, slug })
+  if (!res.ok) {
+    throw new Error(await res.json())
   }
+
+  const posts: Post[] = await res.json()
 
   return {
     props: {
-      posts: posts.sort(sortByDate).slice(0, 6),
+      posts,
     },
   }
 }

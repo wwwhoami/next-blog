@@ -1,25 +1,38 @@
 import prisma from '@/lib/prisma'
-import { Prisma } from '@prisma/client'
 
 type order = 'asc' | 'desc'
-type Post = {
-  createdAt: Date
-  title: string
-  slug: string
-  excerpt: string
-  viewCount: string
-  coverImage: string
-  authorName: string
-  authorImage: string
-  category: string
-  hexColor: string
-}
+
 type GetPostsQueryParams = {
   take?: number
   skip?: number
   order?: order
   orderBy?: string
   content?: boolean
+}
+
+const selectPostWithAuthorCategories = {
+  createdAt: true,
+  title: true,
+  slug: true,
+  excerpt: true,
+  viewCount: true,
+  coverImage: true,
+  author: {
+    select: {
+      name: true,
+      image: true,
+    },
+  },
+  categories: {
+    select: {
+      category: {
+        select: {
+          name: true,
+          hexColor: true,
+        },
+      },
+    },
+  },
 }
 
 export async function getPosts({
@@ -31,29 +44,8 @@ export async function getPosts({
 }: GetPostsQueryParams) {
   const posts = await prisma.post.findMany({
     select: {
-      createdAt: true,
-      title: true,
-      slug: true,
-      excerpt: true,
+      ...selectPostWithAuthorCategories,
       content,
-      viewCount: true,
-      coverImage: true,
-      author: {
-        select: {
-          name: true,
-          image: true,
-        },
-      },
-      categories: {
-        select: {
-          category: {
-            select: {
-              name: true,
-              hexColor: true,
-            },
-          },
-        },
-      },
     },
     where: {
       published: true,
@@ -70,29 +62,7 @@ export async function getPosts({
 export async function getPostBySlug(slug: string) {
   const post = await prisma.post.findFirst({
     select: {
-      createdAt: true,
-      title: true,
-      slug: true,
-      excerpt: true,
-      content: true,
-      viewCount: true,
-      coverImage: true,
-      author: {
-        select: {
-          name: true,
-          image: true,
-        },
-      },
-      categories: {
-        select: {
-          category: {
-            select: {
-              name: true,
-              hexColor: true,
-            },
-          },
-        },
-      },
+      ...selectPostWithAuthorCategories,
     },
     where: {
       slug,
@@ -110,30 +80,7 @@ export async function deletePostBySlug(slug: string) {
       slug,
     },
     select: {
-      id: true,
-      createdAt: true,
-      title: true,
-      slug: true,
-      excerpt: true,
-      content: true,
-      viewCount: true,
-      coverImage: true,
-      author: {
-        select: {
-          name: true,
-          image: true,
-        },
-      },
-      categories: {
-        select: {
-          category: {
-            select: {
-              name: true,
-              hexColor: true,
-            },
-          },
-        },
-      },
+      ...selectPostWithAuthorCategories,
     },
   })
 
@@ -149,30 +96,8 @@ export async function publishPostBySlug(slug: string) {
       published: true,
     },
     select: {
-      id: true,
-      createdAt: true,
-      title: true,
-      slug: true,
-      excerpt: true,
-      content: true,
-      viewCount: true,
-      coverImage: true,
-      author: {
-        select: {
-          name: true,
-          image: true,
-        },
-      },
-      categories: {
-        select: {
-          category: {
-            select: {
-              name: true,
-              hexColor: true,
-            },
-          },
-        },
-      },
+      ...selectPostWithAuthorCategories,
+      content: false,
     },
   })
 

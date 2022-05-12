@@ -3,22 +3,21 @@ import React from 'react'
 import { getCategoryColor } from '@/utils/post'
 
 type Props = {
-  category: string
+  name: string
+  hexColor: string
 }
 
-const CategoryLabel = ({ category }: Props) => {
-  const categoryColor = getCategoryColor(category)
-
+const CategoryLabel = ({ name, hexColor }: Props) => {
   return (
-    <Link href={`/blog/category/${category.toLowerCase()}`} passHref>
+    <Link href={`/blog/category/${name.toLowerCase()}`} passHref>
       <a
         className={`rounded-lg px-2 py-1 text-c font-bold hover-ring focus-ring`}
         style={{
-          ['--tw-ring-color' as any]: categoryColor,
-          ['color' as any]: categoryColor,
+          ['--tw-ring-color' as any]: hexColor,
+          ['color' as any]: hexColor,
         }}
       >
-        {category}
+        {name}
       </a>
     </Link>
   )

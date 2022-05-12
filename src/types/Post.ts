@@ -1,8 +1,29 @@
 export interface Post {
+  createdAt: string
+  title: string
   slug: string
-  frontmatter: Frontmatter & {
-    [key: string]: any
-  }
+  excerpt: string
+  content?: string
+  viewCount: number
+  coverImage: string
+  author: Author
+  categories: CategoryElement[]
+}
+
+export interface Author {
+  name: string
+  email?: string
+  image: string
+}
+
+export interface CategoryElement {
+  category: Category
+}
+
+export interface Category {
+  name: string
+  description?: string
+  hexColor: string
 }
 
 export type Frontmatter = {

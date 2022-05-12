@@ -16,7 +16,7 @@ const handler = nc<NextApiRequest, NextApiResponse>({
   onError: (err, req, res, next) => {
     console.error(err.message)
     console.error(err.stack)
-    res.status(500).send('Internal server error')
+    res.status(500).json('Internal server error')
   },
   onNoMatch: (req, res) => {
     res.status(404).send('Page is not found')
