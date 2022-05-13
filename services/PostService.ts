@@ -38,7 +38,7 @@ const selectPostWithAuthorCategories = {
 export async function getPosts(
   take = 10,
   skip = 0,
-  order = 'desc',
+  order: order = 'desc',
   orderBy = 'createdAt',
   content = false
 ) {

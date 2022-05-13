@@ -31,7 +31,7 @@ const Home: NextPage<Props> = ({ posts }) => {
 export default Home
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  const posts = (await getPosts()).map((post) => ({
+  const posts = (await getPosts(8)).map((post) => ({
     ...post,
     createdAt: post.createdAt.toISOString(),
   }))

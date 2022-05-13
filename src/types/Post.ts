@@ -12,9 +12,12 @@ export interface Post {
   categories: CategoryElement[]
 }
 
-export type PostMdx = Omit<Post, 'content'> & {
+export type PostMdx = Omit<Post, 'content' | 'slug'> & {
   content: MDXRemoteSerializeResult<Record<string, unknown>>
+  readingTimeMinutes: number
 }
+
+export type PostHeader = Omit<PostMdx, 'content' | 'viewCount'>
 
 export interface Author {
   name: string
