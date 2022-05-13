@@ -9,7 +9,7 @@
     "lint": "next lint",
     "db:push": "dotenv -e .env.development.local --- npx prisma db push",
     "db:migrate": "dotenv -e .env.development.local --- npx prisma migrate dev",
-    "db:seed": "npx prisma db seed",
+    "db:seed": "dotenv -e .env.development.local --- npx prisma db seed",
     "db:reset": "dotenv -e .env.development.local --- npx prisma migrate reset"
   },
   "dependencies": {

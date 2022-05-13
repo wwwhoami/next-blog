@@ -53,6 +53,7 @@ export async function getPosts(
     orderBy: {
       [orderBy]: order,
     },
+    take,
     skip,
   })
 

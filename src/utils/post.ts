@@ -1,22 +1,50 @@
-import { Post } from '@/types/Post'
+import { Frontmatter } from '@/types/Post'
+import { Prisma } from '@prisma/client'
+import { userData } from 'data/seedData'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import slugify from 'slugify'
+import { getPostFromSlugForDb, getSlugs } from './mdx'
 
-export const sortByDate = (a: Post, b: Post) => {
-  return (
-    new Date(b.frontmatter.date).getTime() -
-    new Date(a.frontmatter.date).getTime()
-  )
+type PostFromFile = Frontmatter & {
+  content: string
+  slug: string
 }
 
-export const getCategoryColor = (category: string) => {
-  const colorKey = {
-    JavaScript: '#ca8a04',
-    PHP: '#9333ea',
-    CSS: '#2563eb',
-    Python: '#16a34a',
-    Ruby: '#dc2626',
+dayjs.extend(utc)
+
+export async function getPostData() {
+  const slugs = await getSlugs()
+
+  const posts: PostFromFile[] = []
+  for (let slug of slugs) {
+    let { frontmatter, content } = await getPostFromSlugForDb(slug)
+    posts.push({ ...frontmatter, slug, content })
   }
 
-  const categoryColor: string | null = (colorKey as any)[category] || null
+  const postData: Prisma.PostCreateInput[] = posts.map((post) => ({
+    createdAt: dayjs.utc(post.date, 'YYYY-MM-DD').format(),
+    title: post.title,
+    slug: slugify(post.title, { lower: true }),
+    excerpt: post.excerpt,
+    content: post.content,
+    published: true,
+    coverImage: post.cover_image,
+    author: {
+      connect: {
+        id: userData.findIndex((user) => user.name === post.author) + 1,
+      },
+    },
+    categories: {
+      create: {
+        category: {
+          connect: {
+            name: post.category,
+          },
+        },
+      },
+    },
+  }))
 
-  return categoryColor
+  return postData
 }
