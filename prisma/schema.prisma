@@ -13,7 +13,7 @@ model User {
   email    String @unique @db.VarChar()
   password String @db.Char(60)
   name     String @unique @db.VarChar()
-  image    String @unique @db.VarChar()
+  image    String @db.VarChar()
   posts    Post[]
 }
 

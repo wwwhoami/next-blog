@@ -52,3 +52,18 @@ export async function getPostFromSlugForDb(slug: string) {
     frontmatter,
   }
 }
+
+export async function getRandomPostContent(slugs: string[], count: number) {
+  if (count <= 0) throw new Error('Count should be positive integer')
+  const postDirs = slugs.map((slug) => path.join(postsPath, `${slug}.mdx`))
+  let postContents: string[] = []
+  while (count > 0) {
+    const randPostDir = postDirs[Math.floor(Math.random() * postDirs.length)]
+    const source = fs.readFileSync(randPostDir, 'utf-8')
+    const { content } = matter(source)
+    postContents.push(content)
+    count--
+  }
+
+  return postContents
+}

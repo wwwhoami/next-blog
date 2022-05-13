@@ -30,10 +30,10 @@ const PostCard = ({
       >
         <Image
           src={coverImage}
-          alt="cover image"
+          alt="Cover image"
           height={420}
           width={600}
-          className="mb-4 rounded"
+          className="mb-4 rounded object-cover"
         />
         <div className="flex items-center mt-1 gap-2">
           <Image

@@ -1,5 +1,10 @@
 import { Frontmatter } from '@/types/Post'
-import { getPostFromSlugForDb, getSlugs } from '@/utils/mdx'
+import {
+  getPostFromSlugForDb,
+  getRandomPostContent,
+  getSlugs,
+} from '@/utils/mdx'
+import { faker } from '@faker-js/faker'
 import { Prisma, PrismaClient } from '@prisma/client'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
@@ -8,7 +13,64 @@ import slugify from 'slugify'
 dayjs.extend(utc)
 const prisma = new PrismaClient()
 
-const userData: Prisma.UserCreateWithoutPostsInput[] = [
+async function generateUsers(count: number) {
+  if (count <= 0) throw new Error('Count should be positive integer')
+  let userData: Prisma.UserCreateWithoutPostsInput[] = []
+  while (count > 0) {
+    userData.push({
+      name: faker.unique(faker.name.firstName),
+      email: faker.unique(faker.internet.email),
+      password: '$2a$12$lCGhm3HSmjkFJFtViSPpSemPLvSGpak1ljgC5WyGoIh/l5Igfyl/K',
+      image: faker.image.avatar(),
+    })
+    count--
+  }
+
+  return userData
+}
+
+async function generatePosts(count: number, userDataLength: number) {
+  if (count <= 0) throw new Error('Count should be positive integer')
+  let postData: Prisma.PostCreateInput[] = []
+  const slugs = await getSlugs()
+  const contents = await getRandomPostContent(slugs, count)
+  for (let i = 0; i < count; i++) {
+    const randTitle = faker.lorem.sentence(3)
+    postData.push({
+      createdAt: faker.datatype.datetime({
+        min: 1589315917000,
+        max: 1620851917000,
+      }),
+      title: randTitle,
+      slug: slugify(randTitle, { lower: true }),
+      excerpt: faker.lorem.sentence(15),
+      content: contents[i],
+      published: true,
+      coverImage: faker.image.image(1200, 480, false),
+      author: {
+        connect: {
+          id: Math.floor(Math.random() * userDataLength) + 1,
+        },
+      },
+      categories: {
+        create: {
+          category: {
+            connect: {
+              name: categoryData[
+                Math.floor(Math.random() * categoryData.length)
+              ].name,
+            },
+          },
+        },
+      },
+    })
+    count--
+  }
+
+  return postData
+}
+
+const userDataByHand: Prisma.UserCreateWithoutPostsInput[] = [
   {
     name: 'Alice Johnson',
     email: 'alice@prisma.io',
@@ -69,6 +131,13 @@ type PostFromFile = Frontmatter & {
 }
 
 async function main() {
+  console.log('Data generating...')
+
+  const userData = await generateUsers(100)
+  const randomPosts = await generatePosts(100, userData.length)
+
+  console.log('Data generating finished')
+
   console.log(`Start seeding ...`)
 
   for (const u of userData) {
@@ -77,6 +146,14 @@ async function main() {
     })
     console.log(`Created user with id: ${user.id}`)
   }
+
+  for (const u of userDataByHand) {
+    const user = await prisma.user.create({
+      data: u,
+    })
+    console.log(`Created user with id: ${user.id}`)
+  }
+
   for (const c of categoryData) {
     const category = await prisma.category.create({
       data: c,
@@ -102,7 +179,7 @@ async function main() {
     coverImage: post.cover_image,
     author: {
       connect: {
-        id: userData.findIndex((user) => user.name === post.author) + 1,
+        id: userDataByHand.findIndex((user) => user.name === post.author) + 1,
       },
     },
     categories: {
@@ -117,6 +194,13 @@ async function main() {
   }))
 
   for (const p of postData) {
+    const post = await prisma.post.create({
+      data: p,
+    })
+    console.log(`Created post with id: ${post.id}`)
+  }
+
+  for (const p of randomPosts) {
     const post = await prisma.post.create({
       data: p,
     })
