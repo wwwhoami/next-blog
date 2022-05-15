@@ -1,29 +1,58 @@
 import Layout from '@/components/Layout'
 import PostCard from '@/components/PostCard'
 import { Post } from '@/types/Post'
-import type { GetStaticProps, NextPage } from 'next'
-import Link from 'next/link'
-import { getPosts } from 'services/PostService'
+import { GetStaticProps, NextPage } from 'next'
+import { useInfiniteLoading } from 'src/hooks/useInfiniteLoading'
+import { SWRInfiniteKeyLoader } from 'swr/infinite/dist/infinite/types'
 
 type Props = {
-  posts: Post[]
+  fallbackData: Post[][]
 }
 
-const Home: NextPage<Props> = ({ posts }) => {
+const PAGE_SIZE = 8
+
+const fetchPosts = async (url: string) => {
+  const res = await fetch(url)
+
+  if (!res.ok) throw new Error(await res.json())
+
+  const posts: Post[] = await res.json()
+
+  return posts
+}
+
+const getKey: SWRInfiniteKeyLoader = (
+  pageIndex: number,
+  previousPageData: Post[]
+) => {
+  if (previousPageData && !previousPageData.length) return null
+
+  return `${process.env.NEXT_PUBLIC_API_URL}post?take=${PAGE_SIZE}&skip=${
+    pageIndex * PAGE_SIZE
+  }`
+}
+
+const Home: NextPage<Props> = ({ fallbackData }) => {
+  const { ref, isLoadingInitialData, isLoadingMore, isRefreshing, data } =
+    useInfiniteLoading({
+      getKey,
+      fetcher: fetchPosts,
+      fallbackData,
+    })
+  const posts = data?.flatMap((page) => page) ?? []
+
   return (
     <Layout>
       <h1 className="text-4xl border-b-4 p-3 font-semibold">Latest Posts</h1>
       <div className="grid my-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-        {posts.map((post, index) => (
+        {posts?.map((post, index) => (
           <PostCard key={index} post={post} />
         ))}
       </div>
 
-      <Link href="/blog">
-        <a className="mt-8 block text-center border border-gray-500 text-gray-800 rounded-md py-4 my-5 transition duration-500 ease select-none hover:text-white hover:bg-gray-900 focus:outline-none focus:shadow-outline w-full">
-          All posts
-        </a>
-      </Link>
+      <div ref={ref}>
+        {isLoadingMore ? 'Loading...' : isRefreshing ? 'Refreshing...' : ''}
+      </div>
     </Layout>
   )
 }
@@ -31,14 +60,13 @@ const Home: NextPage<Props> = ({ posts }) => {
 export default Home
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  const posts = (await getPosts(8)).map((post) => ({
-    ...post,
-    createdAt: post.createdAt.toISOString(),
-  }))
+  const url = `${process.env.NEXT_PUBLIC_API_URL}post?take=${PAGE_SIZE}&skip=0`
+
+  const posts = await fetchPosts(url)
 
   return {
     props: {
-      posts,
+      fallbackData: [posts],
     },
   }
 }

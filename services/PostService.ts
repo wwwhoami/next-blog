@@ -1,5 +1,4 @@
 import prisma from '@/lib/prisma'
-
 type order = 'asc' | 'desc'
 
 type GetPostsQueryParams = {
@@ -58,6 +57,16 @@ export async function getPosts(
   })
 
   return posts
+}
+
+export async function countPosts() {
+  const postsCount = await prisma.post.count({
+    where: {
+      published: true,
+    },
+  })
+
+  return postsCount
 }
 
 export async function getPostsSlugs() {
