@@ -41,7 +41,7 @@ export async function generatePosts(count: number, userDataLength: number) {
       excerpt: faker.lorem.sentence(15),
       content: contents[i],
       published: true,
-      coverImage: faker.image.image(1200, 480),
+      coverImage: faker.image.business(1200, 480),
       author: {
         connect: {
           id: Math.floor(Math.random() * userDataLength) + 1,

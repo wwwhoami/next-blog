@@ -7,8 +7,8 @@ const prisma = new PrismaClient()
 
 async function main() {
   const handmadeData = parseInt(process.argv[2]) || 1
-  const userDataCount = parseInt(process.argv[3]) || 1000
-  const postDataCount = parseInt(process.argv[4]) || 10000
+  const userDataCount = parseInt(process.argv[3]) || 100
+  const postDataCount = parseInt(process.argv[4]) || 1000
   const postData = await getPostData()
   console.log(userDataCount)
   console.log(postDataCount)
