@@ -21,8 +21,8 @@ const PostCard = ({
   },
 }: Props) => {
   return (
-    <Link href={`/blog/${slug}`}>
-      <a
+    <Link href={`/blog/${slug}`} passHref>
+      <div
         className={`w-full px-6 py-3 cursor-pointer mt-6 rounded-lg hover-ring focus-ring`}
         style={{
           ['--tw-ring-color' as any]: categories[0].category.hexColor,
@@ -66,7 +66,7 @@ const PostCard = ({
           </a>
           <p className="mt-2 text-gray-600">{excerpt}</p>
         </div>
-      </a>
+      </div>
     </Link>
   )
 }
