@@ -116,7 +116,7 @@ export async function getPostsByCategories({
   searchQuery,
   category,
 }: GetPostsByCategoriesQueryParams) {
-  if (!category) throw new Error('Categories param is undefined')
+  if (!category) throw new Error('Category param is undefined')
 
   const categories = category.split(' ')
 
@@ -135,6 +135,7 @@ export async function getPostsByCategories({
   if (groupedPosts.length === 0) return
 
   const search = searchQuery ? searchQuery.split(' ').join(' & ') : undefined
+  const postIds = groupedPosts.map((data) => data.postId)
 
   let posts
 
@@ -146,13 +147,14 @@ export async function getPostsByCategories({
       },
       where: {
         id: {
-          in: groupedPosts.map((data) => data.postId),
+          in: postIds,
         },
         published: true,
         categories: {
           every: {
             categoryName: {
               in: categories,
+              mode: 'insensitive',
             },
           },
         },
@@ -178,6 +180,7 @@ export async function getPostsByCategories({
           every: {
             categoryName: {
               in: categories,
+              mode: 'insensitive',
             },
           },
         },

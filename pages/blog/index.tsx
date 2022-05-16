@@ -7,22 +7,23 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { useInfiniteLoading } from 'src/hooks/useInfiniteLoading'
 
-type Props = {
-  fallbackData: Post[][]
-}
+type Props = {}
 
 const PAGE_SIZE = 8
 
 const getKey = (
   pageIndex: number,
   previousPageData: Post[],
-  searchQuery?: string
+  searchQuery?: string,
+  category?: string
 ) => {
   if (previousPageData && !previousPageData.length) return null
 
   return `${process.env.NEXT_PUBLIC_API_URL}post/search?${
-    searchQuery ? `searchQuery=${searchQuery}` : ''
-  }&take=${PAGE_SIZE}&skip=${pageIndex * PAGE_SIZE}`
+    searchQuery ? `searchQuery=${searchQuery}&` : ''
+  }${category ? `category=${category}&` : ''}take=${PAGE_SIZE}&skip=${
+    pageIndex * PAGE_SIZE
+  }`
 }
 
 const BlogPage: NextPage<Props> = (props) => {
@@ -32,7 +33,8 @@ const BlogPage: NextPage<Props> = (props) => {
 
   const { ref, isLoadingMore, isRefreshing, data, isEmpty } =
     useInfiniteLoading(
-      (...args) => getKey(...args, query.searchQuery as string),
+      (...args) =>
+        getKey(...args, query.searchQuery as string, query.category as string),
       fetchPosts
     )
 
