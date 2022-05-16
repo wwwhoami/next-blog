@@ -120,7 +120,7 @@ export async function getPostsByCategories({
 
   const categories = category.split(' ')
 
-  // Get postIds with cardinality >= cat  egories count
+  // Get postIds with cardinality >= categories count
   const groupedPosts = await prisma.postToCategory.groupBy({
     by: ['postId'],
     having: {
