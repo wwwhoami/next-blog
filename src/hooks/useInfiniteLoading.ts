@@ -1,30 +1,28 @@
 import { useEffect, useRef } from 'react'
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite'
-import useOnScreen from './useOnscreen'
+import useOnScreen from './useOnScreen'
 
-type Props<T> = {
-  getKey: SWRInfiniteKeyLoader
-  fetcher: (...args: any) => Promise<T>
+export const useInfiniteLoading = <T extends any[]>(
+  getKey: SWRInfiniteKeyLoader,
+  fetcher: (...args: any) => Promise<T>,
   fallbackData?: T[]
-}
-
-export const useInfiniteLoading = <T>({
-  getKey,
-  fetcher,
-  fallbackData,
-}: Props<T>) => {
+) => {
   const ref = useRef() as React.MutableRefObject<HTMLDivElement>
   const isVisible = useOnScreen(ref)
   const { data, error, size, setSize, isValidating } = useSWRInfinite<T>(
-    (pageIndex, ...args) => getKey(pageIndex, ...args),
+    (...args) => getKey(...args),
     fetcher,
     { fallbackData }
   )
 
+  console.log(data)
+  console.log(size)
+
+  const isEmpty = data?.[0]?.length === 0
   const isLoadingInitialData = !data && !error
   const isLoadingMore =
     isLoadingInitialData ||
-    (size > 0 && data && typeof data[size - 1] === 'undefined')
+    (size > 0 && data && typeof data[size - 1] === 'undefined' && !isEmpty)
   const isRefreshing = isValidating && data && data.length === size
 
   useEffect(() => {
@@ -39,6 +37,8 @@ export const useInfiniteLoading = <T>({
     isLoadingInitialData,
     isLoadingMore,
     isRefreshing,
+    isEmpty,
     data,
+    size,
   }
 }

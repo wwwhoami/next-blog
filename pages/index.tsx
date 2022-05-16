@@ -1,5 +1,6 @@
 import Layout from '@/components/Layout'
 import PostCard from '@/components/PostCard'
+import { fetchPosts } from '@/lib/fetchPost'
 import { Post } from '@/types/Post'
 import { GetStaticProps, NextPage } from 'next'
 import { useInfiniteLoading } from 'src/hooks/useInfiniteLoading'
@@ -10,16 +11,6 @@ type Props = {
 }
 
 const PAGE_SIZE = 8
-
-const fetchPosts = async (url: string) => {
-  const res = await fetch(url)
-
-  if (!res.ok) throw new Error(await res.json())
-
-  const posts: Post[] = await res.json()
-
-  return posts
-}
 
 const getKey: SWRInfiniteKeyLoader = (
   pageIndex: number,
@@ -34,11 +25,7 @@ const getKey: SWRInfiniteKeyLoader = (
 
 const Home: NextPage<Props> = ({ fallbackData }) => {
   const { ref, isLoadingInitialData, isLoadingMore, isRefreshing, data } =
-    useInfiniteLoading({
-      getKey,
-      fetcher: fetchPosts,
-      fallbackData,
-    })
+    useInfiniteLoading(getKey, fetchPosts, fallbackData)
   const posts = data?.flatMap((page) => page) ?? []
 
   return (
