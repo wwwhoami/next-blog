@@ -7,6 +7,8 @@ type GetPostsQueryParams = {
   order?: order
   orderBy?: string
   content?: boolean
+  searchQuery?: string
+  categories?: string
 }
 
 const selectPostWithAuthorCategories = {
@@ -34,13 +36,17 @@ const selectPostWithAuthorCategories = {
   },
 }
 
-export async function getPosts(
+export async function getPosts({
   take = 10,
   skip = 0,
-  order: order = 'desc',
+  order = 'desc',
   orderBy = 'createdAt',
-  content = false
-) {
+  content = false,
+  searchQuery,
+  categories,
+}: GetPostsQueryParams) {
+  const search = searchQuery ? searchQuery.split(' ').join(' & ') : undefined
+  const category = categories ? categories.split(' ') : undefined
   const posts = await prisma.post.findMany({
     select: {
       ...selectPostWithAuthorCategories,
@@ -48,6 +54,16 @@ export async function getPosts(
     },
     where: {
       published: true,
+      title: {
+        search,
+      },
+      categories: {
+        every: {
+          categoryName: {
+            in: category,
+          },
+        },
+      },
     },
     orderBy: {
       [orderBy]: order,
