@@ -49,23 +49,60 @@ export async function getPosts({
 }: GetPostsQueryParams) {
   const search = searchQuery ? searchQuery.split(' ').join(' & ') : undefined
 
-  const posts = await prisma.post.findMany({
-    select: {
-      ...selectPostWithAuthorCategories,
-      content,
-    },
-    where: {
-      published: true,
-      title: {
-        search,
+  let posts
+
+  if (typeof search === 'undefined') {
+    posts = await prisma.post.findMany({
+      select: {
+        ...selectPostWithAuthorCategories,
+        content,
       },
-    },
-    orderBy: {
-      [orderBy]: order,
-    },
-    take,
-    skip,
-  })
+      where: {
+        published: true,
+      },
+      orderBy: {
+        [orderBy]: order,
+      },
+      take,
+      skip,
+    })
+  } else {
+    posts = await prisma.post.findMany({
+      select: {
+        ...selectPostWithAuthorCategories,
+        content,
+      },
+      where: {
+        published: true,
+        OR: [
+          {
+            title: {
+              search,
+            },
+          },
+          {
+            excerpt: {
+              search,
+            },
+          },
+        ],
+      },
+      orderBy: [
+        {
+          _relevance: {
+            fields: ['title', 'excerpt'],
+            search,
+            sort: order,
+          },
+        },
+        {
+          [orderBy]: order,
+        },
+      ],
+      take,
+      skip,
+    })
+  }
 
   return posts
 }
@@ -99,33 +136,80 @@ export async function getPostsByCategories({
 
   const search = searchQuery ? searchQuery.split(' ').join(' & ') : undefined
 
-  const posts = await prisma.post.findMany({
-    select: {
-      ...selectPostWithAuthorCategories,
-      content,
-    },
-    where: {
-      id: {
-        in: groupedPosts.map((data) => data.postId),
+  let posts
+
+  if (typeof search === 'undefined') {
+    posts = await prisma.post.findMany({
+      select: {
+        ...selectPostWithAuthorCategories,
+        content,
       },
-      published: true,
-      title: {
-        search,
-      },
-      categories: {
-        every: {
-          categoryName: {
-            in: categories,
+      where: {
+        id: {
+          in: groupedPosts.map((data) => data.postId),
+        },
+        published: true,
+        categories: {
+          every: {
+            categoryName: {
+              in: categories,
+            },
           },
         },
       },
-    },
-    orderBy: {
-      [orderBy]: order,
-    },
-    take,
-    skip,
-  })
+      orderBy: {
+        [orderBy]: order,
+      },
+      take,
+      skip,
+    })
+  } else {
+    posts = await prisma.post.findMany({
+      select: {
+        ...selectPostWithAuthorCategories,
+        content,
+      },
+      where: {
+        id: {
+          in: groupedPosts.map((data) => data.postId),
+        },
+        published: true,
+        categories: {
+          every: {
+            categoryName: {
+              in: categories,
+            },
+          },
+        },
+        OR: [
+          {
+            title: {
+              search,
+            },
+          },
+          {
+            excerpt: {
+              search,
+            },
+          },
+        ],
+      },
+      orderBy: [
+        {
+          _relevance: {
+            fields: ['title', 'excerpt'],
+            search,
+            sort: order,
+          },
+        },
+        {
+          [orderBy]: order,
+        },
+      ],
+      take,
+      skip,
+    })
+  }
 
   return posts
 }
