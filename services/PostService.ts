@@ -8,7 +8,10 @@ type GetPostsQueryParams = {
   orderBy?: string
   content?: boolean
   searchQuery?: string
-  categories?: string
+}
+
+type GetPostsByCategoriesQueryParams = GetPostsQueryParams & {
+  category?: string
 }
 
 const selectPostWithAuthorCategories = {
@@ -43,10 +46,9 @@ export async function getPosts({
   orderBy = 'createdAt',
   content = false,
   searchQuery,
-  categories,
 }: GetPostsQueryParams) {
   const search = searchQuery ? searchQuery.split(' ').join(' & ') : undefined
-  const category = categories ? categories.split(' ') : undefined
+
   const posts = await prisma.post.findMany({
     select: {
       ...selectPostWithAuthorCategories,
@@ -57,10 +59,63 @@ export async function getPosts({
       title: {
         search,
       },
+    },
+    orderBy: {
+      [orderBy]: order,
+    },
+    take,
+    skip,
+  })
+
+  return posts
+}
+
+export async function getPostsByCategories({
+  take = 10,
+  skip = 0,
+  order = 'desc',
+  orderBy = 'createdAt',
+  content = false,
+  searchQuery,
+  category,
+}: GetPostsByCategoriesQueryParams) {
+  if (!category) throw new Error('Categories param is undefined')
+
+  const categories = category.split(' ')
+
+  // Get postIds with cardinality >= cat  egories count
+  const groupedPosts = await prisma.postToCategory.groupBy({
+    by: ['postId'],
+    having: {
+      categoryName: {
+        _count: {
+          gte: categories.length,
+        },
+      },
+    },
+  })
+
+  if (groupedPosts.length === 0) return
+
+  const search = searchQuery ? searchQuery.split(' ').join(' & ') : undefined
+
+  const posts = await prisma.post.findMany({
+    select: {
+      ...selectPostWithAuthorCategories,
+      content,
+    },
+    where: {
+      id: {
+        in: groupedPosts.map((data) => data.postId),
+      },
+      published: true,
+      title: {
+        search,
+      },
       categories: {
         every: {
           categoryName: {
-            in: category,
+            in: categories,
           },
         },
       },
