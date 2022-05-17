@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { MutableRefObject, useEffect, useRef, useState } from 'react'
 
 type Props = {
   name: string
@@ -6,7 +6,8 @@ type Props = {
   setSelectedCategories: React.Dispatch<
     React.SetStateAction<string[] | undefined>
   >
-  available: boolean
+  available?: boolean
+  selected?: boolean
 }
 
 const CategoryLabel = ({
@@ -14,20 +15,38 @@ const CategoryLabel = ({
   hexColor,
   setSelectedCategories,
   available = true,
+  selected = false,
 }: Props) => {
   const [isChecked, setIsChecked] = useState(false)
+  const ref: MutableRefObject<HTMLInputElement> = useRef()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!available && !isChecked) return
 
+    setIsChecked(e.target.checked)
+
     const value = e.target.value
     if (e.target.checked) {
       setSelectedCategories((prev) => (prev ? [...prev, value] : [value]))
-    } else {
+    } else if (!e.target.checked) {
       setSelectedCategories((prev) => prev?.filter((val) => val !== value))
     }
-    setIsChecked(e.target.checked)
   }
+
+  useEffect(() => {
+    setIsChecked(selected)
+  }, [selected])
+
+  // useEffect(() => {
+  //   if (isChecked)
+  //     setSelectedCategories((prev) =>
+  //       prev ? [...prev, ref.current.value] : [ref.current.value]
+  //     )
+  //   else if (!isChecked)
+  //     setSelectedCategories((prev) =>
+  //       prev?.filter((val) => val !== ref.current.value)
+  //     )
+  // }, [isChecked, setSelectedCategories])
 
   return (
     <label
@@ -43,8 +62,10 @@ const CategoryLabel = ({
       <input
         type="checkbox"
         value={name}
+        checked={isChecked}
         className="sr-only"
         onChange={handleChange}
+        ref={ref}
       />
       <span>{name}</span>
     </label>

@@ -1,4 +1,5 @@
 import { Category } from '@/types/Post'
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import CategoryLabel from './CategoryLabel'
@@ -25,7 +26,9 @@ const categoryCombinationsFetcher = async (url: string) => {
   return categoryCominations
 }
 
-const CategorySelect = (props: Props) => {
+const CategorySelect = ({}: Props) => {
+  const router = useRouter()
+
   const [selectedCategories, setSelectedCategories] = useState<string[]>()
   const [availableCategories, setAvailableCategories] = useState<string[]>()
 
@@ -38,6 +41,20 @@ const CategorySelect = (props: Props) => {
     `${process.env.NEXT_PUBLIC_API_URL}category/combo`,
     categoryCombinationsFetcher
   )
+
+  useEffect(() => {
+    if (selectedCategories) {
+      const selectedCategoryQuery = selectedCategories.join(' ')
+
+      router.push(
+        { pathname: '/blog', query: { category: selectedCategoryQuery } },
+        undefined,
+        {
+          shallow: true,
+        }
+      )
+    }
+  }, [selectedCategories])
 
   useEffect(() => {
     const hasCombination = categoryCombinations?.map((categories) =>
@@ -53,12 +70,20 @@ const CategorySelect = (props: Props) => {
       })
       .filter((e) => e) as string[]
 
-    setAvailableCategories(availableCategories)
-  }, [selectedCategories])
+    if (availableCategories) {
+      setAvailableCategories(availableCategories)
+    }
+  }, [categoryCombinations, selectedCategories])
 
   useEffect(() => {
     setAvailableCategories(categories?.map((category) => category.name))
   }, [categories])
+
+  useEffect(() => {
+    if (router.query.category) {
+      setSelectedCategories((router.query.category as string).split(' '))
+    }
+  }, [router.query.category])
 
   return (
     <>
@@ -71,13 +96,12 @@ const CategorySelect = (props: Props) => {
           name={category.name}
           hexColor={category.hexColor}
           setSelectedCategories={setSelectedCategories}
-          available={
-            availableCategories?.length
-              ? availableCategories.some(
-                  (availableCategory) => availableCategory === category.name
-                )
-              : false
-          }
+          available={availableCategories?.some(
+            (availableCategory) => availableCategory === category.name
+          )}
+          selected={selectedCategories?.some(
+            (selectedCategory) => selectedCategory === category.name
+          )}
         />
       ))}
     </>

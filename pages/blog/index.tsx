@@ -29,7 +29,6 @@ const getKey = (
 
 const BlogPage: NextPage<Props> = (props) => {
   const router = useRouter()
-
   const query = router.query
 
   const { ref, isLoadingMore, isRefreshing, data, isEmpty } =
