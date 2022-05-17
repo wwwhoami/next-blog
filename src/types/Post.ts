@@ -32,7 +32,7 @@ export interface CategoryElement {
 export interface Category {
   name: string
   description?: string
-  hexColor: string | null
+  hexColor?: string | null
 }
 
 export type Frontmatter = {

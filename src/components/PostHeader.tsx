@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
-import CategoryLabel from './CategoryLabel'
+import CategoryLink from './CategoryLink'
 
 type Props = {
   postHeader: PostHeader
@@ -53,7 +53,7 @@ const PostHeader = ({
           </div>
           <div className="ml-auto">
             {categories.map((category, index) => (
-              <CategoryLabel
+              <CategoryLink
                 key={index}
                 name={category.category.name}
                 hexColor={category.category.hexColor}

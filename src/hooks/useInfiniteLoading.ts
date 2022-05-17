@@ -15,9 +15,6 @@ export const useInfiniteLoading = <T extends any[]>(
     { fallbackData }
   )
 
-  console.log(data)
-  console.log(size)
-
   const isEmpty = data?.[0]?.length === 0
   const isLoadingInitialData = !data && !error
   const isLoadingMore =

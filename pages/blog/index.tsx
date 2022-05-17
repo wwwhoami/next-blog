@@ -1,3 +1,4 @@
+import CategorySelect from '@/components/CategorySelect'
 import Layout from '@/components/Layout'
 import PostCard from '@/components/PostCard'
 import { fetchPosts } from '@/lib/fetchPost'
@@ -43,6 +44,8 @@ const BlogPage: NextPage<Props> = (props) => {
   return (
     <Layout>
       <h1 className="text-4xl border-b-4 p-3 font-semibold">Posts</h1>
+      <CategorySelect />
+
       {isEmpty && (
         <div className="flex flex-col items-center mt-20">
           <h1 className="text-6xl my-5">Whoops</h1>

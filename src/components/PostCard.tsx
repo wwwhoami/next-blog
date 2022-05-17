@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
-import CategoryLabel from './CategoryLabel'
+import CategoryLink from './CategoryLink'
 
 type Props = {
   post: Post
@@ -23,7 +23,7 @@ const PostCard = ({
   return (
     <Link href={`/blog/${slug}`} passHref>
       <div
-        className={`w-full px-6 py-3 cursor-pointer mt-6 rounded-lg hover-ring focus-ring`}
+        className={`w-full px-6 py-3 cursor-pointer mt-6 rounded-xl hover-ring focus-ring bg-slate-100`}
         style={{
           ['--tw-ring-color' as any]: categories[0].category.hexColor,
         }}
@@ -53,7 +53,7 @@ const PostCard = ({
           </span>
 
           {categories.map((category, index) => (
-            <CategoryLabel
+            <CategoryLink
               key={index}
               name={category.category.name}
               hexColor={category.category.hexColor}
