@@ -44,15 +44,15 @@ const CategorySelect = ({}: Props) => {
 
   useEffect(() => {
     const selectedCategoryQuery = selectedCategories.join(' ')
-    const currentQuery = router.query
+    const queryToSet = router.query
 
-    if (selectedCategories.length === 0) delete currentQuery.category
-    else currentQuery.category = selectedCategoryQuery
+    if (selectedCategories.length === 0) delete queryToSet.category
+    else queryToSet.category = selectedCategoryQuery
 
     router.push(
       {
         pathname: '/blog',
-        query: { ...currentQuery },
+        query: { ...queryToSet },
       },
       undefined,
       {

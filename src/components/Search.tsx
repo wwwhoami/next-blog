@@ -11,7 +11,28 @@ const Search = ({ className }: Props) => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    router.push(`/blog?searchQuery=${term}`)
+    if (router.route !== '/blog') router.push(`/blog?searchQuery=${term}`)
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTerm(e.target.value)
+    if (router.route === '/blog') {
+      const queryToSet = router.query
+
+      if (!e.target.value) delete queryToSet.searchQuery
+      else queryToSet.searchQuery = e.target.value
+
+      router.push(
+        {
+          pathname: '/blog',
+          query: { ...queryToSet },
+        },
+        undefined,
+        {
+          shallow: true,
+        }
+      )
+    }
   }
 
   useEffect(() => {
@@ -28,7 +49,7 @@ const Search = ({ className }: Props) => {
           type="text"
           value={term}
           placeholder="Search Posts"
-          onChange={(e) => setTerm(e.target.value)}
+          onChange={handleChange}
         />
         <button className="flex items-center justify-center p-2 m-1 text-white transition-colors duration-300 transform rounded-xl lg:w-8 lg:h-8 lg:p-0 bg-indigo-500 hover:bg-indigo-500/70 focus:outline-none focus:bg-indigo-500/70">
           <svg
