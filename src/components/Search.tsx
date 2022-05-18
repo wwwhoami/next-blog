@@ -35,6 +35,27 @@ const Search = ({ className }: Props) => {
     }
   }
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTerm(e.target.value)
+    if (router.route === '/blog') {
+      const queryToSet = router.query
+
+      if (!e.target.value) delete queryToSet.searchQuery
+      else queryToSet.searchQuery = e.target.value
+
+      router.push(
+        {
+          pathname: '/blog',
+          query: { ...queryToSet },
+        },
+        undefined,
+        {
+          shallow: true,
+        }
+      )
+    }
+  }
+
   useEffect(() => {
     setTerm(router.query.searchQuery ?? '')
   }, [router])
