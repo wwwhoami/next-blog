@@ -29,7 +29,7 @@ const categoryCombinationsFetcher = async (url: string) => {
 const CategorySelect = ({}: Props) => {
   const router = useRouter()
 
-  const [selectedCategories, setSelectedCategories] = useState<string[]>()
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [availableCategories, setAvailableCategories] = useState<string[]>()
 
   const { data: categories } = useSWR<Omit<Category, 'description'>[]>(
@@ -43,22 +43,30 @@ const CategorySelect = ({}: Props) => {
   )
 
   useEffect(() => {
-    if (selectedCategories) {
-      const selectedCategoryQuery = selectedCategories.join(' ')
+    const selectedCategoryQuery = selectedCategories.join(' ')
+    const currentQuery = router.query
 
-      router.push(
-        { pathname: '/blog', query: { category: selectedCategoryQuery } },
-        undefined,
-        {
-          shallow: true,
-        }
-      )
-    }
+    if (selectedCategories.length === 0) delete currentQuery.category
+    else currentQuery.category = selectedCategoryQuery
+
+    router.push(
+      {
+        pathname: '/blog',
+        query: { ...currentQuery },
+      },
+      undefined,
+      {
+        shallow: true,
+      }
+    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCategories])
 
   useEffect(() => {
     const hasCombination = categoryCombinations?.map((categories) =>
-      selectedCategories?.every((selected) => categories.includes(selected))
+      selectedCategories?.length
+        ? selectedCategories?.every((selected) => categories.includes(selected))
+        : true
     )
 
     const availableCategories = categoryCombinations
@@ -74,10 +82,6 @@ const CategorySelect = ({}: Props) => {
       setAvailableCategories(availableCategories)
     }
   }, [categoryCombinations, selectedCategories])
-
-  useEffect(() => {
-    setAvailableCategories(categories?.map((category) => category.name))
-  }, [categories])
 
   useEffect(() => {
     if (router.query.category) {

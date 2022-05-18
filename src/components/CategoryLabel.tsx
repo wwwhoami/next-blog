@@ -3,9 +3,7 @@ import React, { MutableRefObject, useEffect, useRef, useState } from 'react'
 type Props = {
   name: string
   hexColor?: string | null
-  setSelectedCategories: React.Dispatch<
-    React.SetStateAction<string[] | undefined>
-  >
+  setSelectedCategories: React.Dispatch<React.SetStateAction<string[]>>
   available?: boolean
   selected?: boolean
 }
@@ -18,7 +16,7 @@ const CategoryLabel = ({
   selected = false,
 }: Props) => {
   const [isChecked, setIsChecked] = useState(false)
-  const ref: MutableRefObject<HTMLInputElement> = useRef()
+  const ref = useRef() as MutableRefObject<HTMLInputElement>
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!available && !isChecked) return
@@ -36,17 +34,6 @@ const CategoryLabel = ({
   useEffect(() => {
     setIsChecked(selected)
   }, [selected])
-
-  // useEffect(() => {
-  //   if (isChecked)
-  //     setSelectedCategories((prev) =>
-  //       prev ? [...prev, ref.current.value] : [ref.current.value]
-  //     )
-  //   else if (!isChecked)
-  //     setSelectedCategories((prev) =>
-  //       prev?.filter((val) => val !== ref.current.value)
-  //     )
-  // }, [isChecked, setSelectedCategories])
 
   return (
     <label
