@@ -28,6 +28,9 @@ const categoryCombinationsFetcher = async (url: string) => {
 
 const CategorySelect = ({}: Props) => {
   const router = useRouter()
+  const searchQuery = router.query.searchQuery
+    ? `?searchQuery=${router.query.searchQuery}`
+    : ''
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [availableCategories, setAvailableCategories] = useState<string[]>()
@@ -38,7 +41,7 @@ const CategorySelect = ({}: Props) => {
   )
 
   const { data: categoryCombinations } = useSWR<string[][]>(
-    `${process.env.NEXT_PUBLIC_API_URL}category/combo`,
+    `${process.env.NEXT_PUBLIC_API_URL}category/combo${searchQuery}`,
     categoryCombinationsFetcher
   )
 
@@ -78,10 +81,8 @@ const CategorySelect = ({}: Props) => {
       })
       .filter((e) => e) as string[]
 
-    if (availableCategories) {
-      setAvailableCategories(availableCategories)
-    }
-  }, [categoryCombinations, selectedCategories])
+    setAvailableCategories(availableCategories)
+  }, [categoryCombinations, searchQuery, selectedCategories])
 
   useEffect(() => {
     if (router.query.category) {

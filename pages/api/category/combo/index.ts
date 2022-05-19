@@ -2,6 +2,11 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import nc from 'next-connect'
 import { getCategoryCombinations } from 'services/CategoryService'
 
+type GetCategoryCombsRequest = NextApiRequest & {
+  query: {
+    searchQuery?: string
+  }
+}
 const handler = nc<NextApiRequest, NextApiResponse>({
   onError: (err, req, res, next) => {
     console.error(err.message)
@@ -11,8 +16,9 @@ const handler = nc<NextApiRequest, NextApiResponse>({
   onNoMatch: (req, res) => {
     res.status(404).send('Page is not found')
   },
-}).get(async (req, res) => {
-  const categoryCombs = await getCategoryCombinations()
+}).get<GetCategoryCombsRequest>(async (req, res) => {
+  const { searchQuery } = req.query
+  const categoryCombs = await getCategoryCombinations(searchQuery)
   res.status(200).json(categoryCombs)
 })
 

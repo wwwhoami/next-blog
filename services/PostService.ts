@@ -39,6 +39,60 @@ const selectPostWithAuthorCategories = {
   },
 }
 
+export async function getPostIds({
+  take = undefined,
+  skip = 0,
+  order = 'desc',
+  orderBy = 'createdAt',
+  content = false,
+  searchQuery,
+}: GetPostsQueryParams) {
+  const search = searchQuery ? searchQuery.split(' ').join(' & ') : undefined
+
+  let posts
+
+  if (!search) {
+    posts = await prisma.post.findMany({
+      select: {
+        id: true,
+      },
+      where: {
+        published: true,
+      },
+      orderBy: {
+        [orderBy]: order,
+      },
+      take,
+      skip,
+    })
+  } else {
+    posts = await prisma.post.findMany({
+      select: {
+        id: true,
+      },
+      where: {
+        published: true,
+        OR: [
+          {
+            title: {
+              search,
+            },
+          },
+          {
+            excerpt: {
+              search,
+            },
+          },
+        ],
+      },
+      take,
+      skip,
+    })
+  }
+
+  return posts
+}
+
 export async function getPosts({
   take = 10,
   skip = 0,
@@ -151,7 +205,7 @@ export async function getPostsByCategories({
         },
         published: true,
         categories: {
-          every: {
+          some: {
             categoryName: {
               in: categories,
               mode: 'insensitive',
@@ -177,7 +231,7 @@ export async function getPostsByCategories({
         },
         published: true,
         categories: {
-          every: {
+          some: {
             categoryName: {
               in: categories,
               mode: 'insensitive',
