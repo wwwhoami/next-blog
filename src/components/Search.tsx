@@ -1,5 +1,13 @@
+import debounce from 'lodash.debounce'
 import { useRouter } from 'next/router'
-import React, { FormEvent, useEffect, useState } from 'react'
+import React, {
+  FormEvent,
+  MutableRefObject,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 
 type Props = {
   className?: string
@@ -8,19 +16,34 @@ type Props = {
 const Search = ({ className }: Props) => {
   const router = useRouter()
   const [term, setTerm] = useState(router.query.searchQuery ?? '')
+  const inputRef = useRef() as MutableRefObject<HTMLInputElement>
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (router.route !== '/blog') router.push(`/blog?searchQuery=${term}`)
+    if (router.route !== '/blog')
+      router.push(`/blog?searchQuery=${inputRef.current.value}`)
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTerm(e.target.value)
+  }
+
+  const debouncedResults = useMemo(
+    () => debounce(handleChange, 300),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  )
+
+  useEffect(() => {
+    inputRef.current.value = (router.query.searchQuery as string) ?? ''
+  }, [router.query.searchQuery])
+
+  useEffect(() => {
     if (router.route === '/blog') {
       const queryToSet = router.query
 
-      if (!e.target.value) delete queryToSet.searchQuery
-      else queryToSet.searchQuery = e.target.value
+      if (!term) delete queryToSet.searchQuery
+      else queryToSet.searchQuery = term
 
       router.push(
         {
@@ -33,11 +56,14 @@ const Search = ({ className }: Props) => {
         }
       )
     }
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [term])
 
   useEffect(() => {
-    setTerm(router.query.searchQuery ?? '')
-  }, [router])
+    return () => {
+      debouncedResults.cancel()
+    }
+  })
 
   return (
     <div
@@ -47,9 +73,9 @@ const Search = ({ className }: Props) => {
         <input
           className="flex-1 w-60 px-2 m-1 bg-transparent text-gray-700 placeholder-gray-400 focus:outline-none"
           type="text"
-          value={term}
           placeholder="Search Posts"
-          onChange={handleChange}
+          ref={inputRef}
+          onChange={debouncedResults}
         />
         <button className="flex items-center justify-center p-2 m-1 text-white transition-colors duration-300 transform rounded-xl lg:w-8 lg:h-8 lg:p-0 bg-indigo-500 hover:bg-indigo-500/70 focus:outline-none focus:bg-indigo-500/70">
           <svg
