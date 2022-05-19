@@ -46,6 +46,12 @@ const CategorySelect = ({}: Props) => {
   )
 
   useEffect(() => {
+    if (router.query.category) {
+      setSelectedCategories((router.query.category as string).split(' '))
+    }
+  }, [router.query.category])
+
+  useEffect(() => {
     const selectedCategoryQuery = selectedCategories.join(' ')
     const queryToSet = router.query
 
@@ -83,12 +89,6 @@ const CategorySelect = ({}: Props) => {
 
     setAvailableCategories(availableCategories)
   }, [categoryCombinations, searchQuery, selectedCategories])
-
-  useEffect(() => {
-    if (router.query.category) {
-      setSelectedCategories((router.query.category as string).split(' '))
-    }
-  }, [router.query.category])
 
   return (
     <>
