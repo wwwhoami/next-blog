@@ -1,6 +1,7 @@
 import { MDXRemoteSerializeResult } from 'next-mdx-remote/dist/types'
 
 export interface Post {
+  id: string
   createdAt: string
   title: string
   slug: string

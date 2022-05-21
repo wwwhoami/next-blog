@@ -15,6 +15,7 @@ type GetPostsByCategoriesQueryParams = GetPostsQueryParams & {
 }
 
 const selectPostWithAuthorCategories = {
+  id: true,
   createdAt: true,
   title: true,
   slug: true,

@@ -15,7 +15,7 @@ type Props = {
 
 const Search = ({ className }: Props) => {
   const router = useRouter()
-  const [term, setTerm] = useState(router.query.searchQuery ?? '')
+  const [term, setTerm] = useState('')
   const inputRef = useRef() as MutableRefObject<HTMLInputElement>
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -35,7 +35,10 @@ const Search = ({ className }: Props) => {
   )
 
   useEffect(() => {
-    inputRef.current.value = (router.query.searchQuery as string) ?? ''
+    if (router.query.searchQuery) {
+      inputRef.current.value = router.query.searchQuery as string
+      setTerm(router.query.searchQuery as string)
+    }
   }, [router.query.searchQuery])
 
   useEffect(() => {

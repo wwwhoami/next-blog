@@ -32,8 +32,8 @@ const Home: NextPage<Props> = ({ fallbackData }) => {
     <Layout>
       <h1 className="text-4xl border-b-4 p-3 font-semibold">Latest Posts</h1>
       <div className="grid my-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-        {posts?.map((post, index) => (
-          <PostCard key={index} post={post} />
+        {posts?.map((post) => (
+          <PostCard key={post.id} post={post} />
         ))}
       </div>
 
