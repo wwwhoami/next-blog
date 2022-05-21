@@ -1,7 +1,7 @@
 import { MDXRemoteSerializeResult } from 'next-mdx-remote/dist/types'
 
 export interface Post {
-  id: string
+  id: number
   createdAt: string
   title: string
   slug: string
@@ -18,7 +18,7 @@ export type PostMdx = Omit<Post, 'content' | 'slug'> & {
   readingTimeMinutes: number
 }
 
-export type PostHeader = Omit<PostMdx, 'content' | 'viewCount'>
+export type PostHeader = Omit<PostMdx, 'content' | 'viewCount' | 'id'>
 
 export interface Author {
   name: string
