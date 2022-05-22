@@ -19,8 +19,7 @@ const useOnScreen = (ref: MutableRefObject<any>) => {
     return () => {
       observer.disconnect()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [ref])
 
   return isIntersecting
 }
