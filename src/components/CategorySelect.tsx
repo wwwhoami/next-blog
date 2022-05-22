@@ -97,20 +97,22 @@ const CategorySelect = ({}: Props) => {
       <div className="mt-3 text-2xl font-medium text-black col-span-full mb-6">
         Search posts by topics
       </div>
-      {categories?.map((category, index) => (
-        <CategoryLabel
-          key={index}
-          name={category.name}
-          hexColor={category.hexColor}
-          setSelectedCategories={setSelectedCategories}
-          available={availableCategories?.some(
-            (availableCategory) => availableCategory === category.name
-          )}
-          selected={selectedCategories?.some(
-            (selectedCategory) => selectedCategory === category.name
-          )}
-        />
-      ))}
+      <div className="-mb-4 -mr-4 flex flex-wrap">
+        {categories?.map((category, index) => (
+          <CategoryLabel
+            key={index}
+            name={category.name}
+            hexColor={category.hexColor}
+            setSelectedCategories={setSelectedCategories}
+            available={availableCategories?.some(
+              (availableCategory) => availableCategory === category.name
+            )}
+            selected={selectedCategories?.some(
+              (selectedCategory) => selectedCategory === category.name
+            )}
+          />
+        ))}
+      </div>
     </>
   )
 }
