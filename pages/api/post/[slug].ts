@@ -1,3 +1,4 @@
+import { checkAuth } from '@/lib/auth'
 import { Prisma } from '@prisma/client'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import nc from 'next-connect'
@@ -29,7 +30,8 @@ const handler = nc<NextApiRequest, NextApiResponse>({
     }
     res.status(400).send('Bad Request')
   })
-  .delete(async (req, res) => {
+  // TODO: check if requesting user is author
+  .delete(checkAuth, async (req, res) => {
     const { slug } = req.query
     if (typeof slug === 'string') {
       const post = await deletePostBySlug(slug)

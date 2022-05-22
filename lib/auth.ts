@@ -1,6 +1,10 @@
-import bcrypt from 'bcrypt'
-import { sign } from 'jsonwebtoken'
 import redis from '@/lib/redis'
+import bcrypt from 'bcrypt'
+import { sign, verify } from 'jsonwebtoken'
+import { NextHandler } from 'next-connect'
+import { NextApiRequest, NextApiResponse } from 'next/types'
+import { BadRequest, UnauthorizedError } from './error'
+import prisma from './prisma'
 
 export async function matchPassword(
   enteredPassword: string,
@@ -25,8 +29,31 @@ export async function createRefreshToken(id: string) {
     expiresIn,
   })
 
-  redis.set(id, refreshToken)
-  redis.expire(id, expiresIn)
+  await redis.set(id, refreshToken)
+  await redis.expire(id, expiresIn)
 
   return refreshToken
+}
+
+export async function checkAuth(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  next: NextHandler
+) {
+  const { authorization } = req.headers
+
+  if (authorization?.startsWith('Bearer')) {
+    const token = authorization.split(' ')[1]
+    const decoded = verify(token, process.env.ACCESS_TOKEN_SECRET as string)
+
+    req.body.user = await prisma.user.findFirst({
+      where: {
+        id: parseInt(decoded as string),
+      },
+      rejectOnNotFound: true,
+    })
+  } else {
+    throw new UnauthorizedError('Not authorized, no token')
+  }
+  next()
 }

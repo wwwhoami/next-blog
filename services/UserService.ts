@@ -3,6 +3,7 @@ import {
   createRefreshToken,
   matchPassword,
 } from '@/lib/auth'
+import { BadRequest } from '@/lib/error'
 import prisma from '@/lib/prisma'
 import redis from '@/lib/redis'
 import { decode, JwtPayload, verify } from 'jsonwebtoken'
@@ -37,12 +38,19 @@ export async function authUser(email: string, password: string) {
   }
 }
 
-export async function createUser(
-  name: string,
-  email: string,
-  password: string,
-  image: string = 'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/591.jpg'
-) {
+type CreateUserParams = {
+  name: string
+  email: string
+  password: string
+  image?: string
+}
+
+export async function createUser({
+  name,
+  email,
+  password,
+  image = 'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/591.jpg',
+}: CreateUserParams) {
   const userWithEmailExists = await prisma.user.findFirst({
     where: {
       email,
@@ -61,9 +69,9 @@ export async function createUser(
   })
 
   if (userWithEmailExists) {
-    throw new Error('User with provided email exists')
+    throw new BadRequest('User with provided email exists')
   } else if (userWithUsernameExists) {
-    throw new Error('User with provided name exists')
+    throw new BadRequest('User with provided name exists')
   }
 
   const user = await prisma.user.create({
@@ -75,22 +83,23 @@ export async function createUser(
     },
   })
   if (user) {
-    const { id, name, email } = user
+    const { id, name, email, image } = user
     const accessToken = await createAccessToken(id.toString())
     const accessTokenExpiry = (decode(accessToken) as JwtPayload).exp
 
-    const refreshToken = createRefreshToken(id.toString())
+    const refreshToken = await createRefreshToken(id.toString())
 
     return {
       id,
       name,
       email,
+      image,
       accessToken,
       accessTokenExpiry,
       refreshToken,
     }
   } else {
-    throw new Error('Invalid user data')
+    throw new BadRequest('Invalid user data')
   }
 }
 
@@ -101,9 +110,9 @@ export async function logoutUser(refreshToken: string) {
   )
   const id: string = (decoded as JwtPayload)['userId']
 
-  redis.del(id)
+  await redis.del(id)
 
-  return
+  return id
 }
 
 export async function getUserProfileData(name: string) {
@@ -123,7 +132,7 @@ export async function getUserProfileData(name: string) {
 }
 
 type UserUpdateData = {
-  name?: string
+  name: string
   email?: string
   password?: string
   image?: string
@@ -146,6 +155,7 @@ export async function updateUserProfileData({
       name,
     },
   })
+
   const accessToken = await createAccessToken(updatedUser.id.toString())
   const accessTokenExpiry = (decode(accessToken) as JwtPayload).exp
 
@@ -157,4 +167,14 @@ export async function updateUserProfileData({
     accessToken,
     accessTokenExpiry,
   }
+}
+
+export async function deleteUser({ name }: UserUpdateData) {
+  const deletedUser = await prisma.user.delete({
+    where: {
+      name,
+    },
+  })
+
+  return deletedUser.id
 }
