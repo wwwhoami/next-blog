@@ -2,6 +2,7 @@ import { Prisma } from '@prisma/client'
 
 export const userData: Prisma.UserCreateWithoutPostsInput[] = [
   {
+    id: 'ab182222-5603-4b01-909b-a68fbb3a2153',
     name: 'Alice Johnson',
     email: 'alice@prisma.io',
     password: '$2a$12$lCGhm3HSmjkFJFtViSPpSemPLvSGpak1ljgC5WyGoIh/l5Igfyl/K',

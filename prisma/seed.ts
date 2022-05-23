@@ -1,4 +1,4 @@
-import { generatePosts, generateUsers } from '@/utils/fakeDataGen'
+import { generatePosts, generateUsers, generateUuid } from '@/utils/fakeDataGen'
 import { getPostData } from '@/utils/post'
 import { PrismaClient } from '@prisma/client'
 import { categoryData, userData } from 'data/seedData'
@@ -15,8 +15,9 @@ async function main() {
 
   console.log('Data generating...')
 
-  const randUserData = await generateUsers(userDataCount)
-  const randPostData = await generatePosts(postDataCount, userDataCount)
+  const randUuids = generateUuid(userDataCount)
+  const randUserData = await generateUsers(userDataCount, randUuids)
+  const randPostData = await generatePosts(postDataCount, randUuids)
 
   console.log('Data generation completed')
 

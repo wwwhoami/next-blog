@@ -32,7 +32,7 @@ export async function getPostData() {
     coverImage: post.cover_image,
     author: {
       connect: {
-        id: userData.findIndex((user) => user.name === post.author) + 1,
+        id: 'ab182222-5603-4b01-909b-a68fbb3a2153',
       },
     },
     categories: {
