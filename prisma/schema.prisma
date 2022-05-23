@@ -9,7 +9,7 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
+  id       String @id @default(uuid()) @db.Uuid
   email    String @unique @db.VarChar
   name     String @unique @db.VarChar
   password String @db.Char(60)
@@ -23,7 +23,7 @@ model Post {
   content    String
   published  Boolean          @default(false)
   coverImage String           @map("cover_image")
-  authorId   Int              @map("author_id")
+  authorId   String           @map("author_id") @db.Uuid
   createdAt  DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt  DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
   viewCount  Int              @default(0) @map("view_count")
