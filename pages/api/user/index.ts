@@ -1,4 +1,4 @@
-import { checkAuth } from '@/lib/auth'
+import { checkAuth } from '@/middleware/authMiddleware'
 import { BadRequest } from '@/lib/error'
 import { serialize } from 'cookie'
 import { NextApiRequest, NextApiResponse } from 'next'
@@ -9,6 +9,11 @@ import {
   getUserProfileData,
   updateUserProfileData,
 } from 'services/UserService'
+import {
+  validateEmail,
+  validatePassword,
+  validateUserImage,
+} from '@/middleware/validateMiddleware'
 
 type CreateUserRequest = {
   body: {
@@ -49,31 +54,45 @@ const handler = nc<NextApiRequest, NextApiResponse>({
 
     res.json({ email, name, image })
   })
-  .post<CreateUserRequest>(async (req, res) => {
-    const {
-      name: username,
-      email: userEmail,
-      password,
-      image: userImage,
-    } = req.body
-    const { name, email, image, accessToken, accessTokenExpiry, refreshToken } =
-      await createUser({
+  .post<CreateUserRequest>(
+    validateEmail,
+    validatePassword,
+    validateUserImage,
+    async (req, res) => {
+      const {
+        name: username,
+        email: userEmail,
+        password,
+        image: userImage,
+      } = req.body
+
+      const {
+        name,
+        email,
+        image,
+        accessToken,
+        accessTokenExpiry,
+        refreshToken,
+      } = await createUser({
         name: username,
         email: userEmail,
         password,
         image: userImage,
       })
 
-    res.setHeader(
-      'Set-Cookie',
-      serialize('refreshToken', refreshToken, {
-        httpOnly: true,
-        sameSite: 'strict',
-      })
-    )
+      res.setHeader(
+        'Set-Cookie',
+        serialize('refreshToken', refreshToken, {
+          httpOnly: true,
+          sameSite: 'strict',
+        })
+      )
 
-    res.status(201).json({ name, email, image, accessToken, accessTokenExpiry })
-  })
+      res
+        .status(201)
+        .json({ name, email, image, accessToken, accessTokenExpiry })
+    }
+  )
   .put<UpdateUserRequest>(checkAuth, async (req, res) => {
     const { name, email, password, image } = req.body
     if (!name) throw new BadRequest('Missing name value in body')

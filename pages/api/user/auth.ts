@@ -1,3 +1,7 @@
+import {
+  validateEmail,
+  validatePassword,
+} from '@/middleware/validateMiddleware'
 import { serialize } from 'cookie'
 import { NextApiRequest, NextApiResponse } from 'next'
 import nc from 'next-connect'
@@ -16,7 +20,7 @@ const handler = nc<NextApiRequest, NextApiResponse>({
   onNoMatch: (req, res) => {
     res.status(404).send({ message: 'Page is not found' })
   },
-}).post(async (req, res) => {
+}).post(validateEmail, validatePassword, async (req, res) => {
   const { email: userEmail, password } = req.body
   const { name, email, accessToken, accessTokenExpiry, refreshToken } =
     await authUser(userEmail, password)
