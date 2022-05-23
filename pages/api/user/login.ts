@@ -1,3 +1,4 @@
+import { BadRequest } from '@/lib/error'
 import {
   validateEmail,
   validatePassword,
@@ -5,15 +6,14 @@ import {
 import { serialize } from 'cookie'
 import { NextApiRequest, NextApiResponse } from 'next'
 import nc from 'next-connect'
-import { authUser } from 'services/UserService'
+import { loginUser } from 'services/UserService'
 
 const handler = nc<NextApiRequest, NextApiResponse>({
   onError: (err, req, res, next) => {
     console.error(err.message)
     console.error(err.stack)
-    if (typeof err === 'string') res.status(400).json({ message: err })
-    if (err.name === 'UnauthorizedError')
-      res.status(401).json({ mesasge: 'Invalid token' })
+    if (err instanceof BadRequest)
+      res.status(400).json({ message: err.message, name: err.name })
 
     res.status(500).json({ message: 'Internal server error' })
   },
@@ -23,7 +23,7 @@ const handler = nc<NextApiRequest, NextApiResponse>({
 }).post(validateEmail, validatePassword, async (req, res) => {
   const { email: userEmail, password } = req.body
   const { name, email, accessToken, accessTokenExpiry, refreshToken } =
-    await authUser(userEmail, password)
+    await loginUser(userEmail, password)
 
   res.setHeader(
     'Set-Cookie',

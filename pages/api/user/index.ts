@@ -1,5 +1,5 @@
 import { checkAuth } from '@/middleware/authMiddleware'
-import { BadRequest } from '@/lib/error'
+import { BadRequest, UnauthorizedError } from '@/lib/error'
 import { serialize } from 'cookie'
 import { NextApiRequest, NextApiResponse } from 'next'
 import nc from 'next-connect'
@@ -37,7 +37,11 @@ const handler = nc<NextApiRequest, NextApiResponse>({
   onError: (err, req, res, next) => {
     console.error(err.message)
     console.error(err.stack)
-    if (err instanceof BadRequest) res.status(400).json(err)
+
+    if (err instanceof BadRequest)
+      res.status(400).json({ name: err.name, message: err.message })
+    if (err instanceof UnauthorizedError)
+      res.status(401).json({ name: err.name, message: err.message })
 
     res.status(500).json({ message: 'Internal server error' })
   },

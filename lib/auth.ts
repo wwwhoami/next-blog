@@ -1,6 +1,7 @@
 import redis from '@/lib/redis'
 import bcrypt from 'bcrypt'
-import { sign } from 'jsonwebtoken'
+import { decode, JwtPayload, sign, verify } from 'jsonwebtoken'
+import { ForbiddenError, UnauthorizedError } from './error'
 
 export async function matchPassword(
   enteredPassword: string,
@@ -29,4 +30,27 @@ export async function createRefreshToken(id: string) {
   await redis.expire(id, expiresIn)
 
   return refreshToken
+}
+
+export const refreshTokens = async (refreshToken: string) => {
+  if (!refreshToken) {
+    throw new ForbiddenError('Access denied: token missing')
+  } else {
+    const decoded = verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET as string
+    )
+    const id: string = (decoded as JwtPayload)['userId']
+    const tokenValue = await redis.get(id)
+    if (!tokenValue) {
+      throw new UnauthorizedError('Token expired')
+    } else {
+      await redis.del(id)
+      const refreshToken = await createRefreshToken(id)
+      const accessToken = await createAccessToken(id)
+      const accessTokenExpiry = (decode(accessToken) as JwtPayload).exp
+
+      return { refreshToken, accessToken, accessTokenExpiry }
+    }
+  }
 }

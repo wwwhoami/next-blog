@@ -8,7 +8,7 @@ import prisma from '@/lib/prisma'
 import redis from '@/lib/redis'
 import { decode, JwtPayload, verify } from 'jsonwebtoken'
 
-export async function authUser(email: string, password: string) {
+export async function loginUser(email: string, password: string) {
   const user = await prisma.user.findFirst({
     select: {
       id: true,
@@ -34,7 +34,7 @@ export async function authUser(email: string, password: string) {
       refreshToken,
     }
   } else {
-    throw new Error('Invalid email or password!')
+    throw new BadRequest('Invalid email or password!')
   }
 }
 
