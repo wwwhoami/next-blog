@@ -18,7 +18,7 @@ const getKey: SWRInfiniteKeyLoader = (
 ) => {
   if (previousPageData && !previousPageData.length) return null
 
-  return `${process.env.NEXT_PUBLIC_API_URL}post?take=${PAGE_SIZE}&skip=${
+  return `${process.env.NEXT_PUBLIC_API_URL}/post?take=${PAGE_SIZE}&skip=${
     pageIndex * PAGE_SIZE
   }`
 }
@@ -47,7 +47,7 @@ const Home: NextPage<Props> = ({ fallbackData }) => {
 export default Home
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  const url = `${process.env.NEXT_PUBLIC_API_URL}post?take=${PAGE_SIZE}&skip=0`
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/post?take=${PAGE_SIZE}&skip=0`
 
   const posts = await fetchPosts(url)
 

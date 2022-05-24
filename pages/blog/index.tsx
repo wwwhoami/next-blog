@@ -20,7 +20,7 @@ const getKey = (
 ) => {
   if (previousPageData && !previousPageData.length) return null
 
-  return `${process.env.NEXT_PUBLIC_API_URL}post/search?${
+  return `${process.env.NEXT_PUBLIC_API_URL}/post/search?${
     searchQuery ? `searchQuery=${searchQuery}&` : ''
   }${category ? `category=${category}&` : ''}take=${PAGE_SIZE}&skip=${
     pageIndex * PAGE_SIZE

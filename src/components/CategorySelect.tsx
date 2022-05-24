@@ -36,13 +36,13 @@ const CategorySelect = ({}: Props) => {
   const [availableCategories, setAvailableCategories] = useState<string[]>()
 
   const { data: categories } = useSWR<Omit<Category, 'description'>[]>(
-    `${process.env.NEXT_PUBLIC_API_URL}category`,
+    `${process.env.NEXT_PUBLIC_API_URL}/category`,
     categoryFetcher,
     { revalidateOnFocus: false }
   )
 
   const { data: categoryCombinations } = useSWR<string[][]>(
-    `${process.env.NEXT_PUBLIC_API_URL}category/combo${searchQuery}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/category/combo${searchQuery}`,
     categoryCombinationsFetcher,
     { revalidateOnFocus: false }
   )
