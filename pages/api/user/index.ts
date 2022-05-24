@@ -56,7 +56,7 @@ const handler = nc<NextApiRequest, NextApiResponse>({
 
     const { email, name, image } = await getUserProfileData(username)
 
-    res.json({ email, name, image })
+    res.json({ user: { email, name, image } })
   })
   .post<CreateUserRequest>(
     validateEmail,
@@ -94,24 +94,37 @@ const handler = nc<NextApiRequest, NextApiResponse>({
 
       res
         .status(201)
-        .json({ name, email, image, accessToken, accessTokenExpiry })
+        .json({ user: { name, email, image }, accessToken, accessTokenExpiry })
     }
   )
   .put<UpdateUserRequest>(checkAuth, async (req, res) => {
     const { name, email, password, image } = req.body
     if (!name) throw new BadRequest('Missing name value in body')
 
-    const updatedUser = updateUserProfileData({ name, email, password, image })
+    const updatedUser = await updateUserProfileData({
+      name,
+      email,
+      password,
+      image,
+    })
 
-    res.status(201).json(updatedUser)
+    res.status(201).json({
+      user: {
+        name: updatedUser.name,
+        email: updatedUser.email,
+        image: updatedUser.image,
+      },
+      accessToken: updatedUser.accessToken,
+      accessTokenExpiry: updatedUser.accessTokenExpiry,
+    })
   })
   .delete(checkAuth, async (req, res) => {
     const { name } = req.body
     if (!name) throw new BadRequest('Missing name value in body')
 
-    const deletedUserId = await deleteUser(name)
+    await deleteUser(name)
 
-    res.status(204).json({ id: deletedUserId })
+    res.status(204)
   })
 
 export default handler

@@ -22,7 +22,7 @@ const handler = nc<NextApiRequest, NextApiResponse>({
   },
 }).post(validateEmail, validatePassword, async (req, res) => {
   const { email: userEmail, password } = req.body
-  const { name, email, accessToken, accessTokenExpiry, refreshToken } =
+  const { name, email, image, accessToken, accessTokenExpiry, refreshToken } =
     await loginUser(userEmail, password)
 
   res.setHeader(
@@ -33,7 +33,7 @@ const handler = nc<NextApiRequest, NextApiResponse>({
     })
   )
 
-  res.json({ name, email, accessToken, accessTokenExpiry })
+  res.json({ user: { name, email, image }, accessToken, accessTokenExpiry })
 })
 
 export default handler

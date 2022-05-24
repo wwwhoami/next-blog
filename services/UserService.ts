@@ -15,12 +15,13 @@ export async function loginUser(email: string, password: string) {
       name: true,
       email: true,
       password: true,
+      image: true,
     },
     where: { email },
   })
 
   if (user && (await matchPassword(password, user.password))) {
-    const { id, name, email } = user
+    const { id, name, email, image } = user
     const accessToken = await createAccessToken(id)
     const accessTokenExpiry = (decode(accessToken) as JwtPayload).exp
 
@@ -29,6 +30,7 @@ export async function loginUser(email: string, password: string) {
     return {
       name,
       email,
+      image,
       accessToken,
       accessTokenExpiry,
       refreshToken,
@@ -90,7 +92,6 @@ export async function createUser({
     const refreshToken = await createRefreshToken(id)
 
     return {
-      id,
       name,
       email,
       image,
@@ -160,8 +161,7 @@ export async function updateUserProfileData({
   const accessTokenExpiry = (decode(accessToken) as JwtPayload).exp
 
   return {
-    id: updatedUser.id,
-    username: updatedUser.name,
+    name: updatedUser.name,
     email: updatedUser.email,
     image: updatedUser.image,
     accessToken,
