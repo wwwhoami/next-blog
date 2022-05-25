@@ -41,7 +41,7 @@ type AccessTokenResponse = {
   accessTokenExpiry: number
 }
 
-export function UserProvider({ children }: Props) {
+function UserProvider({ children }: Props) {
   const [user, setUser] = useState<UserSession>()
   const [error, setError] = useState<Error | null>()
 
@@ -167,3 +167,5 @@ export function UserProvider({ children }: Props) {
     </UserContext.Provider>
   )
 }
+
+export default UserProvider
