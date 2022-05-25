@@ -1,6 +1,6 @@
 import { Category } from '@/types/Post'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import useSWR from 'swr'
 import CategoryLabel from './CategoryLabel'
 
@@ -33,7 +33,6 @@ const CategorySelect = ({}: Props) => {
     : ''
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-  const [availableCategories, setAvailableCategories] = useState<string[]>()
 
   const { data: categories } = useSWR<Omit<Category, 'description'>[]>(
     `${process.env.NEXT_PUBLIC_API_URL}/category`,
@@ -46,6 +45,25 @@ const CategorySelect = ({}: Props) => {
     categoryCombinationsFetcher,
     { revalidateOnFocus: false }
   )
+
+  const availableCategories = useMemo(() => {
+    const hasCombination = categoryCombinations?.map((categories) =>
+      selectedCategories?.length
+        ? selectedCategories?.every((selected) => categories.includes(selected))
+        : true
+    )
+
+    const availableCategories = categoryCombinations
+      ?.flatMap((categories, index) => {
+        if (hasCombination && hasCombination[index])
+          return categories.filter(
+            (category) => !selectedCategories?.includes(category)
+          )
+      })
+      .filter((e) => e) as string[]
+
+    return availableCategories
+  }, [categoryCombinations, selectedCategories])
 
   useEffect(() => {
     if (router.query.category) {
@@ -72,25 +90,6 @@ const CategorySelect = ({}: Props) => {
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCategories])
-
-  useEffect(() => {
-    const hasCombination = categoryCombinations?.map((categories) =>
-      selectedCategories?.length
-        ? selectedCategories?.every((selected) => categories.includes(selected))
-        : true
-    )
-
-    const availableCategories = categoryCombinations
-      ?.flatMap((categories, index) => {
-        if (hasCombination && hasCombination[index])
-          return categories.filter(
-            (category) => !selectedCategories?.includes(category)
-          )
-      })
-      .filter((e) => e) as string[]
-
-    setAvailableCategories(availableCategories)
-  }, [categoryCombinations, searchQuery, selectedCategories])
 
   return (
     <>
