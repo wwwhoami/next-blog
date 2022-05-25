@@ -37,13 +37,19 @@ const CategorySelect = ({}: Props) => {
   const { data: categories } = useSWR<Omit<Category, 'description'>[]>(
     `${process.env.NEXT_PUBLIC_API_URL}/category`,
     categoryFetcher,
-    { revalidateOnFocus: false }
+    {
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+    }
   )
 
   const { data: categoryCombinations } = useSWR<string[][]>(
     `${process.env.NEXT_PUBLIC_API_URL}/category/combo${searchQuery}`,
     categoryCombinationsFetcher,
-    { revalidateOnFocus: false }
+    {
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+    }
   )
 
   const availableCategories = useMemo(() => {
@@ -66,10 +72,11 @@ const CategorySelect = ({}: Props) => {
   }, [categoryCombinations, selectedCategories])
 
   useEffect(() => {
-    if (router.query.category) {
-      setSelectedCategories((router.query.category as string).split(' '))
-    }
-  }, [router.query.category])
+    if (router.isReady)
+      if (router.query.category) {
+        setSelectedCategories((router.query.category as string).split(' '))
+      }
+  }, [router.isReady, router.query.category])
 
   useEffect(() => {
     const selectedCategoryQuery = selectedCategories.join(' ')

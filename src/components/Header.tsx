@@ -1,11 +1,14 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React from 'react'
+import Modal from './Modal'
 import Search from './Search'
-import SignUpModal from './SignUpModal'
+import SignUpForm from './SignUpForm'
 
 type Props = {}
 
 const Header = (props: Props) => {
+  const router = useRouter()
   return (
     <header className="shadow w-full backdrop-filter backdrop-blur-xl sticky z-50 top-0 bg-white bg-opacity-60 h-14 py-1">
       <div className="container mx-auto flex flex-wrap flex-col md:flex-row items-center">
@@ -24,7 +27,7 @@ const Header = (props: Props) => {
               Blog
             </a>
           </Link>
-          <Link href="/?signUp=true" as="/signUp" shallow={true} passHref>
+          <Link href="/?signUp=true" as="/signUp" shallow={true}>
             <a className="px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900">
               Sign up
             </a>
@@ -35,7 +38,14 @@ const Header = (props: Props) => {
             </a>
           </Link>
         </nav>
-        <SignUpModal />
+
+        <Modal
+          isShown={!!router.query.signUp}
+          onClose={() => router.back()}
+          title="Sign Up"
+        >
+          <SignUpForm />
+        </Modal>
       </div>
     </header>
   )

@@ -35,14 +35,16 @@ const Search = ({ className }: Props) => {
   )
 
   useEffect(() => {
-    if (router.query.searchQuery) {
-      inputRef.current.value = router.query.searchQuery as string
-      setTerm(router.query.searchQuery as string)
-    }
-  }, [router.query.searchQuery])
+    if (router.isReady)
+      if (router.query.searchQuery) {
+        console.log(`1 ${router.query.searchQuery}`)
+        inputRef.current.value = router.query.searchQuery as string
+        setTerm(router.query.searchQuery as string)
+      }
+  }, [router.isReady, router.query.searchQuery])
 
   useEffect(() => {
-    if (router.route === '/blog') {
+    if (router.isReady && router.route === '/blog') {
       const queryToSet = router.query
 
       if (!term) delete queryToSet.searchQuery
@@ -60,7 +62,7 @@ const Search = ({ className }: Props) => {
       )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [term])
+  }, [term, router.isReady])
 
   useEffect(() => {
     return () => {

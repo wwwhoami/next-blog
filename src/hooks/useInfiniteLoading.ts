@@ -12,7 +12,11 @@ export const useInfiniteLoading = <T extends any[]>(
   const { data, error, size, setSize, isValidating } = useSWRInfinite<T>(
     (...args) => getKey(...args),
     fetcher,
-    { fallbackData, revalidateOnFocus: false }
+    {
+      fallbackData,
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+    }
   )
 
   const isEmpty = data?.[0]?.length === 0
