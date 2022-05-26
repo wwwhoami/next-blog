@@ -33,7 +33,7 @@ const PostCard = ({
           alt="Cover image"
           height={420}
           width={600}
-          className="mb-4 rounded object-cover"
+          className="mb-4 rounded-xl object-cover"
         />
         <div className="px-6 py-3">
           <div className="flex items-center mt-1 gap-2">

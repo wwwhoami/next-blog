@@ -1,4 +1,4 @@
-import { checkAuth } from '@/lib/auth'
+import { checkAuth } from '@/middleware/authMiddleware'
 import { Prisma } from '@prisma/client'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import nc from 'next-connect'

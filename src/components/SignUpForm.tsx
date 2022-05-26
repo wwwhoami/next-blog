@@ -1,17 +1,12 @@
-import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import isEmail from 'validator/lib/isEmail'
 import isStrongPassword from 'validator/lib/isStrongPassword'
 import FormInput from './FormInput'
-import Modal from './Modal'
 import PasswordInput from './PasswordInput'
 
 type Props = {}
 
 const SignUpForm = (props: Props) => {
-  const router = useRouter()
-  const { signUp } = router.query
-
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [emailError, setEmailError] = useState(false)

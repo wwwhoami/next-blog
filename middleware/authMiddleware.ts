@@ -17,7 +17,7 @@ export async function checkAuth(
 
     req.body.user = await prisma.user.findFirst({
       where: {
-        id: parseInt(decoded as string),
+        id: decoded as string,
       },
       rejectOnNotFound: true,
     })

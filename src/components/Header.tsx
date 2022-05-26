@@ -9,8 +9,9 @@ type Props = {}
 
 const Header = (props: Props) => {
   const router = useRouter()
+
   return (
-    <header className="shadow w-full backdrop-filter backdrop-blur-xl sticky z-50 top-0 bg-white bg-opacity-60 h-14 py-1">
+    <header className="shadow w-full backdrop-filter backdrop-blur-xl sticky z-50 top-0 bg-white bg-opacity-60 py-1">
       <div className="container mx-auto flex flex-wrap flex-col md:flex-row items-center">
         <Link href="/" passHref>
           <a className="text-2xl  ml-3">
