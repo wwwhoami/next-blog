@@ -64,6 +64,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@headlessui/react@npm:^1.6.3":
+  version: 1.6.3
+  resolution: "@headlessui/react@npm:1.6.3"
+  peerDependencies:
+    react: ^16 || ^17 || ^18
+    react-dom: ^16 || ^17 || ^18
+  checksum: be809e713697047b62e5cc3765e8dea957367d3a8cbaac390ff0f2f389c498c98a0855eff607d354db4f21126fd6c0d8f2d8cee069caf89de6611166c63245d0
+  languageName: node
+  linkType: hard
+
 "@heroicons/react@npm:^1.0.6":
   version: 1.0.6
   resolution: "@heroicons/react@npm:1.0.6"
@@ -3789,6 +3799,7 @@ __metadata:
   resolution: "next-blog@workspace:."
   dependencies:
     "@faker-js/faker": ^6.3.1
+    "@headlessui/react": ^1.6.3
     "@heroicons/react": ^1.0.6
     "@prisma/client": latest
     "@tailwindcss/typography": ^0.5.2

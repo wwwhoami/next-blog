@@ -1,5 +1,7 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React, { useState } from 'react'
+import { useUser } from 'src/context/userContext'
 import isEmail from 'validator/lib/isEmail'
 import isStrongPassword from 'validator/lib/isStrongPassword'
 import FormInput from './FormInput'
@@ -13,8 +15,19 @@ const SignInForm = (props: Props) => {
   const [emailError, setEmailError] = useState(false)
   const [passwordError, setPasswordError] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const router = useRouter()
+  const { user, error, login } = useUser()
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (!emailError && !passwordError && email.length && password.length) {
+      await login(email, password)
+      if (error) console.log(error)
+      if (user) {
+        console.log(user)
+        router.push('/', undefined, { shallow: true })
+      }
+    }
   }
 
   return (

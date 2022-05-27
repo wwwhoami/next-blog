@@ -52,10 +52,11 @@ const PasswordInput = ({
           id={id}
         />
         <button
+          type="button"
           onClick={() => {
             setPasswordVisible((prev) => !prev)
           }}
-          className="flex items-center focus-ring justify-center p-2 m-1 transition-colors duration-300 transform rounded-xl lg:w-8 lg:h-8 lg:p-0 text-indigo-500 hover:opacity-80 focus:ring-indigo-500/70 focus:outline-none focus:ring-2"
+          className="flex items-center focus-ring justify-center m-1 transition-colors duration-300 transform rounded-xl w-8 h-8 p-0 text-indigo-500 hover:opacity-80 focus:ring-indigo-500/70 focus:outline-none focus:ring-2"
         >
           {passwordVisible ? <EyeOffIcon /> : <EyeIcon />}
         </button>

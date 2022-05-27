@@ -1,5 +1,7 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React, { useState } from 'react'
+import { useUser } from 'src/context/userContext'
 import isEmail from 'validator/lib/isEmail'
 import isStrongPassword from 'validator/lib/isStrongPassword'
 import FormInput from './FormInput'
@@ -8,17 +10,49 @@ import PasswordInput from './PasswordInput'
 type Props = {}
 
 const SignUpForm = (props: Props) => {
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [nameError, setNameError] = useState(false)
   const [emailError, setEmailError] = useState(false)
   const [passwordError, setPasswordError] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const router = useRouter()
+  const { user, error, register } = useUser()
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (
+      !nameError &&
+      !emailError &&
+      !passwordError &&
+      name.length &&
+      email.length &&
+      password.length
+    ) {
+      await register(name, email, password)
+      if (error) console.log(error)
+      if (user) {
+        console.log(user)
+        router.push('/', undefined, { shallow: true })
+      }
+    }
   }
 
   return (
     <form className="w-80" onSubmit={handleSubmit}>
+      <FormInput
+        label="Name"
+        value={name}
+        onChange={(e) => {
+          setName(e.target.value)
+        }}
+        type="text"
+        id="name"
+        placeholder="Enter preferred username"
+        hasError={nameError}
+        errorMessage="Wrong email format"
+      />
       <FormInput
         label="Email"
         value={email}

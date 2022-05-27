@@ -22,7 +22,9 @@ type UserContext = {
   logout: () => Promise<void>
 }
 
-const UserContext = createContext<UserContext | null>(null)
+const UserContext = createContext<UserContext>(undefined!)
+
+UserContext.displayName = 'UserContext'
 
 export function useUser() {
   const context = useContext(UserContext)
@@ -111,11 +113,11 @@ function UserProvider({ children }: Props) {
       headers: { 'Content-Type': 'application/json' },
     })
 
-    const data: any | Error = await res.json()
+    const data: { id: string } | Error = await res.json()
 
     if (!res.ok && 'message' in data) setError(data)
 
-    if (res.ok) {
+    if (res.ok && 'id' in data) {
       setUser(undefined)
       setError(null)
     }
