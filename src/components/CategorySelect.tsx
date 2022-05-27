@@ -1,7 +1,7 @@
 import { Category } from '@/types/Post'
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import useSWR, { useSWRConfig } from 'swr'
+import useSWR from 'swr'
 import CategoryLabel from './CategoryLabel'
 
 type Props = {}
@@ -31,7 +31,6 @@ const CategorySelect = ({}: Props) => {
   const searchQuery = router.query.searchQuery
     ? `?searchQuery=${router.query.searchQuery}`
     : ''
-  const { mutate } = useSWRConfig()
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const selectedCategoriesNotLoadedFromQuery = useRef(true)
@@ -95,8 +94,6 @@ const CategorySelect = ({}: Props) => {
 
       if (selectedCategories.length === 0) delete queryToSet.category
       else queryToSet.category = selectedCategoryQuery
-
-      mutate(`${process.env.NEXT_PUBLIC_API_URL}/post/search`)
 
       router.push(
         {
