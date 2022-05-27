@@ -3,7 +3,7 @@ import debounce from 'lodash.debounce'
 import { useRouter } from 'next/router'
 import React, {
   FormEvent,
-  MutableRefObject,
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -16,40 +16,35 @@ type Props = {
 
 const Search = ({ className }: Props) => {
   const router = useRouter()
-  const [term, setTerm] = useState('')
-  const inputRef = useRef() as MutableRefObject<HTMLInputElement>
+  const [term, setTerm] = useState(
+    router.query.searchQuery ? (router.query.searchQuery as string) : ''
+  )
+  const termNotLoadedFromQuery = useRef(true)
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (router.route !== '/blog')
-      router.push(`/blog?searchQuery=${inputRef.current.value}`)
+      router.push(`/blog?searchQuery=${term.trim()}`)
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTerm(e.target.value)
+    debounceSetSearchQuery(e.target.value)
   }
 
-  const debouncedResults = useMemo(
-    () => debounce(handleChange, 300),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  )
-
   useEffect(() => {
-    if (router.isReady)
-      if (router.query.searchQuery) {
-        console.log(`1 ${router.query.searchQuery}`)
-        inputRef.current.value = router.query.searchQuery as string
-        setTerm(router.query.searchQuery as string)
-      }
+    if (router.isReady && router.query.searchQuery && termNotLoadedFromQuery) {
+      setTerm(router.query.searchQuery as string)
+      termNotLoadedFromQuery.current = false
+    }
   }, [router.isReady, router.query.searchQuery])
 
-  useEffect(() => {
-    if (router.isReady && router.route === '/blog') {
+  const setQueryParam = useCallback(
+    (query: string) => {
       const queryToSet = router.query
 
-      if (!term) delete queryToSet.searchQuery
-      else queryToSet.searchQuery = term
+      if (!query) delete queryToSet.searchQuery
+      else queryToSet.searchQuery = query.trim()
 
       router.push(
         {
@@ -61,15 +56,23 @@ const Search = ({ className }: Props) => {
           shallow: true,
         }
       )
-    }
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [term, router.isReady])
+    [router.query]
+  )
+
+  const debounceSetSearchQuery = useMemo(
+    () => debounce(setQueryParam, 500),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [router.query]
+  )
 
   useEffect(() => {
     return () => {
-      debouncedResults.cancel()
+      debounceSetSearchQuery.cancel()
     }
-  })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.query])
 
   return (
     <div
@@ -83,8 +86,8 @@ const Search = ({ className }: Props) => {
           className="flex-1 w-60 px-2 m-1 bg-transparent text-gray-700 placeholder-gray-400 focus:outline-none"
           type="text"
           placeholder="Search Posts"
-          ref={inputRef}
-          onChange={debouncedResults}
+          value={term}
+          onChange={handleChange}
         />
         <button className="flex items-center justify-center p-2 m-0.5 text-white transition-colors duration-300 transform rounded-xl bg-indigo-500 hover:bg-indigo-500/70 focus:outline-none focus:bg-indigo-500/70">
           <SearchIcon className="h-5 w-5" />
