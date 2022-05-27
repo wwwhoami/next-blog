@@ -31,6 +31,7 @@ const CategorySelect = ({}: Props) => {
   const searchQuery = router.query.searchQuery
     ? `?searchQuery=${router.query.searchQuery}`
     : ''
+  const { mutate } = useSWRConfig()
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const selectedCategoriesNotLoadedFromQuery = useRef(true)
@@ -95,6 +96,11 @@ const CategorySelect = ({}: Props) => {
       if (selectedCategories.length === 0) delete queryToSet.category
       else queryToSet.category = selectedCategoryQuery
 
+<<<<<<< HEAD
+=======
+      mutate(`${process.env.NEXT_PUBLIC_API_URL}/post/search`)
+
+>>>>>>> 99258a1284ff86b9ea0912d99bc5047a0aff480f
       router.push(
         {
           pathname: '/blog',
