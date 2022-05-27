@@ -1,6 +1,6 @@
 import { Post } from '@/types/Post'
 
-export const fetchPosts = async (url: string) => {
+export const fetchPosts = async (url: RequestInfo) => {
   const res = await fetch(url)
 
   if (!res.ok) throw new Error(await res.json())

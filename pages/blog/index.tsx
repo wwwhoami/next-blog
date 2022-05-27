@@ -3,12 +3,14 @@ import Layout from '@/components/Layout'
 import PostCard from '@/components/PostCard'
 import { fetchPosts } from '@/lib/fetchPost'
 import { Post } from '@/types/Post'
-import { NextPage } from 'next'
+import { GetServerSideProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { useInfiniteLoading } from 'src/hooks/useInfiniteLoading'
 
-type Props = {}
+type Props = {
+  fallbackData: Post[][]
+}
 
 const PAGE_SIZE = 8
 
@@ -27,7 +29,7 @@ const getKey = (
   }`
 }
 
-const BlogPage: NextPage<Props> = (props) => {
+const BlogPage: NextPage<Props> = ({ fallbackData }: Props) => {
   const router = useRouter()
   const query = router.query
 
@@ -35,7 +37,8 @@ const BlogPage: NextPage<Props> = (props) => {
     useInfiniteLoading(
       (...args) =>
         getKey(...args, query.searchQuery as string, query.category as string),
-      fetchPosts
+      fetchPosts,
+      fallbackData
     )
 
   const posts = data?.flatMap((page) => page) ?? []
@@ -63,3 +66,17 @@ const BlogPage: NextPage<Props> = (props) => {
 }
 
 export default BlogPage
+
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/post/search?${
+    query.searchQuery ? `searchQuery=${query.searchQuery}&` : ''
+  }${query.category ? `category=${query.category}` : ''}`
+
+  const posts = url ? await fetchPosts(url) : []
+
+  return {
+    props: {
+      fallbackData: [posts],
+    },
+  }
+}
