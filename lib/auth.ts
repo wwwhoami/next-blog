@@ -11,18 +11,24 @@ export async function matchPassword(
 }
 
 export async function createAccessToken(id: string) {
+  if (process.env.ACCESS_TOKEN_SECRET === undefined)
+    throw new Error('process.env.ACCESS_TOKEN_SECRET undefined')
+
   const expiresIn = 600
 
-  const accessToken = sign({ userId: id }, process.env.ACCESS_TOKEN_SECRET!, {
+  const accessToken = sign({ userId: id }, process.env.ACCESS_TOKEN_SECRET, {
     expiresIn,
   })
   return accessToken
 }
 
 export async function createRefreshToken(id: string) {
+  if (process.env.REFRESH_TOKEN_SECRET === undefined)
+    throw new Error('process.env.REFRESH_TOKEN_SECRET undefined')
+
   const expiresIn = 86400
 
-  const refreshToken = sign({ userId: id }, process.env.REFRESH_TOKEN_SECRET!, {
+  const refreshToken = sign({ userId: id }, process.env.REFRESH_TOKEN_SECRET, {
     expiresIn,
   })
 
@@ -36,10 +42,10 @@ export const refreshTokens = async (refreshToken: string) => {
   if (!refreshToken) {
     throw new ForbiddenError('Access denied: token missing')
   } else {
-    const decoded = verify(
-      refreshToken,
-      process.env.REFRESH_TOKEN_SECRET as string
-    )
+    if (process.env.REFRESH_TOKEN_SECRET === undefined)
+      throw new Error('process.env.REFRESH_TOKEN_SECRET undefined')
+
+    const decoded = verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
     const id: string = (decoded as JwtPayload)['userId']
     const tokenValue = await redis.get(id)
     if (!tokenValue) {

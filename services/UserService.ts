@@ -105,10 +105,10 @@ export async function createUser({
 }
 
 export async function logoutUser(refreshToken: string) {
-  const decoded = verify(
-    refreshToken,
-    process.env.REFRESH_TOKEN_SECRET as string
-  )
+  if (process.env.REFRESH_TOKEN_SECRET === undefined)
+    throw new Error('process.env.REFRESH_TOKEN_SECRET undefined')
+
+  const decoded = verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
   const id: string = (decoded as JwtPayload)['userId']
 
   await redis.del(id)

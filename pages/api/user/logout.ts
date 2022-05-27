@@ -21,9 +21,9 @@ const handler = nc<NextApiRequest, NextApiResponse>({
   const { refreshToken } = req.cookies
   if (!refreshToken) throw new BadRequest('No refresh token')
 
-  await logoutUser(refreshToken)
+  const id = await logoutUser(refreshToken)
 
-  res.status(200)
+  res.status(200).json({ id })
 })
 
 export default handler

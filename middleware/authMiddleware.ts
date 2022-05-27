@@ -12,8 +12,11 @@ export async function checkAuth(
   const { authorization } = req.headers
 
   if (authorization?.startsWith('Bearer')) {
+    if (process.env.ACCESS_TOKEN_SECRET === undefined)
+      throw new Error('process.env.ACCESS_TOKEN_SECRET undefined')
+
     const token = authorization.split(' ')[1]
-    const decoded = verify(token, process.env.ACCESS_TOKEN_SECRET as string)
+    const decoded = verify(token, process.env.ACCESS_TOKEN_SECRET)
 
     req.body.user = await prisma.user.findFirst({
       where: {
