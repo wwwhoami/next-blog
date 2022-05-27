@@ -1,7 +1,7 @@
 import { Category } from '@/types/Post'
 import { useRouter } from 'next/router'
-import React, { useEffect, useMemo, useState } from 'react'
-import useSWR from 'swr'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import useSWR, { useSWRConfig } from 'swr'
 import CategoryLabel from './CategoryLabel'
 
 type Props = {}
@@ -31,8 +31,10 @@ const CategorySelect = ({}: Props) => {
   const searchQuery = router.query.searchQuery
     ? `?searchQuery=${router.query.searchQuery}`
     : ''
+  const { mutate } = useSWRConfig()
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+  const selectedCategoriesNotLoadedFromQuery = useRef(true)
 
   const { data: categories } = useSWR<Omit<Category, 'description'>[]>(
     `${process.env.NEXT_PUBLIC_API_URL}/category`,
@@ -40,6 +42,8 @@ const CategorySelect = ({}: Props) => {
     {
       revalidateOnFocus: true,
       revalidateOnReconnect: true,
+      revalidateIfStale: true,
+      revalidateOnMount: true,
     }
   )
 
@@ -49,6 +53,8 @@ const CategorySelect = ({}: Props) => {
     {
       revalidateOnFocus: true,
       revalidateOnReconnect: true,
+      revalidateIfStale: true,
+      revalidateOnMount: true,
     }
   )
 
@@ -72,29 +78,37 @@ const CategorySelect = ({}: Props) => {
   }, [categoryCombinations, selectedCategories])
 
   useEffect(() => {
-    if (router.isReady)
-      if (router.query.category) {
-        setSelectedCategories((router.query.category as string).split(' '))
-      }
+    if (
+      router.isReady &&
+      router.query.category &&
+      selectedCategoriesNotLoadedFromQuery
+    ) {
+      setSelectedCategories((router.query.category as string).split(' '))
+      selectedCategoriesNotLoadedFromQuery.current = false
+    }
   }, [router.isReady, router.query.category])
 
   useEffect(() => {
-    const selectedCategoryQuery = selectedCategories.join(' ')
-    const queryToSet = router.query
+    if (router.isReady) {
+      const selectedCategoryQuery = selectedCategories.join(' ')
+      const queryToSet = router.query
 
-    if (selectedCategories.length === 0) delete queryToSet.category
-    else queryToSet.category = selectedCategoryQuery
+      if (selectedCategories.length === 0) delete queryToSet.category
+      else queryToSet.category = selectedCategoryQuery
 
-    router.push(
-      {
-        pathname: '/blog',
-        query: { ...queryToSet },
-      },
-      undefined,
-      {
-        shallow: true,
-      }
-    )
+      mutate(`${process.env.NEXT_PUBLIC_API_URL}/post/search`)
+
+      router.push(
+        {
+          pathname: '/blog',
+          query: { ...queryToSet },
+        },
+        undefined,
+        {
+          shallow: true,
+        }
+      )
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCategories])
 
