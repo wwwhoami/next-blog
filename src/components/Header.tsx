@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import Modal from './Modal'
 import Search from './Search'
+import SignInForm from './SignInForm'
 import SignUpForm from './SignUpForm'
 
 type Props = {}
@@ -33,6 +34,11 @@ const Header = (props: Props) => {
               Sign up
             </a>
           </Link>
+          <Link href="/?signIn=true" as="/signIn" shallow={true} passHref>
+            <a className="px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900">
+              Sign in
+            </a>
+          </Link>
           <Link href="/about">
             <a className="px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900">
               About
@@ -41,11 +47,23 @@ const Header = (props: Props) => {
         </nav>
 
         <Modal
-          isShown={!!router.query.signUp}
-          onClose={() => router.back()}
-          title="Sign Up"
+          isShown={!!router.query.signUp || !!router.query.signIn}
+          onClose={() => router.push('/', undefined, { shallow: true })}
+          title={
+            !!router.query.signUp
+              ? 'Sign Up'
+              : !!router.query.signIn
+              ? 'Sign In'
+              : ''
+          }
         >
-          <SignUpForm />
+          {!!router.query.signUp ? (
+            <SignUpForm />
+          ) : !!router.query.signIn ? (
+            <SignInForm />
+          ) : (
+            ''
+          )}
         </Modal>
       </div>
     </header>

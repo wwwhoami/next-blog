@@ -7,7 +7,7 @@ import PasswordInput from './PasswordInput'
 
 type Props = {}
 
-const SignUpForm = (props: Props) => {
+const SignInForm = (props: Props) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [emailError, setEmailError] = useState(false)
@@ -88,13 +88,13 @@ const SignUpForm = (props: Props) => {
             : ''
         }`}
       >
-        Sign up
+        Sign in
       </button>
       <p className="mt-8 text-center font-light">
-        Already have an account?
-        <Link href="/signIn">
+        No account yet?
+        <Link href="/signUp">
           <a className="text-indigo-600 focus-ring rounded-xl hover:underline mx-2">
-            Sign in
+            Sign up
           </a>
         </Link>
       </p>
@@ -102,4 +102,4 @@ const SignUpForm = (props: Props) => {
   )
 }
 
-export default SignUpForm
+export default SignInForm
