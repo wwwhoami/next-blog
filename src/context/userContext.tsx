@@ -1,7 +1,9 @@
 import { UserApiResponse, UserSession } from '@/types/User'
 import {
   createContext,
+  Dispatch,
   ReactNode,
+  SetStateAction,
   useContext,
   useEffect,
   useState,
@@ -20,6 +22,8 @@ type UserContext = {
     image: string
   ) => Promise<void>
   logout: () => Promise<void>
+  setUser: Dispatch<SetStateAction<UserSession | undefined>>
+  setError: Dispatch<SetStateAction<Error | null | undefined>>
 }
 
 const UserContext = createContext<UserContext>(undefined!)
@@ -102,6 +106,7 @@ function UserProvider({ children }: Props) {
     if (!res.ok && 'message' in data) setError(data)
 
     if (res.ok && 'accessToken' in data) {
+      console.log('user')
       setUser(data)
       setError(null)
     }
@@ -163,6 +168,8 @@ function UserProvider({ children }: Props) {
         login,
         logout,
         updateUserData,
+        setUser,
+        setError,
       }}
     >
       {children}

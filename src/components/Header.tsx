@@ -90,9 +90,27 @@ const Header = (props: Props) => {
           }
         >
           {!!router.query.signUp ? (
-            <SignUpForm />
+            <SignUpForm 
+          closeModal={() =>
+            router.push(
+              router.query.referer?.toString().replaceAll('|', '&') || '/',
+              undefined,
+              {
+                shallow: true,
+              }
+            )
+          } />
           ) : !!router.query.signIn ? (
-            <SignInForm />
+            <SignInForm 
+          closeModal={() =>
+            router.push(
+              router.query.referer?.toString().replaceAll('|', '&') || '/',
+              undefined,
+              {
+                shallow: true,
+              }
+            )
+          } />
           ) : (
             ''
           )}

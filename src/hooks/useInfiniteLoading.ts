@@ -16,6 +16,7 @@ export const useInfiniteLoading = <T extends any[]>(
       fallbackData,
       revalidateOnFocus: true,
       revalidateOnReconnect: true,
+      revalidateFirstPage: true,
     }
   )
 
