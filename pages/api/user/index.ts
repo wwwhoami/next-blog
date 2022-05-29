@@ -61,7 +61,6 @@ const handler = nc<NextApiRequest, NextApiResponse>({
   .post<CreateUserRequest>(
     validateEmail,
     validatePassword,
-    validateUserImage,
     async (req, res) => {
       const {
         name: username,

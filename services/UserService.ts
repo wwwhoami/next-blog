@@ -7,6 +7,7 @@ import { BadRequest } from '@/lib/error'
 import prisma from '@/lib/prisma'
 import redis from '@/lib/redis'
 import { decode, JwtPayload, verify } from 'jsonwebtoken'
+import { genSalt, hash } from 'bcrypt'
 
 export async function loginUser(email: string, password: string) {
   const user = await prisma.user.findFirst({
@@ -76,11 +77,14 @@ export async function createUser({
     throw new BadRequest('User with provided name exists')
   }
 
+  const salt = await genSalt(10)
+  const encryptedPassword = await hash(password, salt)
+
   const user = await prisma.user.create({
     data: {
       name,
       email,
-      password,
+      password: encryptedPassword,
       image,
     },
   })
@@ -145,11 +149,17 @@ export async function updateUserProfileData({
   password,
   image,
 }: UserUpdateData) {
+  let encryptedPassword
+  if (password) {
+    const salt = await genSalt(10)
+    encryptedPassword = await hash(password, salt)
+  }
+
   const updatedUser = await prisma.user.update({
     data: {
       name,
       email,
-      password,
+      password: password ? encryptedPassword : undefined,
       image,
     },
     where: {
