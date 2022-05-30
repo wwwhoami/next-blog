@@ -136,6 +136,22 @@ export async function getUserProfileData(name: string) {
   return user
 }
 
+export async function getUserProfileDataById(id: string) {
+  const user = await prisma.user.findFirst({
+    select: {
+      name: true,
+      email: true,
+      image: true,
+    },
+    where: {
+      id,
+    },
+    rejectOnNotFound: true,
+  })
+
+  return user
+}
+
 type UserUpdateData = {
   name: string
   email?: string

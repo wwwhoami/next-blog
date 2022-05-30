@@ -3,6 +3,10 @@ import { BadRequest, ForbiddenError, UnauthorizedError } from '@/lib/error'
 import { serialize } from 'cookie'
 import { NextApiRequest, NextApiResponse } from 'next'
 import nc from 'next-connect'
+import {
+  getUserProfileData,
+  getUserProfileDataById,
+} from 'services/UserService'
 
 const handler = nc<NextApiRequest, NextApiResponse>({
   onError: (err, req, res, next) => {
@@ -23,9 +27,10 @@ const handler = nc<NextApiRequest, NextApiResponse>({
   },
 }).get(async (req, res) => {
   const { refreshToken: oldRefreshToken } = req.cookies
-  const { accessToken, accessTokenExpiry, refreshToken } = await refreshTokens(
-    oldRefreshToken
-  )
+  const { accessToken, accessTokenExpiry, refreshToken, id } =
+    await refreshTokens(oldRefreshToken)
+
+  // const { name, email, image } = await getUserProfileDataById(id)
 
   res.setHeader(
     'Set-Cookie',

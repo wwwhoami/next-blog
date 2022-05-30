@@ -1,7 +1,7 @@
 import { NextApiRequest } from 'next/dist/shared/lib/utils'
 
 export type UserSession = {
-  accessToken: string
+  accessToken?: string
   user?: User
 }
 
@@ -17,12 +17,11 @@ export type UserApiResponse = {
   accessTokenExpiry: string
 }
 
-export type ApiRequestWithUser = NextApiRequest & {
-  user?: {
-    id: number
-    name: string
-    email: string
-    image: string
-    accessToken: string
+export type NextApiUserRequest = NextApiRequest & {
+  user: {
+    id: string
+    name?: string
+    email?: string
+    image?: string
   }
 }

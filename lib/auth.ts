@@ -56,7 +56,7 @@ export const refreshTokens = async (refreshToken: string) => {
       const accessToken = await createAccessToken(id)
       const accessTokenExpiry = (decode(accessToken) as JwtPayload).exp
 
-      return { refreshToken, accessToken, accessTokenExpiry }
+      return { refreshToken, accessToken, accessTokenExpiry, id }
     }
   }
 }
