@@ -1,6 +1,8 @@
+import { LogoutIcon } from '@heroicons/react/outline'
 import React from 'react'
 import { toast } from 'react-toastify'
 import { useUser } from 'src/context/userContext'
+import MenuItem from './MenuItem'
 
 type Props = {}
 
@@ -43,18 +45,7 @@ const SignOut = (props: Props) => {
     }
   }
 
-  return (
-    <a
-      href="#"
-      className="px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900"
-      onClick={handleLogout}
-    >
-      Sign out
-    </a>
-  )
+  return <MenuItem Icon={LogoutIcon} onClick={handleLogout} text="Log out" />
 }
 
 export default SignOut
-function setError(data: Error) {
-  throw new Error('Function not implemented.')
-}

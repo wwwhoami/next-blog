@@ -5,8 +5,8 @@ import { useUser } from 'src/context/userContext'
 import AuthModal from './AuthModal'
 import Search from './Search'
 import SignInForm from './SignInForm'
-import SignOut from './SignOut'
 import SignUpForm from './SignUpForm'
+import UserMenu from './UserMenu'
 
 type Props = {}
 
@@ -18,7 +18,7 @@ const Header = (props: Props) => {
     <header className="shadow w-full backdrop-filter backdrop-blur-xl sticky z-50 top-0 bg-white bg-opacity-60 py-1">
       <div className="container mx-auto flex flex-wrap flex-col md:flex-row items-center">
         <Link href="/" passHref>
-          <a className="text-2xl  ml-3">
+          <a className="focus-ring rounded-xl text-2xl  ml-3">
             <span className="text-indigo-600 font-semibold hover:text-indigo-700">
               Next
             </span>
@@ -28,8 +28,13 @@ const Header = (props: Props) => {
         <Search />
         <nav className="flex flex-wrap items-center justify-end text-base md:ml-auto space-x-4">
           <Link href="/blog">
-            <a className="px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900">
+            <a className="focus-ring px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900">
               Blog
+            </a>
+          </Link>
+          <Link href="/about">
+            <a className="focus-ring px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900">
+              About
             </a>
           </Link>
           {!user && (
@@ -43,7 +48,7 @@ const Header = (props: Props) => {
                 shallow={true}
                 passHref
               >
-                <a className="px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900">
+                <a className="focus-ring px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900">
                   Sign up
                 </a>
               </Link>
@@ -56,18 +61,13 @@ const Header = (props: Props) => {
                 shallow={true}
                 passHref
               >
-                <a className="px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900">
+                <a className="focus-ring px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900">
                   Sign in
                 </a>
               </Link>
             </>
           )}
-          {user && <SignOut />}
-          <Link href="/about">
-            <a className="px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900">
-              About
-            </a>
-          </Link>
+          {user?.user && <UserMenu />}
         </nav>
 
         <AuthModal
@@ -90,27 +90,29 @@ const Header = (props: Props) => {
           }
         >
           {!!router.query.signUp ? (
-            <SignUpForm 
-          closeModal={() =>
-            router.push(
-              router.query.referer?.toString().replaceAll('|', '&') || '/',
-              undefined,
-              {
-                shallow: true,
+            <SignUpForm
+              closeModal={() =>
+                router.push(
+                  router.query.referer?.toString().replaceAll('|', '&') || '/',
+                  undefined,
+                  {
+                    shallow: true,
+                  }
+                )
               }
-            )
-          } />
+            />
           ) : !!router.query.signIn ? (
-            <SignInForm 
-          closeModal={() =>
-            router.push(
-              router.query.referer?.toString().replaceAll('|', '&') || '/',
-              undefined,
-              {
-                shallow: true,
+            <SignInForm
+              closeModal={() =>
+                router.push(
+                  router.query.referer?.toString().replaceAll('|', '&') || '/',
+                  undefined,
+                  {
+                    shallow: true,
+                  }
+                )
               }
-            )
-          } />
+            />
           ) : (
             ''
           )}

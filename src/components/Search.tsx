@@ -29,7 +29,7 @@ const Search = ({ className }: Props) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTerm(e.target.value)
-    debounceSetSearchQuery(e.target.value)
+    if (router.route === '/blog') debounceSetSearchQuery(e.target.value)
   }
 
   useEffect(() => {
