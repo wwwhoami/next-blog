@@ -16,7 +16,6 @@ type Props = {
 
 const PasswordInput = ({
   value,
-  type,
   id,
   label,
   placeholder,

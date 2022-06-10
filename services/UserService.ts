@@ -152,14 +152,30 @@ export async function getUserProfileDataById(id: string) {
   return user
 }
 
+export async function checkUserPassword(id: string, password: string) {
+  const user = await prisma.user.findFirst({
+    select: {
+      password: true,
+    },
+    where: {
+      id,
+    },
+    rejectOnNotFound: true,
+  })
+
+  return await matchPassword(password, user.password)
+}
+
 type UserUpdateData = {
-  name: string
+  id: string
+  name?: string
   email?: string
   password?: string
   image?: string
 }
 
 export async function updateUserProfileData({
+  id,
   name,
   email,
   password,
@@ -175,11 +191,11 @@ export async function updateUserProfileData({
     data: {
       name,
       email,
-      password: password ? encryptedPassword : undefined,
+      password: encryptedPassword,
       image,
     },
     where: {
-      name,
+      id,
     },
   })
 

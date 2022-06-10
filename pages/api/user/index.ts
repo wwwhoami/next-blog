@@ -4,6 +4,7 @@ import { serialize } from 'cookie'
 import { NextApiRequest, NextApiResponse } from 'next'
 import nc from 'next-connect'
 import {
+  checkUserPassword,
   createUser,
   deleteUser,
   getUserProfileData,
@@ -24,11 +25,17 @@ type CreateUserRequest = {
   }
 }
 
-type UpdateUserRequest = {
+type UpdateUserRequest = NextApiRequest & {
   body: {
     name?: string
     email?: string
     password?: string
+    image?: string
+  }
+  user: {
+    id: string
+    name?: string
+    email?: string
     image?: string
   }
 }
@@ -46,7 +53,7 @@ const handler = nc<NextApiRequest, NextApiResponse>({
     res.status(500).json({ message: 'Internal server error' })
   },
   onNoMatch: (req, res) => {
-    res.status(404).send({ message: 'Page is not found' })
+    res.status(404).json({ message: 'Page is not found' })
   },
 })
   .get(async (req, res) => {
@@ -97,13 +104,18 @@ const handler = nc<NextApiRequest, NextApiResponse>({
     }
   )
   .put<UpdateUserRequest>(checkAuth, async (req, res) => {
-    const { name, email, password, image } = req.body
-    if (!name) throw new BadRequest('Missing name value in body')
+    const { name, email, oldPassword, password: newPassword, image } = req.body
+
+    if (oldPassword) {
+      const passwordCheck = await checkUserPassword(req.user.id, oldPassword)
+      if (!passwordCheck) throw new BadRequest('Wrong old password')
+    }
 
     const updatedUser = await updateUserProfileData({
+      id: req.user.id,
       name,
       email,
-      password,
+      password: newPassword,
       image,
     })
 

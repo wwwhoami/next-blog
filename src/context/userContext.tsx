@@ -13,15 +13,6 @@ type UserContext = {
   user?: UserSession
   error?: Error | null
   refreshSession: () => Promise<void>
-  register: (name: string, email: string, password: string) => Promise<void>
-  login: (email: string, password: string) => Promise<void>
-  updateUserData: (
-    name: string,
-    email: string,
-    password: string,
-    image: string
-  ) => Promise<void>
-  logout: () => Promise<void>
   setUser: Dispatch<SetStateAction<UserSession | undefined>>
   setError: Dispatch<SetStateAction<Error | null | undefined>>
 }
@@ -53,6 +44,7 @@ function UserProvider({ children }: Props) {
 
   useEffect(() => {
     refreshSession()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const refreshSession = async () => {
@@ -67,93 +59,25 @@ function UserProvider({ children }: Props) {
     if (res.ok && 'accessToken' in data) {
       setUser((prev) => ({ ...prev, accessToken: data.accessToken }))
       setError(null)
+
+      await getCurrentUserData(data.accessToken)
     }
   }
 
-  const register = async (name: string, email: string, password: string) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name,
-        email,
-        password,
-      }),
-    })
-
-    const data: UserApiResponse | Error = await res.json()
-
-    if (!res.ok && 'message' in data) setError(data)
-
-    if (res.ok && 'accessToken' in data) {
-      setUser(data)
-      setError(null)
-    }
-  }
-
-  const login = async (email: string, password: string) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    })
-
-    const data: UserApiResponse | Error = await res.json()
-
-    if (!res.ok && 'message' in data) setError(data)
-
-    if (res.ok && 'accessToken' in data) {
-      console.log('user')
-      setUser(data)
-      setError(null)
-    }
-  }
-
-  const logout = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/logout`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-    })
-
-    const data: { id: string } | Error = await res.json()
-
-    if (!res.ok && 'message' in data) setError(data)
-
-    if (res.ok && 'id' in data) {
-      setUser(undefined)
-      setError(null)
-    }
-  }
-
-  const updateUserData = async (
-    name: string,
-    email: string,
-    password: string,
-    image: string
-  ) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
-      method: 'PUT',
+  const getCurrentUserData = async (accessToken: string) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/me`, {
+      method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${user?.accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
-      body: JSON.stringify({
-        name,
-        email,
-        password,
-        image,
-      }),
     })
 
     const data: UserApiResponse | Error = await res.json()
 
     if (!res.ok && 'message' in data) setError(data)
 
-    if (res.ok && 'accessToken' in data) {
-      setUser(data)
+    if (res.ok && 'user' in data) {
+      setUser((prev) => ({ ...prev, user: data.user }))
       setError(null)
     }
   }
@@ -164,10 +88,6 @@ function UserProvider({ children }: Props) {
         user,
         error,
         refreshSession,
-        register,
-        login,
-        logout,
-        updateUserData,
         setUser,
         setError,
       }}
