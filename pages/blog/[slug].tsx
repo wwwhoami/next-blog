@@ -5,7 +5,7 @@ import 'highlight.js/styles/atom-one-dark-reasonable.css'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { MDXRemote } from 'next-mdx-remote'
 import { serialize } from 'next-mdx-remote/serialize'
-import Image from 'next/image'
+import Image from "next/legacy/image";
 import { ParsedUrlQuery } from 'querystring'
 import React from 'react'
 import readingTime from 'reading-time'

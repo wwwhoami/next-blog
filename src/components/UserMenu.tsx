@@ -1,6 +1,6 @@
 import { Menu, Transition } from '@headlessui/react'
 import { PencilAltIcon, PlusCircleIcon } from '@heroicons/react/outline'
-import Image from 'next/image'
+import Image from "next/legacy/image";
 import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 import { useUser } from 'src/context/userContext'

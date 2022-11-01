@@ -1,6 +1,6 @@
 import { PostHeader } from '@/types/Post'
 import dayjs from 'dayjs'
-import Image from 'next/image'
+import Image from "next/legacy/image";
 import Link from 'next/link'
 import React from 'react'
 import CategoryLink from './CategoryLink'
@@ -32,19 +32,20 @@ const PostHeader = ({
       <div className="my-8 max-w-3xl mx-auto">
         <div className="flex items-center gap-5 ">
           <Link href={`/author/${author.name}`} passHref>
-            <a>
-              <Image
-                src={author.image}
-                alt="Author image"
-                className="mx-4 w-10 h-10 object-cover rounded-full hidden sm:block hover:cursor-pointer"
-                width={40}
-                height={40}
-              />
-            </a>
+            <Image
+              src={author.image}
+              alt="Author image"
+              className="mx-4 w-10 h-10 object-cover rounded-full hidden sm:block hover:cursor-pointer"
+              width={40}
+              height={40}
+            />
           </Link>
           <div className="flex flex-col">
-            <Link href={`/author/${author.name}`}>
-              <a className="text-lg font-medium">{author.name}</a>
+            <Link
+              href={`/author/${author.name}`}
+              className="text-lg font-medium"
+            >
+              {author.name}
             </Link>
             <p className="text-lg font-medium text-gray-500">
               on {dayjs(createdAt).format('DD MMMM, YYYY')} —{' '}

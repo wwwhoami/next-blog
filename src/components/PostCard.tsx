@@ -1,6 +1,6 @@
 import { Post } from '@/types/Post'
 import dayjs from 'dayjs'
-import Image from 'next/image'
+import Image from "next/legacy/image";
 import Link from 'next/link'
 import React from 'react'
 import CategoryLink from './CategoryLink'
@@ -21,7 +21,7 @@ const PostCard = ({
   },
 }: Props) => {
   return (
-    <Link href={`/blog/${slug}`} passHref>
+    <Link href={`/blog/${slug}`} passHref legacyBehavior>
       <div
         className={`w-full cursor-pointer mt-6 rounded-xl hover-ring focus-ring bg-slate-100`}
         style={{

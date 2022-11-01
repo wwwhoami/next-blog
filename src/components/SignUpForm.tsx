@@ -178,10 +178,11 @@ const SignUpForm = ({ closeModal }: Props) => {
       </button>
       <p className="mt-8 text-center font-light">
         Already have an account?
-        <Link href="/signIn">
-          <a className="text-indigo-600 focus-ring rounded-xl hover:underline mx-2">
-            Sign in
-          </a>
+        <Link
+          href="/signIn"
+          className="text-indigo-600 focus-ring rounded-xl hover:underline mx-2"
+        >
+          Sign in
         </Link>
       </p>
     </form>
