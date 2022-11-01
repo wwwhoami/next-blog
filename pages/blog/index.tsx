@@ -31,12 +31,11 @@ const getKey = (
 
 const BlogPage: NextPage<Props> = ({ fallbackData }: Props) => {
   const router = useRouter()
-  const query = router.query
+  const { searchQuery, category } = router.query
 
   const { ref, isLoadingMore, isRefreshing, data, isEmpty } =
     useInfiniteLoading(
-      (...args) =>
-        getKey(...args, query.searchQuery as string, query.category as string),
+      (...args) => getKey(...args, searchQuery as string, category as string),
       fetchPosts,
       fallbackData
     )
