@@ -5,7 +5,7 @@ import 'highlight.js/styles/atom-one-dark-reasonable.css'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { MDXRemote } from 'next-mdx-remote'
 import { serialize } from 'next-mdx-remote/serialize'
-import Image from "next/legacy/image";
+import Image from 'next/legacy/image'
 import { ParsedUrlQuery } from 'querystring'
 import React from 'react'
 import readingTime from 'reading-time'
@@ -46,7 +46,7 @@ const PostPage = ({
         }}
       />
       {content && (
-        <article className="w-full bg-white mt-2 max-w-3xl mx-auto prose prose-lg prose-a:no-underline hover:prose-a:underline prose-a:text-indigo-600">
+        <article className="w-full max-w-3xl mx-auto mt-2 prose prose-lg bg-white prose-a:no-underline hover:prose-a:underline prose-a:text-indigo-600">
           <MDXRemote {...content} components={{ Image }} />
         </article>
       )}

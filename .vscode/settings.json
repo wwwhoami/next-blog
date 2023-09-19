@@ -10,5 +10,6 @@
       "username": "postgres",
       "password": "postgrespw"
     }
-  ]
+  ],
+  "jest.jestCommandLine": "test"
 }
