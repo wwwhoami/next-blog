@@ -2096,6 +2096,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"highlight.js@npm:^11.9.0":
+  version: 11.9.0
+  resolution: "highlight.js@npm:11.9.0"
+  checksum: 44b3e42bc096a2e5207e514826a10ff7671de315a7216ebaeba76593d4f16dfe3f7078390cb5c2b08eae657694fef4fb65d775376db48480c829c83fbc4f157a
+  languageName: node
+  linkType: hard
+
 "highlight.js@npm:~11.5.0":
   version: 11.5.1
   resolution: "highlight.js@npm:11.5.1"
@@ -3311,6 +3318,7 @@ __metadata:
     dotenv-cli: "npm:^5.1.0"
     eslint: "npm:8.8.0"
     eslint-config-next: "npm:12.0.10"
+    highlight.js: "npm:^11.9.0"
     lodash.debounce: "npm:^4.0.8"
     next: "npm:^13.0.1"
     next-mdx-remote: "npm:^4.0.3"

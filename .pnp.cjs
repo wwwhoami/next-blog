@@ -38,6 +38,7 @@ const RAW_RUNTIME_STATE =
           ["dotenv-cli", "npm:5.1.0"],\
           ["eslint", "npm:8.8.0"],\
           ["eslint-config-next", "virtual:b12ba291ee2514a0e12483078237052dfe49637e15a84982389921d93eaedaf82cae0b5f1974777fc8769c04321f39e8dad0dd42ea5dbe2469ca2faf97651f79#npm:12.0.10"],\
+          ["highlight.js", "npm:11.9.0"],\
           ["lodash.debounce", "npm:4.0.8"],\
           ["next", "virtual:b12ba291ee2514a0e12483078237052dfe49637e15a84982389921d93eaedaf82cae0b5f1974777fc8769c04321f39e8dad0dd42ea5dbe2469ca2faf97651f79#npm:13.0.1"],\
           ["next-mdx-remote", "virtual:b12ba291ee2514a0e12483078237052dfe49637e15a84982389921d93eaedaf82cae0b5f1974777fc8769c04321f39e8dad0dd42ea5dbe2469ca2faf97651f79#npm:4.0.3"],\
@@ -2669,6 +2670,13 @@ const RAW_RUNTIME_STATE =
           ["highlight.js", "npm:11.5.1"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:11.9.0", {\
+        "packageLocation": "./.yarn/cache/highlight.js-npm-11.9.0-ec99f7b12f-44b3e42bc0.zip/node_modules/highlight.js/",\
+        "packageDependencies": [\
+          ["highlight.js", "npm:11.9.0"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["http-cache-semantics", [\
@@ -4087,6 +4095,7 @@ const RAW_RUNTIME_STATE =
           ["dotenv-cli", "npm:5.1.0"],\
           ["eslint", "npm:8.8.0"],\
           ["eslint-config-next", "virtual:b12ba291ee2514a0e12483078237052dfe49637e15a84982389921d93eaedaf82cae0b5f1974777fc8769c04321f39e8dad0dd42ea5dbe2469ca2faf97651f79#npm:12.0.10"],\
+          ["highlight.js", "npm:11.9.0"],\
           ["lodash.debounce", "npm:4.0.8"],\
           ["next", "virtual:b12ba291ee2514a0e12483078237052dfe49637e15a84982389921d93eaedaf82cae0b5f1974777fc8769c04321f39e8dad0dd42ea5dbe2469ca2faf97651f79#npm:13.0.1"],\
           ["next-mdx-remote", "virtual:b12ba291ee2514a0e12483078237052dfe49637e15a84982389921d93eaedaf82cae0b5f1974777fc8769c04321f39e8dad0dd42ea5dbe2469ca2faf97651f79#npm:4.0.3"],\
