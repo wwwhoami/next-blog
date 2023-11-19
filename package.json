@@ -1,11 +1,11 @@
 {
   "name": "next-blog",
   "private": true,
-  "packageManager": "yarn@3.2.0",
+  "packageManager": "yarn@4.0.2",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 8080",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 8080",
     "lint": "next lint",
     "db:push": "dotenv -e .env.development.local --- npx prisma db push",
     "db:migrate": "dotenv -e .env.development.local --- npx prisma migrate dev",
