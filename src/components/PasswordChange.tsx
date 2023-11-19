@@ -2,41 +2,45 @@ import { UserApiResponse } from '@/types/User'
 import React, { useState } from 'react'
 import { toast } from 'react-toastify'
 import { useUser } from 'src/context/userContext'
+import useRouterReferer from 'src/hooks/useRouterReferer'
 import isStrongPassword from 'validator/lib/isStrongPassword'
 import PasswordInput from './PasswordInput'
 
-type Props = {
-  closeModal?: () => void
-}
+type Props = {}
 
-const PasswordChange = ({ closeModal }: Props) => {
-  const { user, setUser } = useUser()
-
+const PasswordChange = ({}: Props) => {
   const [oldPassword, setOldPassword] = useState<string>()
   const [newPassword, setNewPassword] = useState<string>()
   const [oldPasswordError, setOldPasswordError] = useState(false)
   const [newPasswordError, setNewPasswordError] = useState(false)
   const [errorResponse, setErrorResponse] = useState<Error>()
 
+  const { user, setUser } = useUser()
+  const { backToReferer } = useRouterReferer()
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (
+      user?.accessToken &&
       !oldPasswordError &&
       !newPasswordError &&
       oldPassword?.length &&
       newPassword?.length
     ) {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user?.accessToken}`,
-        },
-        body: JSON.stringify({
-          oldPassword,
-          newPassword,
-        }),
-      })
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/profile`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${user.accessToken}`,
+          },
+          body: JSON.stringify({
+            password: oldPassword,
+            newPassword,
+          }),
+        }
+      )
 
       const data: UserApiResponse | Error = await res.json()
 
@@ -47,6 +51,7 @@ const PasswordChange = ({ closeModal }: Props) => {
       if (res.ok && 'accessToken' in data) {
         setUser(data)
         setErrorResponse(undefined)
+
         toast.success('🦄 Password changed successfully!', {
           position: 'bottom-center',
           autoClose: 5000,
@@ -56,7 +61,8 @@ const PasswordChange = ({ closeModal }: Props) => {
           draggable: true,
           progress: undefined,
         })
-        if (closeModal) closeModal()
+
+        backToReferer()
       }
     }
   }
@@ -68,7 +74,20 @@ const PasswordChange = ({ closeModal }: Props) => {
           className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
           role="alert"
         >
-          <span className="font-medium">{errorResponse.message}</span>
+          {Array.isArray(errorResponse.message) ? (
+            <ul className="mx-4 list-disc">
+              {(errorResponse.message as string[]).map((message, idx) => (
+                <li key={idx} className="font-medium">
+                  {message.charAt(0).toUpperCase() + message.slice(1)}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <span className="font-medium">
+              {errorResponse.message.charAt(0).toUpperCase() +
+                errorResponse.message.slice(1)}
+            </span>
+          )}
         </div>
       )}
       <PasswordInput

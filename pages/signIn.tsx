@@ -5,12 +5,12 @@ import React from 'react'
 
 type Props = {}
 
-const signIn: NextPage<Props> = (props: Props) => {
+const SignIn: NextPage<Props> = (props: Props) => {
   return (
     <Layout title="Sign In">
-      <div className="flex items-center justify-center flex-col">
-        <div className="mt-32 p-10 bg-slate-50 rounded-2xl">
-          <h1 className="text-3xl font-bold mb-10">Sign In</h1>
+      <div className="flex flex-col items-center justify-center">
+        <div className="p-10 mt-32 bg-slate-50 rounded-2xl">
+          <h1 className="mb-10 text-3xl font-bold">Sign In</h1>
           <SignInForm />
         </div>
       </div>
@@ -18,4 +18,4 @@ const signIn: NextPage<Props> = (props: Props) => {
   )
 }
 
-export default signIn
+export default SignIn

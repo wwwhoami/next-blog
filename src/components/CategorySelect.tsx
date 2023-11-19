@@ -1,30 +1,19 @@
-import { Category } from '@/types/Post'
+import fetcher from '@/lib/fetcher'
+import { Category } from '@/types/Category'
 import { useRouter } from 'next/router'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import useSWR from 'swr'
 import CategoryLabel from './CategoryLabel'
 
-type Props = {}
-
 const categoryFetcher = async (url: string) => {
-  const res = await fetch(url)
-
-  if (!res.ok) throw new Error(await res.text())
-
-  const categories: Omit<Category, 'description'>[] = await res.json()
-
-  return categories
+  return fetcher<Omit<Category, 'description'>[]>(url)
 }
 
 const categoryCombinationsFetcher = async (url: string) => {
-  const res = await fetch(url)
-
-  if (!res.ok) throw new Error(await res.text())
-
-  const categoryCominations: string[][] = await res.json()
-
-  return categoryCominations
+  return fetcher<string[][]>(url)
 }
+
+type Props = {}
 
 const CategorySelect = ({}: Props) => {
   const router = useRouter()
@@ -111,10 +100,10 @@ const CategorySelect = ({}: Props) => {
 
   return (
     <>
-      <div className="mt-3 text-2xl font-medium text-black col-span-full mb-6">
+      <div className="mt-3 mb-6 text-2xl font-medium text-black col-span-full">
         Search posts by topics
       </div>
-      <div className="-mb-4 -mr-4 flex flex-wrap">
+      <div className="flex flex-wrap -mb-4 -mr-4">
         {categories?.map((category, index) => (
           <CategoryLabel
             key={index}

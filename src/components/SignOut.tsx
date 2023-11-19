@@ -7,18 +7,23 @@ import MenuItem from './MenuItem'
 type Props = {}
 
 const SignOut = (props: Props) => {
-  const { setUser, setError } = useUser()
+  const { setUser, setError, user } = useUser()
 
   const handleLogout = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/logout`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user?.accessToken}`,
+      },
+      credentials: 'include',
     })
 
-    const data: { id: string } | Error = await res.json()
+    if (!res.ok) {
+      const data: Error = await res.json()
 
-    if (!res.ok && 'message' in data) {
       setError(data)
+
       toast.error('Something went wrong', {
         position: 'bottom-center',
         autoClose: 5000,
@@ -30,9 +35,10 @@ const SignOut = (props: Props) => {
       })
     }
 
-    if (res.ok && 'id' in data) {
+    if (res.ok) {
       setUser(undefined)
       setError(null)
+
       toast.success('🦄 Logged out', {
         position: 'bottom-center',
         autoClose: 5000,

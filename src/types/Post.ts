@@ -1,46 +1,54 @@
-import { MDXRemoteSerializeResult } from 'next-mdx-remote/dist/types'
+import { MDXRemoteSerializeResult } from 'next-mdx-remote'
+import { CategoryNoDescription } from './Category'
 
-export interface Post {
-  id: number
-  createdAt: string
-  title: string
-  slug: string
-  excerpt: string
-  viewCount: number
-  coverImage: string
-  author: Author
-  content?: string
-  categories: CategoryElement[]
+export enum PostEntityKeysEnum {
+  id = 'id',
+  title = 'title',
+  content = 'content',
+  published = 'published',
+  coverImage = 'coverImage',
+  authorId = 'authorId',
+  createdAt = 'createdAt',
+  updatedAt = 'updatedAt',
+  excerpt = 'excerpt',
+  slug = 'slug',
+  likesCount = 'likesCount',
 }
 
-export type PostMdx = Omit<Post, 'content' | 'slug'> & {
+export type Post = {
+  id: number
+  title: string
+  content?: string
+  coverImage: string
+  createdAt: string
+  updatedAt: string
+  excerpt: string
+  slug: string
+  author?: Author
+  categories?: PostCategory[]
+  likesCount: number
+}
+
+export type PostWithContent = Post & {
+  content: string
+}
+
+export type PostMdx = Omit<Post, 'content'> & {
   content: MDXRemoteSerializeResult<Record<string, unknown>>
   readingTimeMinutes: number
 }
 
-export type PostHeader = Omit<PostMdx, 'content' | 'viewCount' | 'id'>
+export type Slug = {
+  slug: string
+}
 
-export interface Author {
+type Author = {
   name: string
-  email?: string
-  image: string
+  image: string | null
 }
 
-export interface CategoryElement {
-  category: Category
+export type PostCategory = {
+  category: CategoryNoDescription
 }
 
-export interface Category {
-  name: string
-  description?: string
-  hexColor?: string | null
-}
-
-export type Frontmatter = {
-  title: string
-  date: string
-  excerpt: string
-  cover_image: string
-  category: string
-  author: string
-}
+export type PostLike = Pick<Post, 'id' | 'likesCount'>

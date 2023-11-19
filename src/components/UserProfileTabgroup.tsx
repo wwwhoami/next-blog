@@ -2,15 +2,13 @@ import { Tab } from '@headlessui/react'
 import PasswordChange from './PasswordChange'
 import ProfileEdit from './ProfileEdit'
 
-type Props = {
-  closeModal?: () => void
-}
+type Props = {}
 
-const UserProfileTabgroup = ({ closeModal }: Props) => {
+const UserProfileTabgroup = ({}: Props) => {
   return (
     <div className="w-full max-w-md px-2 sm:px-0">
       <Tab.Group>
-        <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
+        <Tab.List className="flex p-1 space-x-1 rounded-xl bg-blue-900/20">
           <Tab
             key="Account"
             className={({ selected }) => `
@@ -42,15 +40,15 @@ const UserProfileTabgroup = ({ closeModal }: Props) => {
         <Tab.Panels className="mt-2">
           <Tab.Panel
             key="Account"
-            className="rounded-xl p-3 focus-ring focus:ring-opacity-60"
+            className="p-3 rounded-xl focus-ring focus:ring-opacity-60"
           >
-            <ProfileEdit closeModal={closeModal} />
+            <ProfileEdit />
           </Tab.Panel>
           <Tab.Panel
             key="Password"
-            className="rounded-xl p-3 focus-ring focus:ring-opacity-60"
+            className="p-3 rounded-xl focus-ring focus:ring-opacity-60"
           >
-            <PasswordChange closeModal={closeModal} />
+            <PasswordChange />
           </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>

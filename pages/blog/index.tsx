@@ -22,8 +22,8 @@ const getKey = (
 ) => {
   if (previousPageData && !previousPageData.length) return null
 
-  return `${process.env.NEXT_PUBLIC_API_URL}/post/search?${
-    searchQuery ? `searchQuery=${searchQuery}&` : ''
+  return `${process.env.NEXT_PUBLIC_API_URL}/post?${
+    searchQuery ? `searchTerm=${searchQuery}&` : ''
   }${category ? `category=${category}&` : ''}take=${PAGE_SIZE}&skip=${
     pageIndex * PAGE_SIZE
   }`
@@ -44,16 +44,16 @@ const BlogPage: NextPage<Props> = ({ fallbackData }: Props) => {
 
   return (
     <Layout>
-      <h1 className="text-4xl border-b-4 p-3 font-semibold">Posts</h1>
+      <h1 className="p-3 text-4xl font-semibold border-b-4">Posts</h1>
       <CategorySelect />
 
       {isEmpty && (
         <div className="flex flex-col items-center mt-20">
-          <h1 className="text-6xl my-5">Whoops</h1>
+          <h1 className="my-5 text-6xl">Whoops</h1>
           <h2 className="text-4xl text-gray-400">No posts found :(</h2>
         </div>
       )}
-      <div className="grid my-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+      <div className="grid gap-5 my-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {posts?.map((post) => (
           <PostCard key={post.id} post={post} />
         ))}
@@ -67,11 +67,11 @@ const BlogPage: NextPage<Props> = ({ fallbackData }: Props) => {
 export default BlogPage
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/post/search?${
-    query.searchQuery ? `searchQuery=${query.searchQuery}&` : ''
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/post?${
+    query.searchQuery ? `searchTerm=${query.searchQuery}&` : ''
   }${query.category ? `category=${query.category}` : ''}`
 
-  const posts = url ? await fetchPosts(url) : []
+  const posts = await fetchPosts(url)
 
   return {
     props: {

@@ -1,37 +1,52 @@
 import { UserApiResponse } from '@/types/User'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useUser } from 'src/context/userContext'
+import useRouterReferer from 'src/hooks/useRouterReferer'
 import isEmail from 'validator/lib/isEmail'
 import FormInput from './FormInput'
 
-type Props = {
-  closeModal?: () => void
-}
+type Props = {}
 
-const ProfileEdit = ({ closeModal }: Props) => {
+const ProfileEdit = ({}: Props) => {
   const { user, setUser } = useUser()
+  const { backToReferer } = useRouterReferer()
 
-  const [name, setName] = useState(user?.user?.name)
-  const [email, setEmail] = useState(user?.user?.email)
+  const [name, setName] = useState(user?.name)
+  const [email, setEmail] = useState(user?.email)
   const [nameError, setNameError] = useState(false)
   const [emailError, setEmailError] = useState(false)
   const [errorResponse, setErrorResponse] = useState<Error>()
 
+  // Reinitialize name and email states on page refresh
+  useEffect(() => {
+    setName(user?.name)
+    setEmail(user?.email)
+  }, [user?.name, user?.email])
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!nameError && !emailError && name?.length && email?.length) {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user?.accessToken}`,
-        },
-        body: JSON.stringify({
-          name,
-          email,
-        }),
-      })
+    if (
+      user?.accessToken &&
+      !nameError &&
+      !emailError &&
+      name?.length &&
+      email?.length
+    ) {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/profile`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${user.accessToken}`,
+          },
+          body: JSON.stringify({
+            name,
+            email,
+          }),
+        }
+      )
 
       const data: UserApiResponse | Error = await res.json()
 
@@ -42,6 +57,7 @@ const ProfileEdit = ({ closeModal }: Props) => {
       if (res.ok && 'accessToken' in data) {
         setUser(data)
         setErrorResponse(undefined)
+
         toast.success('🦄 Profile data updated successfully!', {
           position: 'bottom-center',
           autoClose: 5000,
@@ -51,7 +67,8 @@ const ProfileEdit = ({ closeModal }: Props) => {
           draggable: true,
           progress: undefined,
         })
-        if (closeModal) closeModal()
+
+        backToReferer()
       }
     }
   }

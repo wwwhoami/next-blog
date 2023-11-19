@@ -1,39 +1,33 @@
 import { UserApiResponse } from '@/types/User'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { toast } from 'react-toastify'
 import { useUser } from 'src/context/userContext'
+import useRouterReferer from 'src/hooks/useRouterReferer'
 import isEmail from 'validator/lib/isEmail'
 import isStrongPassword from 'validator/lib/isStrongPassword'
 import FormInput from './FormInput'
 import PasswordInput from './PasswordInput'
 
-type Props = {
-  closeModal?: () => void
-}
+type Props = {}
 
-const SignInForm = ({ closeModal }: Props) => {
+const SignInForm = ({}: Props) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [emailError, setEmailError] = useState(false)
   const [passwordError, setPasswordError] = useState(false)
   const [errorResponse, setErrorResponse] = useState<Error>()
 
-  const router = useRouter()
-  const { user, setUser, setError } = useUser()
-
-  useEffect(() => {
-    if (user) router.back()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user])
+  const { backToReferer } = useRouterReferer()
+  const { setUser, setError } = useUser()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!emailError && !passwordError && email.length && password.length) {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/login`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({
           email,
           password,
@@ -50,6 +44,7 @@ const SignInForm = ({ closeModal }: Props) => {
       if (res.ok && 'accessToken' in data) {
         setUser(data)
         setError(null)
+
         toast.success('🦄 Logged in successfully!', {
           position: 'bottom-center',
           autoClose: 5000,
@@ -59,7 +54,8 @@ const SignInForm = ({ closeModal }: Props) => {
           draggable: true,
           progress: undefined,
         })
-        if (closeModal) closeModal()
+
+        backToReferer()
       }
     }
   }
@@ -146,11 +142,11 @@ const SignInForm = ({ closeModal }: Props) => {
         >
           Sign in
         </button>
-        <p className="mt-8 text-center font-light">
+        <p className="mt-8 font-light text-center">
           No account yet?
           <Link
             href="/signUp"
-            className="text-indigo-600 focus-ring rounded-xl hover:underline mx-2"
+            className="mx-2 text-indigo-600 focus-ring rounded-xl hover:underline"
           >
             Sign up
           </Link>

@@ -1,20 +1,19 @@
 import Layout from '@/components/Layout'
 import PostHeader from '@/components/PostHeader'
-import { PostMdx } from '@/types/Post'
+import fetcher from '@/lib/fetcher'
+import { PostMdx, PostWithContent } from '@/types/Post'
 import 'highlight.js/styles/atom-one-dark-reasonable.css'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { MDXRemote } from 'next-mdx-remote'
 import { serialize } from 'next-mdx-remote/serialize'
 import Image from 'next/legacy/image'
 import { ParsedUrlQuery } from 'querystring'
-import React from 'react'
 import readingTime from 'reading-time'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeCodeTitles from 'rehype-code-titles'
 import rehypeHighlight from 'rehype-highlight'
 import rehypeSanitize from 'rehype-sanitize'
 import rehypeSlug from 'rehype-slug'
-import { getPostBySlug, getPostsSlugs } from 'services/PostService'
 
 type Props = {
   post: PostMdx
@@ -59,7 +58,9 @@ interface Params extends ParsedUrlQuery {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const slugs = await getPostsSlugs()
+  const slugs = await fetcher<Array<{ slug: string }>>(
+    `${process.env.NEXT_PUBLIC_API_URL}/post/slug`
+  )
   const paths = slugs.map((slug) => ({ params: { ...slug } }))
 
   return {
@@ -73,7 +74,9 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
 }) => {
   const slug = params!.slug
 
-  const post = await getPostBySlug(slug)
+  const post = await fetcher<PostWithContent>(
+    `${process.env.NEXT_PUBLIC_API_URL}/post/article/${slug}`
+  )
 
   const readingTimeMinutes = Math.round(readingTime(post.content).minutes)
 
@@ -100,7 +103,8 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
         ...post,
         content: mdxSource,
         readingTimeMinutes,
-        createdAt: post.createdAt.toISOString(),
+        createdAt: new Date(post.createdAt).toISOString(),
+        updatedAt: new Date(post.updatedAt).toISOString(),
       },
     },
   }
