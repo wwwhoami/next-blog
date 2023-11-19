@@ -2,7 +2,7 @@ import Layout from '@/components/Layout'
 import PostHeader from '@/components/PostHeader'
 import fetcher from '@/lib/fetcher'
 import { PostMdx, PostWithContent } from '@/types/Post'
-import 'highlight.js/styles/atom-one-dark-reasonable.css'
+import 'highlight.js/styles/atom-one-dark.css'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { MDXRemote } from 'next-mdx-remote'
 import { serialize } from 'next-mdx-remote/serialize'
@@ -91,7 +91,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
             behavior: 'wrap',
           },
         ],
-        rehypeHighlight,
+        rehypeHighlight as any,
         rehypeCodeTitles,
       ],
     },
