@@ -1,4 +1,4 @@
-import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline'
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid'
 import React, { useState } from 'react'
 
 type Props = {
@@ -23,7 +23,7 @@ const PasswordInput = ({
   onBlur,
   hasError,
   errorMessage,
-  className = 'flex justify-between border rounded-xl  focus-within:border-primary focus-within:ring focus-within:ring-primary focus-within:ring-opacity-50 focus:ring-offset-4 text-sm w-full bg-white',
+  className = 'flex justify-between w-full text-sm bg-white border rounded-xl focus-within:border-primary focus-within:ring focus-within:ring-primary focus-within:ring-opacity-50 focus:ring-offset-4',
 }: Props) => {
   const [passwordVisible, setPasswordVisible] = useState(false)
 
@@ -55,9 +55,9 @@ const PasswordInput = ({
           onClick={() => {
             setPasswordVisible((prev) => !prev)
           }}
-          className="flex items-center focus-ring justify-center m-1 transition-colors duration-300 transform rounded-xl w-8 h-8 p-0 text-indigo-500 hover:opacity-80 focus:ring-indigo-500/70 focus:outline-none focus:ring-2"
+          className="flex items-center justify-center w-8 h-8 p-0 m-1 text-indigo-500 transition-colors duration-300 transform focus-ring rounded-xl hover:opacity-80 focus:ring-indigo-500/70 focus:outline-none focus:ring-2"
         >
-          {passwordVisible ? <EyeOffIcon /> : <EyeIcon />}
+          {passwordVisible ? <EyeSlashIcon /> : <EyeIcon />}
         </button>
       </div>
       {hasError && (

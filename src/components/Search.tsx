@@ -1,4 +1,4 @@
-import { SearchIcon } from '@heroicons/react/outline'
+import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import debounce from 'lodash.debounce'
 import { useRouter } from 'next/router'
 import React, {
@@ -80,17 +80,17 @@ const Search = ({ className }: Props) => {
     >
       <form
         onSubmit={handleSubmit}
-        className="flex flex-wrap justify-between items-center"
+        className="flex flex-wrap items-center justify-between"
       >
         <input
-          className="flex-1 w-60 px-2 m-1 bg-transparent text-gray-700 placeholder-gray-400 focus:outline-none"
+          className="flex-1 px-2 m-1 text-gray-700 placeholder-gray-400 bg-transparent w-60 focus:outline-none"
           type="text"
           placeholder="Search Posts"
           value={term}
           onChange={handleChange}
         />
         <button className="flex items-center justify-center p-2 m-0.5 text-white transition-colors duration-300 transform rounded-xl bg-indigo-500 hover:bg-indigo-500/70 focus:outline-none focus:bg-indigo-500/70">
-          <SearchIcon className="h-5 w-5" />
+          <MagnifyingGlassIcon className="w-5 h-5" />
         </button>
       </form>
     </div>

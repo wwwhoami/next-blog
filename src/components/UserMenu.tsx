@@ -1,5 +1,5 @@
 import { Menu, Transition } from '@headlessui/react'
-import { PencilAltIcon, PlusCircleIcon } from '@heroicons/react/outline'
+import { PencilIcon, PlusCircleIcon } from '@heroicons/react/20/solid'
 import Image from 'next/legacy/image'
 import { useRouter } from 'next/router'
 import { Fragment } from 'react'
@@ -42,7 +42,7 @@ const UserMenu = (props: Props) => {
             <div className="px-1 py-1 ">
               <MenuItem Icon={PlusCircleIcon} text="Create post" />
               <MenuItem
-                Icon={PencilAltIcon}
+                Icon={PencilIcon}
                 text="Edit profile"
                 onClick={() =>
                   router.push(`/?edit=true&referer=${referer}`, '/user/edit', {

@@ -1,4 +1,4 @@
-import { LogoutIcon } from '@heroicons/react/outline'
+import { ArrowRightOnRectangleIcon } from '@heroicons/react/20/solid'
 import React from 'react'
 import { toast } from 'react-toastify'
 import { useUser } from 'src/context/userContext'
@@ -51,7 +51,13 @@ const SignOut = (props: Props) => {
     }
   }
 
-  return <MenuItem Icon={LogoutIcon} onClick={handleLogout} text="Log out" />
+  return (
+    <MenuItem
+      Icon={ArrowRightOnRectangleIcon}
+      onClick={handleLogout}
+      text="Log out"
+    />
+  )
 }
 
 export default SignOut
