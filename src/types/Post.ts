@@ -33,7 +33,7 @@ export type PostWithContent = Post & {
   content: string
 }
 
-export type PostMdx = Omit<Post, 'content'> & {
+export type PostMdx = Omit<Post, 'content' | 'slug'> & {
   content: MDXRemoteSerializeResult<Record<string, unknown>>
   readingTimeMinutes: number
 }

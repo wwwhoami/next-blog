@@ -4,7 +4,7 @@ import { fetchPosts } from '@/lib/fetchPost'
 import { Post } from '@/types/Post'
 import { GetStaticProps, NextPage } from 'next'
 import { useInfiniteLoading } from 'src/hooks/useInfiniteLoading'
-import { SWRInfiniteKeyLoader } from 'swr/infinite/dist/infinite/types'
+import { SWRInfiniteKeyLoader } from 'swr/infinite'
 
 type Props = {
   fallbackData: Post[][]
@@ -30,8 +30,8 @@ const Home: NextPage<Props> = ({ fallbackData }) => {
 
   return (
     <Layout>
-      <h1 className="text-4xl border-b-4 p-3 font-semibold">Latest Posts</h1>
-      <div className="grid my-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+      <h1 className="p-3 text-4xl font-semibold border-b-4">Latest Posts</h1>
+      <div className="grid gap-5 my-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {posts?.map((post) => (
           <PostCard key={post.id} post={post} />
         ))}

@@ -23,12 +23,14 @@ const PostPage = ({
   post: {
     title,
     content,
-    createdAt,
     coverImage,
     categories,
     author,
     excerpt,
     readingTimeMinutes,
+    createdAt,
+    updatedAt,
+    likesCount,
   },
 }: Props) => {
   return (
@@ -36,12 +38,14 @@ const PostPage = ({
       <PostHeader
         postHeader={{
           title,
-          createdAt,
           coverImage,
           categories,
           author,
           excerpt,
           readingTimeMinutes,
+          createdAt,
+          updatedAt,
+          likesCount,
         }}
       />
       {content && (
