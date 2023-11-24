@@ -2,7 +2,22 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['randomuser.me', 'cloudflare-ipfs.com', 'loremflickr.com', 'avatars.githubusercontent.com']
+    remotePatterns: [{
+      protocol: 'https',
+      hostname: 'randomuser.me'
+    },
+    {
+      protocol: 'https',
+      hostname: 'cloudflare-ipfs.com'
+    },
+    {
+      protocol: 'https',
+      hostname: 'loremflickr.com'
+    },
+    {
+      protocol: 'https',
+      hostname: 'avatars.githubusercontent.com'
+    }]
   }
 }
 

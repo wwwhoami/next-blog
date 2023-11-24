@@ -1,8 +1,7 @@
 import { Post } from '@/types/Post'
 import dayjs from 'dayjs'
-import Image from 'next/legacy/image'
+import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
 import CategoryLink from './CategoryLink'
 
 type Props = {
@@ -18,7 +17,7 @@ const PostCard = ({
   }
 
   return (
-    <Link href={`/blog/${slug}`} passHref legacyBehavior>
+    <Link href={`/blog/${slug}`} passHref>
       <div
         className={`w-full cursor-pointer mt-6 rounded-xl hover-ring focus-ring bg-slate-100`}
         style={{
@@ -30,18 +29,18 @@ const PostCard = ({
         <Image
           src={coverImage}
           alt="Cover image"
-          height={420}
           width={600}
-          className="object-cover mb-4 rounded-xl"
+          height={420}
+          className="object-cover object-center w-full mb-4 sm:h-96 rounded-xl"
         />
         <div className="px-6 py-3">
           <div className="flex items-center gap-2 mt-1">
             <Image
               src={String(authorImage)}
               alt="author image"
-              height={40}
-              width={40}
-              className="object-cover w-full mx-4 rounded-full"
+              height={45}
+              width={45}
+              className="object-cover rounded-full"
             />
             <a className="font-semibold text-gray-700 hover:underline">
               {authorName}

@@ -2635,6 +2635,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"image-size@npm:^1.0.0":
+  version: 1.0.2
+  resolution: "image-size@npm:1.0.2"
+  dependencies:
+    queue: "npm:6.0.2"
+  bin:
+    image-size: bin/image-size.js
+  checksum: 693dfb2f8bfda2aacd087ef7130fd997fd0aceca838291bae400646db1826b80108185d0062ea3c0365b12c3ab5145bb923fdc777fd94c4991840d47fe44ade3
+  languageName: node
+  linkType: hard
+
 "import-fresh@npm:^3.2.1":
   version: 3.3.0
   resolution: "import-fresh@npm:3.3.0"
@@ -2676,7 +2687,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"inherits@npm:2, inherits@npm:^2.0.3":
+"inherits@npm:2, inherits@npm:^2.0.3, inherits@npm:~2.0.3":
   version: 2.0.4
   resolution: "inherits@npm:2.0.4"
   checksum: cd45e923bee15186c07fa4c89db0aace24824c482fb887b528304694b2aa6ff8a898da8657046a5dcf3e46cd6db6c61629551f9215f208d7c3f157cf9b290521
@@ -3973,6 +3984,7 @@ __metadata:
     rehype-autolink-headings: "npm:^7.1.0"
     rehype-code-titles: "npm:^1.2.0"
     rehype-highlight: "npm:^7.0.0"
+    rehype-img-size: "npm:^1.0.1"
     rehype-sanitize: "npm:^6.0.0"
     rehype-slug: "npm:^6.0.0"
     swr: "npm:^2.2.4"
@@ -4525,6 +4537,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"queue@npm:6.0.2":
+  version: 6.0.2
+  resolution: "queue@npm:6.0.2"
+  dependencies:
+    inherits: "npm:~2.0.3"
+  checksum: 3437954ef1442c86ff01a0fbe3dc6222838823b1ca97f37eff651bc20b868c0c2904424ef2c0d44cba46055f54b578f92866e573125dc9a5e8823d751e4d1585
+  languageName: node
+  linkType: hard
+
 "react-dom@npm:18.2.0":
   version: 18.2.0
   resolution: "react-dom@npm:18.2.0"
@@ -4678,6 +4699,16 @@ __metadata:
     unist-util-visit: "npm:^5.0.0"
     vfile: "npm:^6.0.0"
   checksum: cb8ce18bc23ba63c4ca8602ff2cd91566415e1813277e7a6144e3dfcf92f08b16bfb4d06178f79836709124be69e2f7dcca5b0aea10dc1b558de288109f858f2
+  languageName: node
+  linkType: hard
+
+"rehype-img-size@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "rehype-img-size@npm:1.0.1"
+  dependencies:
+    image-size: "npm:^1.0.0"
+    unist-util-visit: "npm:^4.1.0"
+  checksum: 2e53f6ba2279d80f361835047c6921fc77f17ed92bdc812abd7fade25889bf1e083c3a70ebe100ebdebfaa5ce50cf25d7e8b4c0c6d19994fb9ce6f96531d5495
   languageName: node
   linkType: hard
 
@@ -5720,6 +5751,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"unist-util-visit@npm:^4.1.0, unist-util-visit@npm:~4.1.2":
+  version: 4.1.2
+  resolution: "unist-util-visit@npm:4.1.2"
+  dependencies:
+    "@types/unist": "npm:^2.0.0"
+    unist-util-is: "npm:^5.0.0"
+    unist-util-visit-parents: "npm:^5.1.1"
+  checksum: e3b20c6b1f5ae1b7b40bbf9be49103a342d98fad98bdf958110c20d72e5923bd3f12966b6702459bc61ab832facb5af418a79af87cefa7a8a41b892369678b13
+  languageName: node
+  linkType: hard
+
 "unist-util-visit@npm:^5.0.0":
   version: 5.0.0
   resolution: "unist-util-visit@npm:5.0.0"
@@ -5728,17 +5770,6 @@ __metadata:
     unist-util-is: "npm:^6.0.0"
     unist-util-visit-parents: "npm:^6.0.0"
   checksum: f2bbde23641e9ade7640358c06ddeec0f38342322eb8e7819d9ee380b0f859d25d084dde22bf63db0280b3b2f36575f15aa1d6c23acf276c91c2493cf799e3b0
-  languageName: node
-  linkType: hard
-
-"unist-util-visit@npm:~4.1.2":
-  version: 4.1.2
-  resolution: "unist-util-visit@npm:4.1.2"
-  dependencies:
-    "@types/unist": "npm:^2.0.0"
-    unist-util-is: "npm:^5.0.0"
-    unist-util-visit-parents: "npm:^5.1.1"
-  checksum: e3b20c6b1f5ae1b7b40bbf9be49103a342d98fad98bdf958110c20d72e5923bd3f12966b6702459bc61ab832facb5af418a79af87cefa7a8a41b892369678b13
   languageName: node
   linkType: hard
 

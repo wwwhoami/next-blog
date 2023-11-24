@@ -51,6 +51,7 @@ const RAW_RUNTIME_STATE =
           ["rehype-autolink-headings", "npm:7.1.0"],\
           ["rehype-code-titles", "npm:1.2.0"],\
           ["rehype-highlight", "npm:7.0.0"],\
+          ["rehype-img-size", "npm:1.0.1"],\
           ["rehype-sanitize", "npm:6.0.0"],\
           ["rehype-slug", "npm:6.0.0"],\
           ["swr", "virtual:b12ba291ee2514a0e12483078237052dfe49637e15a84982389921d93eaedaf82cae0b5f1974777fc8769c04321f39e8dad0dd42ea5dbe2469ca2faf97651f79#npm:2.2.4"],\
@@ -3268,6 +3269,16 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["image-size", [\
+      ["npm:1.0.2", {\
+        "packageLocation": "./.yarn/cache/image-size-npm-1.0.2-ed5424d843-693dfb2f8b.zip/node_modules/image-size/",\
+        "packageDependencies": [\
+          ["image-size", "npm:1.0.2"],\
+          ["queue", "npm:6.0.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["import-fresh", [\
       ["npm:3.3.0", {\
         "packageLocation": "./.yarn/cache/import-fresh-npm-3.3.0-3e34265ca9-2cacfad06e.zip/node_modules/import-fresh/",\
@@ -4816,6 +4827,7 @@ const RAW_RUNTIME_STATE =
           ["rehype-autolink-headings", "npm:7.1.0"],\
           ["rehype-code-titles", "npm:1.2.0"],\
           ["rehype-highlight", "npm:7.0.0"],\
+          ["rehype-img-size", "npm:1.0.1"],\
           ["rehype-sanitize", "npm:6.0.0"],\
           ["rehype-slug", "npm:6.0.0"],\
           ["swr", "virtual:b12ba291ee2514a0e12483078237052dfe49637e15a84982389921d93eaedaf82cae0b5f1974777fc8769c04321f39e8dad0dd42ea5dbe2469ca2faf97651f79#npm:2.2.4"],\
@@ -5438,6 +5450,16 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["queue", [\
+      ["npm:6.0.2", {\
+        "packageLocation": "./.yarn/cache/queue-npm-6.0.2-ebbcf599cf-3437954ef1.zip/node_modules/queue/",\
+        "packageDependencies": [\
+          ["queue", "npm:6.0.2"],\
+          ["inherits", "npm:2.0.4"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["queue-microtask", [\
       ["npm:1.2.3", {\
         "packageLocation": "./.yarn/cache/queue-microtask-npm-1.2.3-fcc98e4e2d-72900df061.zip/node_modules/queue-microtask/",\
@@ -5640,6 +5662,17 @@ const RAW_RUNTIME_STATE =
           ["lowlight", "npm:3.1.0"],\
           ["unist-util-visit", "npm:5.0.0"],\
           ["vfile", "npm:6.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["rehype-img-size", [\
+      ["npm:1.0.1", {\
+        "packageLocation": "./.yarn/cache/rehype-img-size-npm-1.0.1-a8fcc1615d-2e53f6ba22.zip/node_modules/rehype-img-size/",\
+        "packageDependencies": [\
+          ["rehype-img-size", "npm:1.0.1"],\
+          ["image-size", "npm:1.0.2"],\
+          ["unist-util-visit", "npm:4.1.2"]\
         ],\
         "linkType": "HARD"\
       }]\

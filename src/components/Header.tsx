@@ -17,7 +17,7 @@ const Header = (props: Props) => {
   const { user } = useUser()
 
   return (
-    <header className="sticky top-0 z-50 w-full py-1 bg-white shadow backdrop-filter backdrop-blur-xl bg-opacity-60">
+    <header className="sticky top-0 z-50 w-full py-2 bg-white shadow backdrop-filter backdrop-blur-xl bg-opacity-60">
       <div className="container flex flex-col flex-wrap items-center mx-auto md:flex-row">
         <Link href="/" passHref className="ml-3 text-2xl focus-ring rounded-xl">
           <span className="font-semibold text-indigo-600 hover:text-indigo-700">

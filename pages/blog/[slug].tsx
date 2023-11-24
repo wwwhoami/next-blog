@@ -6,17 +6,31 @@ import 'highlight.js/styles/atom-one-dark.css'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { MDXRemote } from 'next-mdx-remote'
 import { serialize } from 'next-mdx-remote/serialize'
-import Image from 'next/legacy/image'
+import Image from 'next/image'
 import { ParsedUrlQuery } from 'querystring'
 import readingTime from 'reading-time'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeCodeTitles from 'rehype-code-titles'
 import rehypeHighlight from 'rehype-highlight'
+import rehypeImgSize from 'rehype-img-size'
 import rehypeSanitize from 'rehype-sanitize'
 import rehypeSlug from 'rehype-slug'
 
 type Props = {
   post: PostMdx
+}
+
+const components = {
+  img: (props: any) => (
+    // eslint-disable-next-line jsx-a11y/alt-text
+    <Image
+      width={1200}
+      height={420}
+      layout="responsive"
+      loading="lazy"
+      {...props}
+    />
+  ),
 }
 
 const PostPage = ({
@@ -50,7 +64,7 @@ const PostPage = ({
       />
       {content && (
         <article className="w-full max-w-3xl mx-auto mt-2 prose prose-lg bg-white prose-a:no-underline hover:prose-a:underline prose-a:text-indigo-600">
-          <MDXRemote {...content} components={{ Image }} />
+          <MDXRemote {...content} components={components} />
         </article>
       )}
     </Layout>
@@ -97,6 +111,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
         ],
         rehypeHighlight as any,
         rehypeCodeTitles,
+        rehypeImgSize,
       ],
     },
   })

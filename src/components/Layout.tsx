@@ -39,7 +39,9 @@ const Layout = ({ title, children, keywords, description }: Props) => {
 
       <Header />
 
-      <main className="container max-w-6xl px-5 mx-auto my-7">{children}</main>
+      <main className="container px-5 mx-auto max-w-screen-2xl my-7">
+        {children}
+      </main>
     </div>
   )
 }
