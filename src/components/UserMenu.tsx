@@ -20,9 +20,9 @@ const UserMenu = (props: Props) => {
   return (
     <div className="px-3 py-2 text-right rounded-full text-slate-700">
       <Menu as="div" className="relative inline-block text-left">
-        <Menu.Button className="w-10 h-10 rounded-full hover-ring focus-ring">
+        <Menu.Button className="w-10 h-10 align-bottom rounded-full hover-ring focus-ring">
           <Image
-            className="rounded-full"
+            className="object-center rounded-full"
             src={user?.image ?? ''}
             width={40}
             height={40}
