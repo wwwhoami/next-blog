@@ -24,7 +24,7 @@ const RootLayout: FC<RootLayoutProps> = ({ children, modal }) => {
         <body>
           <Header />
           <ToastProvider>
-            <main className="container px-5 mx-auto max-w-screen-2xl my-7">
+            <main className="container mx-auto my-7 max-w-screen-2xl px-5">
               {children}
             </main>
             {modal}

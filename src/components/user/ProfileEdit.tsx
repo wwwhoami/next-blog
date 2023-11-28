@@ -79,7 +79,7 @@ const ProfileEdit = ({}: Props) => {
     <form className="w-80" onSubmit={handleSubmit}>
       {!!errorResponse && (
         <div
-          className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
+          className="mb-4 rounded-lg bg-red-100 p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
           role="alert"
         >
           <span className="font-medium">{errorResponse.message}</span>
@@ -119,7 +119,7 @@ const ProfileEdit = ({}: Props) => {
       />
       <button
         type="submit"
-        className={`text-white bg-indigo-600 hover:bg-indigo-500 focus-ring focus:outline-none focus-within:ring focus-within:ring-primary focus-within:ring-opacity-50 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ${
+        className={`focus-ring focus-within:ring-primary w-full rounded-lg bg-indigo-600 px-5 py-2.5 text-center text-sm font-medium text-white focus-within:ring focus-within:ring-opacity-50 hover:bg-indigo-500 focus:outline-none sm:w-auto ${
           emailError || nameError || !email?.length || !name?.length
             ? "cursor-not-allowed opacity-80"
             : ""

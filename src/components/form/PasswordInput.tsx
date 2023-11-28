@@ -29,13 +29,13 @@ const PasswordInput = ({
 
   return (
     <div className="mb-6">
-      <label htmlFor={id} className="block mb-2 text-sm font-medium">
+      <label htmlFor={id} className="mb-2 block text-sm font-medium">
         {label}
       </label>
       <div
         className={`${className} ${
           hasError
-            ? "bg-red-50 border border-red-500 focus-ring-error "
+            ? "focus-ring-error border border-red-500 bg-red-50 "
             : "focus-ring"
         }`}
       >
@@ -45,7 +45,7 @@ const PasswordInput = ({
           onChange={onChange}
           onBlur={onBlur}
           type={passwordVisible ? "text" : "password"}
-          className={`w-full outline-none rounded-xl p-2.5 ${
+          className={`w-full rounded-xl p-2.5 outline-none ${
             hasError ? "bg-red-50 text-red-900 placeholder-red-700" : ""
           }`}
           id={id}
@@ -55,7 +55,7 @@ const PasswordInput = ({
           onClick={() => {
             setPasswordVisible((prev) => !prev);
           }}
-          className="flex items-center justify-center w-8 h-8 p-0 m-1 text-indigo-500 transition-colors duration-300 transform focus-ring rounded-xl hover:opacity-80 focus:ring-indigo-500/70 focus:outline-none focus:ring-2"
+          className="focus-ring m-1 flex h-8 w-8 transform items-center justify-center rounded-xl p-0 text-indigo-500 transition-colors duration-300 hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-indigo-500/70"
         >
           {passwordVisible ? <EyeSlashIcon /> : <EyeIcon />}
         </button>

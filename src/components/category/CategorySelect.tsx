@@ -88,10 +88,10 @@ const CategorySelect = ({}: Props) => {
 
   return (
     <>
-      <div className="mt-3 mb-6 text-2xl font-medium text-black col-span-full">
+      <div className="col-span-full mb-6 mt-3 text-2xl font-medium text-black">
         Search posts by topics
       </div>
-      <div className="flex flex-wrap -mb-4 -mr-4">
+      <div className="-mb-4 -mr-4 flex flex-wrap">
         {categories?.map((category, index) => (
           <CategoryLabel
             key={index}

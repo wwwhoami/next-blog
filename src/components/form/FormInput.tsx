@@ -27,7 +27,7 @@ const FormInput = ({
 }: Props) => {
   return (
     <div className="mb-6">
-      <label htmlFor={id} className="block mb-2 text-sm font-medium">
+      <label htmlFor={id} className="mb-2 block text-sm font-medium">
         {label}
       </label>
       <input
@@ -39,7 +39,7 @@ const FormInput = ({
         id={id}
         className={`${className} ${
           hasError &&
-          "bg-red-50 border border-red-500 text-red-900 focus-ring-error placeholder-red-700"
+          "focus-ring-error border border-red-500 bg-red-50 text-red-900 placeholder-red-700"
         }`}
       />
       {hasError && (

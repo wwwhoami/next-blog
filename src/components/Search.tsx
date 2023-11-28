@@ -65,21 +65,21 @@ const Search = ({ className }: Props) => {
 
   return (
     <div
-      className={`ml-10 bg-white/80 border focus-ring rounded-xl focus-within:border-primary focus-within:ring focus-within:ring-primary focus-within:ring-opacity-50 ${className}`}
+      className={`focus-ring focus-within:border-primary focus-within:ring-primary ml-10 rounded-xl border bg-white/80 focus-within:ring focus-within:ring-opacity-50 ${className}`}
     >
       <form
         onSubmit={handleSubmit}
         className="flex flex-wrap items-center justify-between"
       >
         <input
-          className="flex-1 px-2 m-1 text-gray-700 placeholder-gray-400 bg-transparent w-60 focus:outline-none"
+          className="m-1 w-60 flex-1 bg-transparent px-2 text-gray-700 placeholder-gray-400 focus:outline-none"
           type="text"
           placeholder="Search Posts"
           value={term}
           onChange={handleChange}
         />
-        <button className="flex items-center justify-center p-2 m-0.5 text-white transition-colors duration-300 transform rounded-xl bg-indigo-500 hover:bg-indigo-500/70 focus:outline-none focus:bg-indigo-500/70">
-          <MagnifyingGlassIcon className="w-5 h-5" />
+        <button className="m-0.5 flex transform items-center justify-center rounded-xl bg-indigo-500 p-2 text-white transition-colors duration-300 hover:bg-indigo-500/70 focus:bg-indigo-500/70 focus:outline-none">
+          <MagnifyingGlassIcon className="h-5 w-5" />
         </button>
       </form>
     </div>

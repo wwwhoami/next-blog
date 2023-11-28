@@ -37,10 +37,10 @@ const CategoryLabel = ({
 
   return (
     <label
-      className={`relative mb-4 mr-4 h-auto w-auto cursor-pointer rounded-full px-6 py-3 transition hover-ring focus-ring ${
-        isChecked ? "text-white bg-black" : "text-black bg-slate-100"
+      className={`hover-ring focus-ring relative mb-4 mr-4 h-auto w-auto cursor-pointer rounded-full px-6 py-3 transition ${
+        isChecked ? "bg-black text-white" : "bg-slate-100 text-black"
       } ${
-        !available && !isChecked ? "opacity-20 cursor-default" : "opacity-100"
+        !available && !isChecked ? "cursor-default opacity-20" : "opacity-100"
       }`}
       style={{
         ["--tw-ring-color" as any]: hexColor,

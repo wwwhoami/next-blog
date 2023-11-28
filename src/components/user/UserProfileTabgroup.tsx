@@ -10,12 +10,12 @@ const UserProfileTabgroup = ({}: Props) => {
   return (
     <div className="w-full max-w-md px-2 sm:px-0">
       <Tab.Group>
-        <Tab.List className="flex p-1 space-x-1 rounded-xl bg-blue-900/20">
+        <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
           <Tab
             key="Account"
             className={({ selected }) => `
-                w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-indigo-700
-              focus-ring focus:ring-opacity-60
+                focus-ring w-full rounded-lg py-2.5 text-sm font-medium leading-5
+              text-indigo-700 focus:ring-opacity-60
               ${
                 selected
                   ? "bg-white shadow"
@@ -27,8 +27,8 @@ const UserProfileTabgroup = ({}: Props) => {
           <Tab
             key="Password"
             className={({ selected }) =>
-              `w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-indigo-700
-              focus-ring focus:ring-opacity-60
+              `focus-ring w-full rounded-lg py-2.5 text-sm font-medium leading-5
+              text-indigo-700 focus:ring-opacity-60
                 ${
                   selected
                     ? "bg-white shadow"
@@ -42,13 +42,13 @@ const UserProfileTabgroup = ({}: Props) => {
         <Tab.Panels className="mt-2">
           <Tab.Panel
             key="Account"
-            className="p-3 rounded-xl focus-ring focus:ring-opacity-60"
+            className="focus-ring rounded-xl p-3 focus:ring-opacity-60"
           >
             <ProfileEdit />
           </Tab.Panel>
           <Tab.Panel
             key="Password"
-            className="p-3 rounded-xl focus-ring focus:ring-opacity-60"
+            className="focus-ring rounded-xl p-3 focus:ring-opacity-60"
           >
             <PasswordChange />
           </Tab.Panel>

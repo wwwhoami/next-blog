@@ -69,7 +69,7 @@ export default async function PostPage({ params }: Props) {
         }}
       />
       {content && (
-        <article className="w-full max-w-3xl mx-auto mt-2 prose prose-lg bg-white prose-a:no-underline hover:prose-a:underline prose-a:text-indigo-600">
+        <article className="prose prose-lg mx-auto mt-2 w-full max-w-3xl bg-white prose-a:text-indigo-600 prose-a:no-underline hover:prose-a:underline">
           <MDXRemote
             source={content}
             options={

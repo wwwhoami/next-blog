@@ -19,7 +19,7 @@ const PostCard = ({
   return (
     <Link
       href={`/blog/${slug}`}
-      className="mt-6 rounded-xl hover-ring focus-ring"
+      className="hover-ring focus-ring mt-6 rounded-xl"
     >
       <object
         className={`w-full cursor-pointer rounded-xl bg-slate-100`}
@@ -34,11 +34,11 @@ const PostCard = ({
           alt="Cover image"
           width={600}
           height={420}
-          className="object-cover object-center w-full mb-4 sm:h-96 rounded-xl"
+          className="mb-4 w-full rounded-xl object-cover object-center sm:h-96"
         />
         <div className="px-6 py-3">
           <Link
-            className="inline-flex items-center gap-2 mt-1rounded-xl hover:underline focus-ring"
+            className="mt-1rounded-xl focus-ring inline-flex items-center gap-2 hover:underline"
             href={""}
           >
             <Image
@@ -46,11 +46,11 @@ const PostCard = ({
               alt="author image"
               height={45}
               width={45}
-              className="object-cover rounded-full"
+              className="rounded-full object-cover"
             />
             <b className="font-semibold text-gray-700">{authorName}</b>
           </Link>
-          <div className="flex items-center justify-between mt-3">
+          <div className="mt-3 flex items-center justify-between">
             <span className="font-light text-gray-600">
               {dayjs(createdAt).format("DD MMMM, YYYY")}
             </span>

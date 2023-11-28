@@ -79,7 +79,7 @@ const SignUpForm = ({}: Props) => {
     <form className="w-80" onSubmit={handleSubmit}>
       {!!errorResponse && (
         <div
-          className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
+          className="mb-4 rounded-lg bg-red-100 p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
           role="alert"
         >
           <span className="font-medium">{errorResponse.message}</span>
@@ -164,7 +164,7 @@ const SignUpForm = ({}: Props) => {
       />
       <button
         type="submit"
-        className={`text-white bg-indigo-600 hover:bg-indigo-500 focus-ring focus:outline-none focus-within:ring focus-within:ring-primary focus-within:ring-opacity-50 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ${
+        className={`focus-ring focus-within:ring-primary w-full rounded-lg bg-indigo-600 px-5 py-2.5 text-center text-sm font-medium text-white focus-within:ring focus-within:ring-opacity-50 hover:bg-indigo-500 focus:outline-none sm:w-auto ${
           emailError ||
           passwordError ||
           nameError ||
@@ -177,13 +177,13 @@ const SignUpForm = ({}: Props) => {
       >
         Sign up
       </button>
-      <p className="mt-8 font-light text-center">
+      <p className="mt-8 text-center font-light">
         Already have an account?
         <Link
           href="/signIn"
           replace
           scroll={false}
-          className="mx-2 text-indigo-600 focus-ring rounded-xl hover:underline"
+          className="focus-ring mx-2 rounded-xl text-indigo-600 hover:underline"
         >
           Sign in
         </Link>

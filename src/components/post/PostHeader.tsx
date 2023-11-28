@@ -21,22 +21,22 @@ const PostHeader = ({
 }: Props) => {
   return (
     <header className="w-full">
-      <span className="box-border relative block overflow-hidden w-full lg:h-[420px] h-72 sm:h-80 md:h-96">
+      <span className="relative box-border block h-72 w-full overflow-hidden sm:h-80 md:h-96 lg:h-[420px]">
         <Image
           src={coverImage}
           alt="Cover image"
           fill={true}
           sizes="100vw"
-          className="object-cover object-center w-full text-center rounded-xl"
+          className="w-full rounded-xl object-cover object-center text-center"
         />
       </span>
-      <div className="max-w-3xl mx-auto my-8">
+      <div className="mx-auto my-8 max-w-3xl">
         <div className="flex items-center gap-5 ">
           <Link href={`/author/${author?.name}`} passHref>
             <Image
               src={String(author?.image)}
               alt="Author image"
-              className="hidden object-cover w-full h-auto rounded-full sm:block hover:cursor-pointer"
+              className="hidden h-auto w-full rounded-full object-cover hover:cursor-pointer sm:block"
               width={50}
               height={50}
             />
@@ -63,7 +63,7 @@ const PostHeader = ({
             ))}
           </div>
         </div>
-        <h1 className="max-w-3xl mt-10 text-5xl font-bold mb-7">{title}</h1>
+        <h1 className="mb-7 mt-10 max-w-3xl text-5xl font-bold">{title}</h1>
         <p className="text-xl font-medium">{excerpt}</p>
       </div>
     </header>

@@ -18,9 +18,9 @@ const MenuItemButton = ({ Icon, text, onClick }: Props) => {
           onClick={onClick}
         >
           {active ? (
-            <Icon className="w-5 h-5 mr-2" aria-hidden="true" />
+            <Icon className="mr-2 h-5 w-5" aria-hidden="true" />
           ) : (
-            <Icon className="w-5 h-5 mr-2" aria-hidden="true" />
+            <Icon className="mr-2 h-5 w-5" aria-hidden="true" />
           )}
           {text}
         </button>

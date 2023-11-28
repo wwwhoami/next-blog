@@ -33,8 +33,8 @@ export default function HomePage({ fallbackData }: Props) {
 
   return (
     <>
-      <h1 className="p-3 text-4xl font-semibold border-b-4">Latest Posts</h1>
-      <div className="grid gap-5 my-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <h1 className="border-b-4 p-3 text-4xl font-semibold">Latest Posts</h1>
+      <div className="my-3 grid gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {posts?.map((post) => <PostCard key={post.id} post={post} />)}
       </div>
       <div ref={ref}>
