@@ -1,20 +1,16 @@
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import React from 'react'
-import { useUser } from 'src/context/userContext'
-import AuthModal from './AuthModal'
-import Search from './Search'
-import SignInForm from './SignInForm'
-import SignUpForm from './SignUpForm'
-import UserMenu from './UserMenu'
-import useRouterReferer from 'src/hooks/useRouterReferer'
+"use client";
 
-type Props = {}
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useUser } from "src/context/userContext";
+import Search from "./Search";
+import UserMenu from "./menu/UserMenu";
+
+type Props = {};
 
 const Header = (props: Props) => {
-  const router = useRouter()
-  const { backToReferer } = useRouterReferer()
-  const { user } = useUser()
+  const pathname = usePathname();
+  const { user } = useUser();
 
   return (
     <header className="sticky top-0 z-50 w-full py-2 bg-white shadow backdrop-filter backdrop-blur-xl bg-opacity-60">
@@ -39,28 +35,20 @@ const Header = (props: Props) => {
           >
             About
           </Link>
-          {!user && (
+          {!user?.id && (
             <>
               <Link
-                href={`/?signUp=true&referer=${router.asPath.replaceAll(
-                  '&',
-                  '|'
-                )}`}
-                as="/signUp"
-                shallow={true}
-                passHref
+                href="/signUp"
+                scroll={false}
+                replace={pathname === "/signIn" || pathname === "/signUp"}
                 className="px-3 py-2 rounded-lg focus-ring text-slate-700 hover:bg-slate-100 hover:text-slate-900"
               >
                 Sign up
               </Link>
               <Link
-                href={`/?signIn=true&referer=${router.asPath.replaceAll(
-                  '&',
-                  '|'
-                )}`}
-                as="/signIn"
-                shallow={true}
-                passHref
+                href="/signIn"
+                scroll={false}
+                replace={pathname === "/signIn" || pathname === "/signUp"}
                 className="px-3 py-2 rounded-lg focus-ring text-slate-700 hover:bg-slate-100 hover:text-slate-900"
               >
                 Sign in
@@ -69,29 +57,9 @@ const Header = (props: Props) => {
           )}
           {user && <UserMenu />}
         </nav>
-
-        <AuthModal
-          isOpen={!!router.query.signUp || !!router.query.signIn}
-          closeModal={backToReferer}
-          title={
-            !!router.query.signUp
-              ? 'Sign Up'
-              : !!router.query.signIn
-              ? 'Sign In'
-              : ''
-          }
-        >
-          {!!router.query.signUp ? (
-            <SignUpForm />
-          ) : !!router.query.signIn ? (
-            <SignInForm />
-          ) : (
-            ''
-          )}
-        </AuthModal>
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

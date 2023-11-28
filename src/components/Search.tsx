@@ -1,6 +1,8 @@
-import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
-import debounce from 'lodash.debounce'
-import { useRouter } from 'next/router'
+"use client";
+
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import debounce from "lodash.debounce";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, {
   FormEvent,
   useCallback,
@@ -8,71 +10,58 @@ import React, {
   useMemo,
   useRef,
   useState,
-} from 'react'
+} from "react";
 
 type Props = {
-  className?: string
-}
+  className?: string;
+};
 
 const Search = ({ className }: Props) => {
-  const router = useRouter()
-  const [term, setTerm] = useState(
-    router.query.searchQuery ? (router.query.searchQuery as string) : ''
-  )
-  const termNotLoadedFromQuery = useRef(true)
+  const router = useRouter();
+  const pathname = usePathname();
+  const query = useSearchParams();
+  const [term, setTerm] = useState(query.get("searchQuery") ?? "");
+  const termNotLoadedFromQuery = useRef(true);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (router.route !== '/blog')
-      router.push(`/blog?searchQuery=${term.trim()}`)
-  }
+    e.preventDefault();
+    if (pathname !== "/blog") router.push(`/blog?searchQuery=${term.trim()}`);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTerm(e.target.value)
-    if (router.route === '/blog') debounceSetSearchQuery(e.target.value)
-  }
-
-  useEffect(() => {
-    if (router.isReady && router.query.searchQuery && termNotLoadedFromQuery) {
-      setTerm(router.query.searchQuery as string)
-      termNotLoadedFromQuery.current = false
-    }
-  }, [router.isReady, router.query.searchQuery])
+    setTerm(e.target.value);
+    if (pathname === "/blog") debounceSetSearchQuery(e.target.value);
+  };
 
   const setQueryParam = useCallback(
     (query: string) => {
-      const queryToSet = router.query
+      const queryToSet = new URLSearchParams();
 
-      if (!query) delete queryToSet.searchQuery
-      else queryToSet.searchQuery = query.trim()
+      if (!query) queryToSet.delete("searchQuery");
+      else queryToSet.set("searchQuery", query.trim());
 
-      router.push(
-        {
-          pathname: '/blog',
-          query: { ...queryToSet },
-        },
-        undefined,
-        {
-          shallow: true,
-        }
-      )
+      router.push(`/blog?${queryToSet.toString()}`);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [router.query]
-  )
+    [query],
+  );
 
   const debounceSetSearchQuery = useMemo(
     () => debounce(setQueryParam, 500),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [router.query]
-  )
+    [query],
+  );
 
   useEffect(() => {
-    return () => {
-      debounceSetSearchQuery.cancel()
+    if (query.get("searchQuery") && termNotLoadedFromQuery) {
+      setTerm(query.get("searchQuery") || "");
+      termNotLoadedFromQuery.current = false;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.query])
+
+    return () => {
+      debounceSetSearchQuery.cancel();
+    };
+  }, [debounceSetSearchQuery, query]);
 
   return (
     <div
@@ -94,7 +83,7 @@ const Search = ({ className }: Props) => {
         </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default Search
+export default Search;

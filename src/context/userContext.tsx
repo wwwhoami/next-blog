@@ -1,4 +1,6 @@
-import { User, UserSession } from '@/types/User'
+"use client";
+
+import { User, UserSession } from "@/types/User";
 import {
   Dispatch,
   ReactNode,
@@ -8,96 +10,94 @@ import {
   useContext,
   useEffect,
   useState,
-} from 'react'
+} from "react";
 
 type UserContext = {
-  user?: UserSession
-  error?: Error | null
-  refreshSession: () => Promise<void>
-  setUser: Dispatch<SetStateAction<UserSession | undefined>>
-  setError: Dispatch<SetStateAction<Error | undefined | null>>
-}
+  user?: UserSession;
+  error?: Error | null;
+  refreshSession: () => Promise<void>;
+  setUser: Dispatch<SetStateAction<UserSession | undefined>>;
+  setError: Dispatch<SetStateAction<Error | undefined | null>>;
+};
 
-const UserContext = createContext<UserContext | undefined>(undefined)
+const UserContext = createContext<UserContext | undefined>(undefined);
 
-UserContext.displayName = 'UserContext'
+UserContext.displayName = "UserContext";
 
 export function useUser() {
-  const context = useContext(UserContext)
+  const context = useContext(UserContext);
 
   if (context === undefined) {
-    throw new Error('useUser must be used within a UserProvider')
+    throw new Error("useUser must be used within a UserProvider");
   }
 
-  return context
-}
-
-type Props = {
-  children: ReactNode
+  return context;
 }
 
 type AccessTokenResponse = {
-  accessToken: string
-}
+  accessToken: string;
+};
 
-function UserProvider({ children }: Props) {
-  const [user, setUser] = useState<UserSession>()
-  const [error, setError] = useState<Error | null>()
+type Props = {
+  children: ReactNode;
+};
+
+export default function UserProvider({ children }: Props) {
+  const [user, setUser] = useState<UserSession>();
+  const [error, setError] = useState<Error | null>();
 
   const getCurrentUserData = useCallback(async (accessToken: string) => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/profile`, {
-      method: 'GET',
+      method: "GET",
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
-    })
+    });
 
-    const data: User | Error = await res.json()
+    const data: User | Error = await res.json();
 
-    console.log(data)
+    if (!res.ok && "message" in data) setError(data);
 
-    if (!res.ok && 'message' in data) setError(data)
-
-    if (res.ok && 'email' in data) {
+    if (res.ok && "email" in data) {
       setUser((prev) => ({
         ...data,
         accessToken: prev?.accessToken,
-      }))
-      setError(undefined)
+      }));
+      setError(undefined);
     }
-  }, [])
+  }, []);
 
   const refreshSession = useCallback(async () => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`, {
-      credentials: 'include',
-    })
+      credentials: "include",
+    });
 
-    const data: AccessTokenResponse | Error = await res.json()
+    const data: AccessTokenResponse | Error = await res.json();
 
-    if (!res.ok && 'message' in data) setError(data)
+    if (!res.ok && "message" in data) setError(data);
 
-    if (res.ok && 'accessToken' in data) {
+    if (res.ok && "accessToken" in data) {
       setUser((prev) => ({
         ...prev,
         accessToken: data.accessToken,
-      }))
-      setError(undefined)
+      }));
+      setError(undefined);
 
-      await getCurrentUserData(data.accessToken)
+      await getCurrentUserData(data.accessToken);
     }
-  }, [getCurrentUserData])
+  }, [getCurrentUserData]);
 
   useEffect(() => {
-    let ignore = false
+    let ignore = false;
 
     if (!ignore) {
-      refreshSession()
+      refreshSession();
     }
 
     return () => {
-      ignore = true
-    }
-  }, [refreshSession])
+      ignore = true;
+    };
+  }, [refreshSession]);
 
   return (
     <UserContext.Provider
@@ -111,7 +111,5 @@ function UserProvider({ children }: Props) {
     >
       {children}
     </UserContext.Provider>
-  )
+  );
 }
-
-export default UserProvider

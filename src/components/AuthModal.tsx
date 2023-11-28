@@ -1,17 +1,20 @@
-import { Dialog, Transition } from '@headlessui/react'
-import React, { Fragment, ReactNode } from 'react'
+"use client";
+
+import { Dialog, Transition } from "@headlessui/react";
+import { useRouter } from "next/navigation";
+import { FC, Fragment, ReactNode } from "react";
 
 type Props = {
-  isOpen: boolean
-  closeModal: () => void
-  title?: string
-  children: ReactNode
-}
+  title?: string;
+  children: ReactNode;
+};
 
-const AuthModal = ({ isOpen, closeModal, title, children }: Props) => {
+const AuthModal: FC<Props> = ({ title, children }) => {
+  const router = useRouter();
+
   return (
-    <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={closeModal}>
+    <Transition show appear as={Fragment}>
+      <Dialog as="div" className="relative z-10" onClose={router.back}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -49,7 +52,7 @@ const AuthModal = ({ isOpen, closeModal, title, children }: Props) => {
         </div>
       </Dialog>
     </Transition>
-  )
-}
+  );
+};
 
-export default AuthModal
+export default AuthModal;

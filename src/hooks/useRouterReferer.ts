@@ -1,20 +1,22 @@
-import { useRouter } from 'next/router'
-import { useCallback } from 'react'
+"use client";
+
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback } from "react";
 
 export default function useRouterReferer() {
-  const router = useRouter()
+  const router = useRouter();
+  const pathname = usePathname();
+  const query = useSearchParams();
 
-  const referer = router.asPath.replaceAll('&', '|')
+  const referer = new URLSearchParams(
+    pathname + query.size ? `?${query.toString()}` : "",
+  );
 
   const backToReferer = useCallback(() => {
-    router.push(
-      router.query.referer?.toString().replaceAll('|', '&') || '/',
-      undefined,
-      {
-        shallow: true,
-      }
-    )
-  }, [router])
+    const nextUrl =
+      new URLSearchParams(query.get("referer") || "").toString() || "/";
+    router.push(nextUrl);
+  }, [query, router]);
 
-  return { referer, backToReferer }
+  return { referer, backToReferer };
 }
