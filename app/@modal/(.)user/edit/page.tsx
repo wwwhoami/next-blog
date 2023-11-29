@@ -1,10 +1,10 @@
-import AuthModal from "@/components/AuthModal";
-import UserProfileTabgroup from "@/components/user/UserProfileTabgroup";
+import AuthModal from '@/components/AuthModal'
+import UserProfileTabgroup from '@/components/user/UserProfileTabgroup'
 
 export default function Edit() {
   return (
-    <AuthModal title={"Edit profile"}>
+    <AuthModal title={'Edit profile'}>
       <UserProfileTabgroup />
     </AuthModal>
-  );
+  )
 }

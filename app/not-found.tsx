@@ -1,7 +1,7 @@
-import { NextPage } from "next";
-import Image from "next/image";
+import { NextPage } from 'next'
+import Image from 'next/image'
 
-type Props = {};
+type Props = {}
 
 const NotFoundPage: NextPage<Props> = (props) => {
   return (
@@ -10,7 +10,7 @@ const NotFoundPage: NextPage<Props> = (props) => {
       <h1 className="my-5 text-6xl">Whoops</h1>
       <h2 className="text-4xl text-gray-400">This page does not exist :(</h2>
     </div>
-  );
-};
+  )
+}
 
-export default NotFoundPage;
+export default NotFoundPage

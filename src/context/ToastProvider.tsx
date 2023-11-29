@@ -1,11 +1,11 @@
-"use client";
+'use client'
 
-import { ReactNode } from "react";
-import { ToastContainer } from "react-toastify";
+import { ReactNode } from 'react'
+import { ToastContainer } from 'react-toastify'
 
 type Props = {
-  children: ReactNode;
-};
+  children: ReactNode
+}
 
 export default function ToastProvider({ children }: Props) {
   return (
@@ -23,5 +23,5 @@ export default function ToastProvider({ children }: Props) {
         pauseOnHover
       />
     </>
-  );
+  )
 }

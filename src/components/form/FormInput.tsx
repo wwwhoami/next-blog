@@ -1,17 +1,17 @@
-import React from "react";
+import React from 'react'
 
 type Props = {
-  value?: string | number | readonly string[];
-  type?: React.HTMLInputTypeAttribute;
-  id?: string;
-  label?: string;
-  placeholder?: string;
-  onChange?: React.ChangeEventHandler<HTMLInputElement>;
-  onBlur?: React.FocusEventHandler<HTMLInputElement>;
-  hasError?: boolean;
-  errorMessage?: string;
-  className?: string;
-};
+  value?: string | number | readonly string[]
+  type?: React.HTMLInputTypeAttribute
+  id?: string
+  label?: string
+  placeholder?: string
+  onChange?: React.ChangeEventHandler<HTMLInputElement>
+  onBlur?: React.FocusEventHandler<HTMLInputElement>
+  hasError?: boolean
+  errorMessage?: string
+  className?: string
+}
 
 const FormInput = ({
   value,
@@ -23,7 +23,7 @@ const FormInput = ({
   onBlur,
   hasError,
   errorMessage,
-  className = "border focus-ring rounded-xl focus-within:border-primary focus-within:ring focus-within:ring-primary focus-within:ring-opacity-50 text-sm block w-full p-2.5",
+  className = 'border focus-ring rounded-xl focus-within:border-primary focus-within:ring focus-within:ring-primary focus-within:ring-opacity-50 text-sm block w-full p-2.5',
 }: Props) => {
   return (
     <div className="mb-6">
@@ -39,7 +39,7 @@ const FormInput = ({
         id={id}
         className={`${className} ${
           hasError &&
-          "focus-ring-error border border-red-500 bg-red-50 text-red-900 placeholder-red-700"
+          'focus-ring-error border border-red-500 bg-red-50 text-red-900 placeholder-red-700'
         }`}
       />
       {hasError && (
@@ -48,7 +48,7 @@ const FormInput = ({
         </p>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default FormInput;
+export default FormInput

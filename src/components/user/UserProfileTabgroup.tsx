@@ -1,10 +1,10 @@
-"use client";
+'use client'
 
-import { Tab } from "@headlessui/react";
-import PasswordChange from "./PasswordChange";
-import ProfileEdit from "./ProfileEdit";
+import { Tab } from '@headlessui/react'
+import PasswordChange from './PasswordChange'
+import ProfileEdit from './ProfileEdit'
 
-type Props = {};
+type Props = {}
 
 const UserProfileTabgroup = ({}: Props) => {
   return (
@@ -18,8 +18,8 @@ const UserProfileTabgroup = ({}: Props) => {
               text-indigo-700 focus:ring-opacity-60
               ${
                 selected
-                  ? "bg-white shadow"
-                  : "text-indigo-100 hover:bg-white/[0.12] hover:text-white"
+                  ? 'bg-white shadow'
+                  : 'text-indigo-100 hover:bg-white/[0.12] hover:text-white'
               }`}
           >
             Account
@@ -31,8 +31,8 @@ const UserProfileTabgroup = ({}: Props) => {
               text-indigo-700 focus:ring-opacity-60
                 ${
                   selected
-                    ? "bg-white shadow"
-                    : "text-indigo-100 hover:bg-white/[0.12] hover:text-white"
+                    ? 'bg-white shadow'
+                    : 'text-indigo-100 hover:bg-white/[0.12] hover:text-white'
                 }`
             }
           >
@@ -55,7 +55,7 @@ const UserProfileTabgroup = ({}: Props) => {
         </Tab.Panels>
       </Tab.Group>
     </div>
-  );
-};
+  )
+}
 
-export default UserProfileTabgroup;
+export default UserProfileTabgroup

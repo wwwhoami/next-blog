@@ -1,18 +1,18 @@
-"use client";
+'use client'
 
-import { Menu, Transition } from "@headlessui/react";
-import { PencilIcon, PlusCircleIcon } from "@heroicons/react/20/solid";
-import Image from "next/image";
-import { Fragment } from "react";
-import { useUser } from "src/context/userContext";
-import SignOut from "../auth/SignOut";
-import MenuItemButton from "./MenuItemButton";
-import MenuItemLink from "./MenuItemLink";
+import { Menu, Transition } from '@headlessui/react'
+import { PencilIcon, PlusCircleIcon } from '@heroicons/react/20/solid'
+import Image from 'next/image'
+import { Fragment } from 'react'
+import { useUser } from 'src/context/UserContext'
+import SignOut from '../auth/SignOut'
+import MenuItemButton from './MenuItemButton'
+import MenuItemLink from './MenuItemLink'
 
-type Props = {};
+type Props = {}
 
 export default function UserMenu(props: Props) {
-  const { user } = useUser();
+  const { user } = useUser()
 
   return (
     <div className="rounded-full px-3 py-2 text-right text-slate-700">
@@ -20,7 +20,7 @@ export default function UserMenu(props: Props) {
         <Menu.Button className="hover-ring focus-ring h-10 w-10 rounded-full align-bottom">
           <Image
             className="rounded-full object-center"
-            src={user?.image ?? ""}
+            src={user?.image ?? ''}
             width={40}
             height={40}
             alt="User avatar"
@@ -52,5 +52,5 @@ export default function UserMenu(props: Props) {
         </Transition>
       </Menu>
     </div>
-  );
+  )
 }

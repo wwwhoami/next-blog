@@ -1,9 +1,9 @@
-import { Metadata } from "next";
+import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "About Next Blog",
-  description: "This is an about page for Next Blog",
-};
+  title: 'About Next Blog',
+  description: 'This is an about page for Next Blog',
+}
 
 export default function AboutPage() {
   return (
@@ -17,5 +17,5 @@ export default function AboutPage() {
         </p>
       </div>
     </>
-  );
+  )
 }

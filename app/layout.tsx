@@ -1,21 +1,21 @@
-import Header from "@/components/Header";
-import "@/styles/globals.css";
-import { Metadata } from "next";
-import { FC, ReactNode } from "react";
-import "react-toastify/dist/ReactToastify.min.css";
-import ToastProvider from "src/context/ToastProvider";
-import UserProvider from "src/context/userContext";
+import Header from '@/components/Header'
+import '@/styles/globals.css'
+import { Metadata } from 'next'
+import { FC, ReactNode } from 'react'
+import 'react-toastify/dist/ReactToastify.min.css'
+import ToastProvider from 'src/context/ToastProvider'
+import UserProvider from 'src/context/UserContext'
 
 interface RootLayoutProps {
-  children: ReactNode;
-  modal: ReactNode;
+  children: ReactNode
+  modal: ReactNode
 }
 
 export const metadata: Metadata = {
-  title: "NextBlog",
-  keywords: "development, programming, IT",
-  description: "The next info and news in dev",
-};
+  title: 'NextBlog',
+  keywords: 'development, programming, IT',
+  description: 'The next info and news in dev',
+}
 
 const RootLayout: FC<RootLayoutProps> = ({ children, modal }) => {
   return (
@@ -24,7 +24,7 @@ const RootLayout: FC<RootLayoutProps> = ({ children, modal }) => {
         <body>
           <Header />
           <ToastProvider>
-            <main className="container mx-auto my-7 max-w-screen-2xl px-5">
+            <main className="container px-5 mx-auto my-7 max-w-screen-2xl">
               {children}
             </main>
             {modal}
@@ -32,7 +32,7 @@ const RootLayout: FC<RootLayoutProps> = ({ children, modal }) => {
         </body>
       </html>
     </UserProvider>
-  );
-};
+  )
+}
 
-export default RootLayout;
+export default RootLayout

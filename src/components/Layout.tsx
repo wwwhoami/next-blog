@@ -1,13 +1,13 @@
-import Head from "next/head";
-import { ReactNode } from "react";
-import Header from "./Header";
+import Head from 'next/head'
+import { ReactNode } from 'react'
+import Header from './Header'
 
 type Props = {
-  title: string;
-  children: ReactNode;
-  keywords: string;
-  description: string;
-};
+  title: string
+  children: ReactNode
+  keywords: string
+  description: string
+}
 
 const Layout = ({ title, children, keywords, description }: Props) => {
   return (
@@ -43,7 +43,7 @@ const Layout = ({ title, children, keywords, description }: Props) => {
         {children}
       </main>
     </div>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout

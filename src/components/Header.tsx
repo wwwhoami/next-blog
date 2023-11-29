@@ -1,16 +1,16 @@
-"use client";
+'use client'
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useUser } from "src/context/userContext";
-import Search from "./Search";
-import UserMenu from "./menu/UserMenu";
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useUser } from 'src/context/UserContext'
+import Search from './Search'
+import UserMenu from './menu/UserMenu'
 
-type Props = {};
+type Props = {}
 
 const Header = (props: Props) => {
-  const pathname = usePathname();
-  const { user } = useUser();
+  const pathname = usePathname()
+  const { user } = useUser()
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white bg-opacity-60 py-2 shadow backdrop-blur-xl backdrop-filter">
@@ -40,7 +40,7 @@ const Header = (props: Props) => {
               <Link
                 href="/signUp"
                 scroll={false}
-                replace={pathname === "/signIn" || pathname === "/signUp"}
+                replace={pathname === '/signIn' || pathname === '/signUp'}
                 className="focus-ring rounded-lg px-3 py-2 text-slate-700 hover:bg-slate-100 hover:text-slate-900"
               >
                 Sign up
@@ -48,7 +48,7 @@ const Header = (props: Props) => {
               <Link
                 href="/signIn"
                 scroll={false}
-                replace={pathname === "/signIn" || pathname === "/signUp"}
+                replace={pathname === '/signIn' || pathname === '/signUp'}
                 className="focus-ring rounded-lg px-3 py-2 text-slate-700 hover:bg-slate-100 hover:text-slate-900"
               >
                 Sign in
@@ -59,7 +59,7 @@ const Header = (props: Props) => {
         </nav>
       </div>
     </header>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

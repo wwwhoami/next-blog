@@ -1,4 +1,4 @@
-import SignInForm from "@/components/auth/SignInForm";
+import SignInForm from '@/components/auth/SignInForm'
 
 export default function SignIn() {
   return (
@@ -8,5 +8,5 @@ export default function SignIn() {
         <SignInForm />
       </div>
     </div>
-  );
+  )
 }

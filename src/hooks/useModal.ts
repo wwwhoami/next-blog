@@ -1,13 +1,13 @@
-"use client";
+'use client'
 
-import { useState } from "react";
+import { useState } from 'react'
 
 export const useModal = (shown = false) => {
-  const [isShown, setIsShown] = useState(shown);
+  const [isShown, setIsShown] = useState(shown)
 
-  const toggle = () => setIsShown(!isShown);
+  const toggle = () => setIsShown(!isShown)
 
-  return [isShown, toggle] as const;
-};
+  return [isShown, toggle] as const
+}
 
-export default useModal;
+export default useModal

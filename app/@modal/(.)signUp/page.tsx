@@ -1,10 +1,10 @@
-import AuthModal from "@/components/AuthModal";
-import SignUpForm from "@/components/auth/SignUpForm";
+import AuthModal from '@/components/AuthModal'
+import SignUpForm from '@/components/auth/SignUpForm'
 
 export default function SignUp() {
   return (
-    <AuthModal title={"Sign Up"}>
+    <AuthModal title={'Sign Up'}>
       <SignUpForm />
     </AuthModal>
-  );
+  )
 }

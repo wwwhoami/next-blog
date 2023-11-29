@@ -1,6 +1,6 @@
-import { Post } from "@/types/Post";
-import fetcher from "./fetcher";
+import { Post } from '@/types/Post'
+import fetcher from './fetcher'
 
 export const fetchPosts = async (url: RequestInfo) => {
-  return fetcher<Post[]>(url.toString());
-};
+  return fetcher<Post[]>(url.toString())
+}

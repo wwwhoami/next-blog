@@ -1,28 +1,28 @@
-import PostHeader from "@/components/post/PostHeader";
-import fetcher from "@/lib/fetcher";
-import { PostMdx, PostWithContent } from "@/types/Post";
-import "highlight.js/styles/atom-one-dark.css";
-import { Metadata } from "next";
-import { MDXRemote } from "next-mdx-remote/rsc";
-import Image from "next/image";
-import Link from "next/link";
-import readingTime from "reading-time";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypeCodeTitles from "rehype-code-titles";
-import rehypeHighlight from "rehype-highlight";
-import rehypeImgSize from "rehype-img-size";
-import rehypeSanitize from "rehype-sanitize";
-import rehypeSlug from "rehype-slug";
+import PostHeader from '@/components/post/PostHeader'
+import fetcher from '@/lib/fetcher'
+import { PostMdx, PostWithContent } from '@/types/Post'
+import 'highlight.js/styles/atom-one-dark.css'
+import { Metadata } from 'next'
+import { MDXRemote } from 'next-mdx-remote/rsc'
+import Image from 'next/image'
+import Link from 'next/link'
+import readingTime from 'reading-time'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import rehypeCodeTitles from 'rehype-code-titles'
+import rehypeHighlight from 'rehype-highlight'
+import rehypeImgSize from 'rehype-img-size'
+import rehypeSanitize from 'rehype-sanitize'
+import rehypeSlug from 'rehype-slug'
 
 export const metadata: Metadata = {
-  title: "About Next Blog",
-  description: "This is an about page for Next Blog",
-};
+  title: 'About Next Blog',
+  description: 'This is an about page for Next Blog',
+}
 
 type Props = {
-  post: PostMdx;
-  params: { slug: string }[];
-};
+  post: PostMdx
+  params: { slug: string }[]
+}
 
 const components = {
   img: (props: any) => (
@@ -36,10 +36,10 @@ const components = {
     />
   ),
   a: (props: any) => <Link {...props} />,
-};
+}
 
 export default async function PostPage({ params }: Props) {
-  const post = await getPost(params as any);
+  const post = await getPost(params as any)
   const {
     title,
     content,
@@ -51,7 +51,7 @@ export default async function PostPage({ params }: Props) {
     createdAt,
     updatedAt,
     likesCount,
-  } = post;
+  } = post
 
   return (
     <>
@@ -82,7 +82,7 @@ export default async function PostPage({ params }: Props) {
                     [
                       rehypeAutolinkHeadings,
                       {
-                        behavior: "wrap",
+                        behavior: 'wrap',
                       },
                     ],
                     rehypeHighlight as any,
@@ -97,30 +97,30 @@ export default async function PostPage({ params }: Props) {
         </article>
       )}
     </>
-  );
+  )
 }
 
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
   const slugs = await fetcher<Array<{ slug: string }>>(
     `${process.env.NEXT_PUBLIC_API_URL}/post/slug`,
-  );
+  )
 
-  return slugs;
+  return slugs
 }
 
 async function getPost(params: { slug: string }) {
-  const slug = params.slug;
+  const slug = params.slug
 
   const post = await fetcher<PostWithContent>(
     `${process.env.NEXT_PUBLIC_API_URL}/post/article/${slug}`,
-  );
+  )
 
-  const readingTimeMinutes = Math.round(readingTime(post.content).minutes);
+  const readingTimeMinutes = Math.round(readingTime(post.content).minutes)
 
   return {
     ...post,
     readingTimeMinutes,
     createdAt: new Date(post.createdAt).toISOString(),
     updatedAt: new Date(post.updatedAt).toISOString(),
-  };
+  }
 }

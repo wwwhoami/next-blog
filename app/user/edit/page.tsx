@@ -1,10 +1,10 @@
-import UserProfileTabgroup from "@/components/user/UserProfileTabgroup";
-import { Metadata } from "next";
+import UserProfileTabgroup from '@/components/user/UserProfileTabgroup'
+import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Edit profile",
-  description: "Edit profile page",
-};
+  title: 'Edit profile',
+  description: 'Edit profile page',
+}
 
 export default function Edit() {
   return (
@@ -14,5 +14,5 @@ export default function Edit() {
         <UserProfileTabgroup />
       </div>
     </div>
-  );
+  )
 }

@@ -1,32 +1,32 @@
-import { Post } from "@/types/Post";
-import dayjs from "dayjs";
-import Image from "next/image";
-import Link from "next/link";
-import CategoryLink from "../category/CategoryLink";
+import { Post } from '@/types/Post'
+import dayjs from 'dayjs'
+import Image from 'next/image'
+import Link from 'next/link'
+import CategoryLink from '../category/CategoryLink'
 
 type Props = {
-  post: Post;
-};
+  post: Post
+}
 
 const PostCard = ({
   post: { coverImage, slug, createdAt, title, excerpt, author, categories },
 }: Props) => {
   const { image: authorImage, name: authorName } = author ?? {
-    image: "",
-    name: "Deleted Author",
-  };
+    image: '',
+    name: 'Deleted Author',
+  }
 
   return (
     <Link
       href={`/blog/${slug}`}
-      className="hover-ring focus-ring mt-6 rounded-xl"
+      className="mt-6 hover-ring focus-ring rounded-xl"
     >
       <object
         className={`w-full cursor-pointer rounded-xl bg-slate-100`}
         style={{
-          ["--tw-ring-color" as any]: categories
+          ['--tw-ring-color' as any]: categories
             ? categories[0].category.hexColor
-            : "#7c3aed",
+            : '#7c3aed',
         }}
       >
         <Image
@@ -34,25 +34,25 @@ const PostCard = ({
           alt="Cover image"
           width={600}
           height={420}
-          className="mb-4 w-full rounded-xl object-cover object-center sm:h-96"
+          className="object-cover object-center w-full mb-4 rounded-xl sm:h-96"
         />
         <div className="px-6 py-3">
           <Link
-            className="mt-1rounded-xl focus-ring inline-flex items-center gap-2 hover:underline"
-            href={""}
+            className="inline-flex items-center gap-2 mt-1 rounded-xl focus-ring hover:underline"
+            href={''}
           >
             <Image
               src={String(authorImage)}
               alt="author image"
               height={45}
               width={45}
-              className="rounded-full object-cover"
+              className="object-cover rounded-full"
             />
             <b className="font-semibold text-gray-700">{authorName}</b>
           </Link>
-          <div className="mt-3 flex items-center justify-between">
+          <div className="flex items-center justify-between mt-3">
             <span className="font-light text-gray-600">
-              {dayjs(createdAt).format("DD MMMM, YYYY")}
+              {dayjs(createdAt).format('DD MMMM, YYYY')}
             </span>
 
             <div>
@@ -74,7 +74,7 @@ const PostCard = ({
         </div>
       </object>
     </Link>
-  );
-};
+  )
+}
 
-export default PostCard;
+export default PostCard
