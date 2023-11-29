@@ -3,7 +3,7 @@
 import fetcher from '@/lib/fetcher'
 import { Category } from '@/types/Category'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo } from 'react'
 import useSWR from 'swr'
 import CategoryLabel from './CategoryLabel'
 
@@ -21,8 +21,10 @@ const CategorySelect = ({}: Props) => {
   const router = useRouter()
   const query = useSearchParams()
 
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-  const selectedCategoriesNotLoadedFromQuery = useRef(true)
+  const selectedCategories = useMemo(
+    () => query.get('category')?.split(' ') ?? [],
+    [query],
+  )
 
   const { data: categories } = useSWR<Omit<Category, 'description'>[]>(
     `${process.env.NEXT_PUBLIC_API_URL}/category`,
@@ -38,6 +40,7 @@ const CategorySelect = ({}: Props) => {
   const searchQuery = query.has('searchQuery')
     ? `?searchTerm=${query.get('searchQuery')}`
     : ''
+
   const { data: categoryCombinations } = useSWR<string[][]>(
     `${process.env.NEXT_PUBLIC_API_URL}/category/combo${searchQuery}`,
     categoryCombinationsFetcher,
@@ -66,25 +69,29 @@ const CategorySelect = ({}: Props) => {
       .filter((e): e is string => e !== undefined)
   }, [categoryCombinations, selectedCategories])
 
-  useEffect(() => {
-    if (query.has('category') && selectedCategoriesNotLoadedFromQuery) {
-      setSelectedCategories(String(query.get('category')).split(' '))
-      selectedCategoriesNotLoadedFromQuery.current = false
-    }
-  }, [query])
-
-  useEffect(() => {
-    const selectedCategoryQuery = selectedCategories.join(' ')
+  const handleSelectedCategoriesChange = (categories: string[]) => {
     const queryToSet = new URLSearchParams(query)
 
-    if (selectedCategories.length === 0) queryToSet.delete('category')
-    else queryToSet.set('category', selectedCategoryQuery)
+    if (categories.length === 0) queryToSet.delete('category')
+    else {
+      const selectedCategoryQuery = categories.join(' ')
+      queryToSet.set('category', selectedCategoryQuery)
+    }
 
-    router.push(`/blog?${queryToSet.toString()}`, {
-      shallow: true,
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCategories])
+    router.push(`/blog?${queryToSet.toString()}`)
+  }
+
+  const handleCategorySelect = (category: string) => {
+    const nextSelectedCategories = [...selectedCategories, category]
+    handleSelectedCategoriesChange(nextSelectedCategories)
+  }
+
+  const handleCategoryDeselect = (category: string) => {
+    const nextSelectedCategories = selectedCategories.filter(
+      (selectedCategory) => selectedCategory !== category,
+    )
+    handleSelectedCategoriesChange(nextSelectedCategories)
+  }
 
   return (
     <>
@@ -97,7 +104,8 @@ const CategorySelect = ({}: Props) => {
             key={index}
             name={category.name}
             hexColor={category.hexColor}
-            setSelectedCategories={setSelectedCategories}
+            onCategoryDeselect={handleCategoryDeselect}
+            onCategorySelect={handleCategorySelect}
             available={availableCategories?.some(
               (availableCategory) => availableCategory === category.name,
             )}

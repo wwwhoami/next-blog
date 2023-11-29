@@ -3,7 +3,9 @@ import React, { MutableRefObject, useEffect, useRef, useState } from 'react'
 type Props = {
   name: string
   hexColor?: string | null
-  setSelectedCategories: React.Dispatch<React.SetStateAction<string[]>>
+  setSelectedCategories?: React.Dispatch<React.SetStateAction<string[]>>
+  onCategorySelect: (category: string) => void
+  onCategoryDeselect: (category: string) => void
   available?: boolean
   selected?: boolean
 }
@@ -11,7 +13,8 @@ type Props = {
 const CategoryLabel = ({
   name,
   hexColor,
-  setSelectedCategories,
+  onCategorySelect,
+  onCategoryDeselect,
   available = true,
   selected = false,
 }: Props) => {
@@ -25,9 +28,9 @@ const CategoryLabel = ({
 
     const value = e.target.value
     if (e.target.checked) {
-      setSelectedCategories((prev) => (prev ? [...prev, value] : [value]))
+      onCategorySelect(value)
     } else if (!e.target.checked) {
-      setSelectedCategories((prev) => prev?.filter((val) => val !== value))
+      onCategoryDeselect(value)
     }
   }
 
