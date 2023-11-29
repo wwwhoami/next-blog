@@ -34,11 +34,11 @@ const Search = ({ className }: Props) => {
   }
 
   const setQueryParam = useCallback(
-    (query: string) => {
+    (searchTerm: string) => {
       const queryToSet = new URLSearchParams()
 
-      if (!query) queryToSet.delete('searchQuery')
-      else queryToSet.set('searchQuery', query.trim())
+      if (!searchTerm) queryToSet.delete('searchQuery')
+      else queryToSet.set('searchQuery', searchTerm.trim())
 
       router.push(`/blog?${queryToSet.toString()}`)
     },
@@ -72,14 +72,14 @@ const Search = ({ className }: Props) => {
         className="flex flex-wrap items-center justify-between"
       >
         <input
-          className="m-1 w-60 flex-1 bg-transparent px-2 text-gray-700 placeholder-gray-400 focus:outline-none"
+          className="flex-1 px-2 m-1 text-gray-700 placeholder-gray-400 bg-transparent w-60 focus:outline-none"
           type="text"
           placeholder="Search Posts"
           value={term}
           onChange={handleChange}
         />
         <button className="m-0.5 flex transform items-center justify-center rounded-xl bg-indigo-500 p-2 text-white transition-colors duration-300 hover:bg-indigo-500/70 focus:bg-indigo-500/70 focus:outline-none">
-          <MagnifyingGlassIcon className="h-5 w-5" />
+          <MagnifyingGlassIcon className="w-5 h-5" />
         </button>
       </form>
     </div>
