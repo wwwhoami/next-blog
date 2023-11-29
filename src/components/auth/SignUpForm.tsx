@@ -1,32 +1,33 @@
-"use client";
+'use client'
 
-import { UserApiResponse } from "@/types/User";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import { toast } from "react-toastify";
-import { useUser } from "src/context/userContext";
-import isEmail from "validator/lib/isEmail";
-import isStrongPassword from "validator/lib/isStrongPassword";
-import FormInput from "../form/FormInput";
-import PasswordInput from "../form/PasswordInput";
+import fetcher from '@/lib/fetcher'
+import { UserSignInResponse } from '@/types/User'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import React, { useState } from 'react'
+import { toast } from 'react-toastify'
+import { useUser } from 'src/context/UserContext'
+import isEmail from 'validator/lib/isEmail'
+import isStrongPassword from 'validator/lib/isStrongPassword'
+import FormInput from '../form/FormInput'
+import PasswordInput from '../form/PasswordInput'
 
-type Props = {};
+type Props = {}
 
 const SignUpForm = ({}: Props) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [nameError, setNameError] = useState(false);
-  const [emailError, setEmailError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
-  const [errorResponse, setErrorResponse] = useState<Error>();
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [nameError, setNameError] = useState(false)
+  const [emailError, setEmailError] = useState(false)
+  const [passwordError, setPasswordError] = useState(false)
+  const [errorResponse, setErrorResponse] = useState<Error>()
 
-  const router = useRouter();
-  const { setUser, setError } = useUser();
+  const router = useRouter()
+  const { setUser, setError } = useUser()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
     if (
       !nameError &&
       !emailError &&
@@ -35,51 +36,47 @@ const SignUpForm = ({}: Props) => {
       email.length &&
       password.length
     ) {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/sign-up`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({
-            name,
-            email,
-            password,
-          }),
-        },
-      );
+      try {
+        const signInRes = await fetcher<UserSignInResponse>(
+          `${process.env.NEXT_PUBLIC_API_URL}/auth/sign-in`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({
+              name,
+              email,
+              password,
+            }),
+          },
+        )
 
-      const data: UserApiResponse | Error = await res.json();
+        setUser(signInRes)
+        setError(null)
 
-      if (!res.ok && "message" in data) {
-        setErrorResponse(data);
-        setError(data);
-      }
-
-      if (res.ok && "accessToken" in data) {
-        setUser(data);
-        setError(null);
-
-        toast.success("🦄 Logged in successfully!", {
-          position: "bottom-center",
+        toast.success('🦄 Logged in successfully!', {
+          position: 'bottom-center',
           autoClose: 5000,
           hideProgressBar: true,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-        });
+        })
 
-        router.back();
+        router.back()
+      } catch (err: any) {
+        setErrorResponse(err)
+        setError(err)
       }
     }
-  };
+  }
 
   return (
     <form className="w-80" onSubmit={handleSubmit}>
       {!!errorResponse && (
         <div
-          className="mb-4 rounded-lg bg-red-100 p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
+          className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
           role="alert"
         >
           <span className="font-medium">{errorResponse.message}</span>
@@ -89,11 +86,11 @@ const SignUpForm = ({}: Props) => {
         label="Name"
         value={name}
         onChange={(e) => {
-          setName(e.target.value);
-          if (nameError) setNameError(!e.target.value.length);
+          setName(e.target.value)
+          if (nameError) setNameError(!e.target.value.length)
         }}
         onBlur={(e) => {
-          setNameError(!e.target.value);
+          setNameError(!e.target.value)
         }}
         type="text"
         id="name"
@@ -105,11 +102,11 @@ const SignUpForm = ({}: Props) => {
         label="Email"
         value={email}
         onChange={(e) => {
-          setEmail(e.target.value);
-          if (emailError) setEmailError(!isEmail(e.target.value));
+          setEmail(e.target.value)
+          if (emailError) setEmailError(!isEmail(e.target.value))
         }}
         onBlur={(e) => {
-          setEmailError(!isEmail(e.target.value));
+          setEmailError(!isEmail(e.target.value))
         }}
         type="email"
         id="email"
@@ -121,7 +118,7 @@ const SignUpForm = ({}: Props) => {
         label="Password"
         value={password}
         onChange={(e) => {
-          setPassword(e.target.value);
+          setPassword(e.target.value)
           if (passwordError)
             setPasswordError(
               !isStrongPassword(e.target.value, {
@@ -138,7 +135,7 @@ const SignUpForm = ({}: Props) => {
                 pointsForContainingNumber: 10,
                 pointsForContainingSymbol: 10,
               }),
-            );
+            )
         }}
         onBlur={(e) => {
           setPasswordError(
@@ -156,7 +153,7 @@ const SignUpForm = ({}: Props) => {
               pointsForContainingNumber: 10,
               pointsForContainingSymbol: 10,
             }),
-          );
+          )
         }}
         id="password"
         hasError={passwordError}
@@ -171,25 +168,25 @@ const SignUpForm = ({}: Props) => {
           !email.length ||
           !password.length ||
           !name.length
-            ? "cursor-not-allowed opacity-80"
-            : ""
+            ? 'cursor-not-allowed opacity-80'
+            : ''
         }`}
       >
         Sign up
       </button>
-      <p className="mt-8 text-center font-light">
+      <p className="mt-8 font-light text-center">
         Already have an account?
         <Link
           href="/signIn"
           replace
           scroll={false}
-          className="focus-ring mx-2 rounded-xl text-indigo-600 hover:underline"
+          className="mx-2 text-indigo-600 focus-ring rounded-xl hover:underline"
         >
           Sign in
         </Link>
       </p>
     </form>
-  );
-};
+  )
+}
 
-export default SignUpForm;
+export default SignUpForm

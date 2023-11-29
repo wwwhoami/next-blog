@@ -1,27 +1,53 @@
-"use client";
+'use client'
 
-import { UserApiResponse } from "@/types/User";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import { toast } from "react-toastify";
-import { useUser } from "src/context/userContext";
-import isStrongPassword from "validator/lib/isStrongPassword";
-import PasswordInput from "../form/PasswordInput";
+import { FetchError } from '@/entities/FetchError'
+import fetcher from '@/lib/fetcher'
+import { UserProfileResponse } from '@/types/User'
+import { useRouter } from 'next/navigation'
+import React, { useState } from 'react'
+import { toast } from 'react-toastify'
+import { useUser } from 'src/context/UserContext'
+import isStrongPassword from 'validator/lib/isStrongPassword'
+import PasswordInput from '../form/PasswordInput'
 
-type Props = {};
+const patchProfilePassword = ({
+  accessToken,
+  oldPassword,
+  newPassword,
+}: {
+  accessToken: string
+  oldPassword: string
+  newPassword: string
+}) =>
+  fetcher<UserProfileResponse>(
+    `${process.env.NEXT_PUBLIC_API_URL}/auth/profile`,
+    {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        password: oldPassword,
+        newPassword,
+      }),
+    },
+  )
+
+type Props = {}
 
 const PasswordChange = ({}: Props) => {
-  const [oldPassword, setOldPassword] = useState<string>();
-  const [newPassword, setNewPassword] = useState<string>();
-  const [oldPasswordError, setOldPasswordError] = useState(false);
-  const [newPasswordError, setNewPasswordError] = useState(false);
-  const [errorResponse, setErrorResponse] = useState<Error>();
+  const [oldPassword, setOldPassword] = useState<string>()
+  const [newPassword, setNewPassword] = useState<string>()
+  const [oldPasswordError, setOldPasswordError] = useState(false)
+  const [newPasswordError, setNewPasswordError] = useState(false)
+  const [errorResponse, setErrorResponse] = useState<Error>()
 
-  const { user, setUser } = useUser();
-  const router = useRouter();
+  const { user, setUser, setError, refreshSession } = useUser()
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
     if (
       user?.accessToken &&
       !oldPasswordError &&
@@ -29,51 +55,83 @@ const PasswordChange = ({}: Props) => {
       oldPassword?.length &&
       newPassword?.length
     ) {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/profile`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.accessToken}`,
-          },
-          body: JSON.stringify({
-            password: oldPassword,
-            newPassword,
-          }),
-        },
-      );
+      const onSuccessfulPasswordChange = (profileData: UserProfileResponse) => {
+        setUser(profileData)
+        setErrorResponse(undefined)
 
-      const data: UserApiResponse | Error = await res.json();
-
-      if (!res.ok && "message" in data) {
-        setErrorResponse(data);
-      }
-
-      if (res.ok && "accessToken" in data) {
-        setUser(data);
-        setErrorResponse(undefined);
-
-        toast.success("🦄 Password changed successfully!", {
-          position: "bottom-center",
+        toast.success('🦄 Password changed successfully!', {
+          position: 'bottom-center',
           autoClose: 5000,
           hideProgressBar: true,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-        });
+        })
 
-        router.back();
+        router.back()
       }
+
+      try {
+        const profileData = await patchProfilePassword({
+          accessToken: user.accessToken,
+          oldPassword,
+          newPassword,
+        })
+
+        onSuccessfulPasswordChange(profileData)
+      } catch (err: any) {
+        // If the access token is expired, try to refresh it
+        if (
+          err instanceof FetchError &&
+          err.status === 401 &&
+          err.message === 'Unauthorized'
+        ) {
+          const newAccessToken = await refreshSession()
+
+          // If the refresh was successful, try to change the password again
+          if (newAccessToken) {
+            patchProfilePassword({
+              accessToken: newAccessToken,
+              oldPassword,
+              newPassword,
+            })
+              .then(onSuccessfulPasswordChange)
+              .catch(setErrorResponse)
+          } else {
+            // If the refresh failed, redirect to the login page
+            const error = new Error('Session refresh failed, try logging in')
+            setError(error)
+            toast.error(error.message, {
+              position: 'bottom-center',
+              autoClose: 5000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            })
+
+            router.replace('/signIn')
+          }
+
+          return
+        }
+
+        setErrorResponse(err)
+      }
+    } else if (user?.accessToken === undefined) {
+      // If the user has no access token, redirect to the login page
+      setError(new Error('Authentication token is missing'))
+      router.replace('/signIn')
     }
-  };
+  }
 
   return (
     <form className="w-80" onSubmit={handleSubmit}>
       {!!errorResponse && (
         <div
-          className="mb-4 rounded-lg bg-red-100 p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
+          className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
           role="alert"
         >
           {Array.isArray(errorResponse.message) ? (
@@ -96,7 +154,7 @@ const PasswordChange = ({}: Props) => {
         label="Old password"
         value={oldPassword}
         onChange={(e) => {
-          setOldPassword(e.target.value);
+          setOldPassword(e.target.value)
           if (oldPasswordError)
             setOldPasswordError(
               !isStrongPassword(e.target.value, {
@@ -113,7 +171,7 @@ const PasswordChange = ({}: Props) => {
                 pointsForContainingNumber: 10,
                 pointsForContainingSymbol: 10,
               }),
-            );
+            )
         }}
         onBlur={(e) => {
           setOldPasswordError(
@@ -131,7 +189,7 @@ const PasswordChange = ({}: Props) => {
               pointsForContainingNumber: 10,
               pointsForContainingSymbol: 10,
             }),
-          );
+          )
         }}
         type="text"
         id="oldPassword"
@@ -143,7 +201,7 @@ const PasswordChange = ({}: Props) => {
         label="New password"
         value={newPassword}
         onChange={(e) => {
-          setNewPassword(e.target.value);
+          setNewPassword(e.target.value)
           if (newPasswordError)
             setNewPasswordError(
               !isStrongPassword(e.target.value, {
@@ -160,7 +218,7 @@ const PasswordChange = ({}: Props) => {
                 pointsForContainingNumber: 10,
                 pointsForContainingSymbol: 10,
               }),
-            );
+            )
         }}
         onBlur={(e) => {
           setNewPasswordError(
@@ -178,7 +236,7 @@ const PasswordChange = ({}: Props) => {
               pointsForContainingNumber: 10,
               pointsForContainingSymbol: 10,
             }),
-          );
+          )
         }}
         id="newPassword"
         placeholder="************"
@@ -192,14 +250,14 @@ const PasswordChange = ({}: Props) => {
           oldPasswordError ||
           !newPassword?.length ||
           !oldPassword?.length
-            ? "cursor-not-allowed opacity-80"
-            : ""
+            ? 'cursor-not-allowed opacity-80'
+            : ''
         }`}
       >
         Change password
       </button>
     </form>
-  );
-};
+  )
+}
 
-export default PasswordChange;
+export default PasswordChange
