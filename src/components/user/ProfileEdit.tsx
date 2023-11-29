@@ -3,7 +3,6 @@
 import { FetchError } from '@/entities/FetchError'
 import fetcher from '@/lib/fetcher'
 import { UserProfileResponse } from '@/types/User'
-import { access } from 'fs'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
