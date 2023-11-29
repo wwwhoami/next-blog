@@ -5,7 +5,7 @@ import { Category } from '@/types/Category'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 import useSWR from 'swr'
-import CategoryLabel from './CategoryLabel'
+import CategorySwitch from './CategorySwitch'
 
 const categoryFetcher = async (url: string) => {
   return fetcher<Omit<Category, 'description'>[]>(url)
@@ -100,7 +100,7 @@ const CategorySelect = ({}: Props) => {
       </h2>
       <div className="flex flex-wrap -mb-4 -mr-4">
         {categories?.map((category, index) => (
-          <CategoryLabel
+          <CategorySwitch
             key={index}
             name={category.name}
             hexColor={category.hexColor}

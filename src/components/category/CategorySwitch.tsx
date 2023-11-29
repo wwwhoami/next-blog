@@ -1,3 +1,4 @@
+import { Switch } from '@headlessui/react'
 import React, { MutableRefObject, useEffect, useRef, useState } from 'react'
 
 type Props = {
@@ -10,7 +11,7 @@ type Props = {
   selected?: boolean
 }
 
-const CategoryLabel = ({
+const CategorySwitch = ({
   name,
   hexColor,
   onCategorySelect,
@@ -21,15 +22,16 @@ const CategoryLabel = ({
   const [isChecked, setIsChecked] = useState(false)
   const ref = useRef() as MutableRefObject<HTMLInputElement>
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (checked: boolean) => {
     if (!available && !isChecked) return
 
-    setIsChecked(e.target.checked)
+    setIsChecked(checked)
 
-    const value = e.target.value
-    if (e.target.checked) {
+    const value = name
+
+    if (checked) {
       onCategorySelect(value)
-    } else if (!e.target.checked) {
+    } else {
       onCategoryDeselect(value)
     }
   }
@@ -39,27 +41,25 @@ const CategoryLabel = ({
   }, [selected])
 
   return (
-    <label
-      className={`hover-ring focus-ring relative mb-4 mr-4 h-auto w-auto cursor-pointer rounded-full px-6 py-3 transition ${
-        isChecked ? 'bg-black text-white' : 'bg-slate-100 text-black'
-      } ${
-        !available && !isChecked ? 'cursor-default opacity-20' : 'opacity-100'
-      }`}
-      style={{
-        ['--tw-ring-color' as any]: hexColor,
-      }}
-    >
-      <input
-        type="checkbox"
-        value={name}
+    <>
+      <Switch
         checked={isChecked}
-        className="sr-only"
+        disabled={!available && !isChecked}
+        value={name}
         onChange={handleChange}
-        ref={ref}
-      />
-      <span>{name}</span>
-    </label>
+        className={`hover-ring focus-ring relative mb-4 mr-4 h-auto w-auto cursor-pointer rounded-full px-6 py-3 transition ${
+          isChecked ? 'bg-black text-white' : 'bg-slate-100 text-black'
+        } ${
+          !available && !isChecked ? 'cursor-default opacity-20' : 'opacity-100'
+        }`}
+        style={{
+          ['--tw-ring-color' as any]: hexColor,
+        }}
+      >
+        <span>{name}</span>
+      </Switch>
+    </>
   )
 }
 
-export default CategoryLabel
+export default CategorySwitch
