@@ -1,7 +1,7 @@
+import { useUser } from '@/context/UserProvider'
 import { FetchError } from '@/entities/FetchError'
 import { ArrowRightOnRectangleIcon } from '@heroicons/react/20/solid'
 import { toast } from 'react-toastify'
-import { useUser } from 'src/context/UserContext'
 import MenuItemButton from '../menu/MenuItemButton'
 
 async function logout(accessToken: string) {

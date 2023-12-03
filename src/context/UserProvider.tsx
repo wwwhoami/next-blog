@@ -43,7 +43,7 @@ type Props = {
   children: ReactNode
 }
 
-export default function UserProvider({ children }: Props) {
+function UserProvider({ children }: Props) {
   const [user, setUser] = useState<UserSession>()
   const [error, setError] = useState<Error | null>()
 
@@ -123,3 +123,5 @@ export default function UserProvider({ children }: Props) {
     </UserContext.Provider>
   )
 }
+
+export default UserProvider

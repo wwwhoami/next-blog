@@ -1,10 +1,10 @@
 import Header from '@/components/Header'
+import UserProvider from '@/context/UserProvider'
 import '@/styles/globals.css'
 import { Metadata } from 'next'
 import { FC, ReactNode } from 'react'
 import 'react-toastify/dist/ReactToastify.min.css'
 import ToastProvider from 'src/context/ToastProvider'
-import UserProvider from 'src/context/UserContext'
 
 interface RootLayoutProps {
   children: ReactNode

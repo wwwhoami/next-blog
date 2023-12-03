@@ -1,5 +1,6 @@
 'use client'
 
+import { useUser } from '@/context/UserProvider'
 import { FetchError } from '@/entities/FetchError'
 import fetcher from '@/lib/fetcher'
 import { UserProfileResponse } from '@/types/User'
@@ -7,7 +8,6 @@ import clsx from 'clsx'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { toast } from 'react-toastify'
-import { useUser } from 'src/context/UserContext'
 import isStrongPassword from 'validator/lib/isStrongPassword'
 import PasswordInput from '../form/PasswordInput'
 

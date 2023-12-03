@@ -1,8 +1,8 @@
 'use client'
 
+import { useUser } from '@/context/UserProvider'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useUser } from 'src/context/userContext'
 import Search from './Search'
 import UserMenu from './menu/UserMenu'
 
