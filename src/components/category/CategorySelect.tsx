@@ -8,11 +8,26 @@ import useSWR from 'swr'
 import CategorySwitch from './CategorySwitch'
 
 const categoryFetcher = async (url: string) => {
-  return fetcher<Omit<Category, 'description'>[]>(url)
+  return fetcher<Omit<Category, 'description'>[]>(url, { cache: 'no-store' })
+}
+
+const getCategoryCombinationsKey = (
+  searchQuery?: string,
+  categories?: string[],
+) => {
+  const query = new URLSearchParams()
+  if (searchQuery) query.set('searchTerm', searchQuery)
+  if (categories?.length) query.set('categories', categories.join(' '))
+
+  return `${process.env.NEXT_PUBLIC_API_URL}/category/combo?${query.toString()}`
 }
 
 const categoryCombinationsFetcher = async (url: string) => {
-  return fetcher<string[][]>(url)
+  const categoryCombinations = await fetcher<Array<string>>(`${url}`)
+
+  const categoryCombinationsSet = new Set<string>(categoryCombinations)
+
+  return categoryCombinationsSet
 }
 
 type Props = {}
@@ -22,7 +37,7 @@ const CategorySelect = ({}: Props) => {
   const query = useSearchParams()
 
   const selectedCategories = useMemo(
-    () => query.get('category')?.split(' ') ?? [],
+    () => new Set(query.get('category')?.split(' ')),
     [query],
   )
 
@@ -37,12 +52,11 @@ const CategorySelect = ({}: Props) => {
     },
   )
 
-  const searchQuery = query.has('searchQuery')
-    ? `?searchTerm=${query.get('searchQuery')}`
-    : ''
+  const searchQuery = query.get('searchQuery') ?? undefined
 
-  const { data: categoryCombinations } = useSWR<string[][]>(
-    `${process.env.NEXT_PUBLIC_API_URL}/category/combo${searchQuery}`,
+  const { data: categoryCombinations } = useSWR<Set<string>>(
+    () =>
+      getCategoryCombinationsKey(searchQuery, Array.from(selectedCategories)),
     categoryCombinationsFetcher,
     {
       revalidateOnFocus: true,
@@ -51,23 +65,6 @@ const CategorySelect = ({}: Props) => {
       revalidateOnMount: true,
     },
   )
-
-  const availableCategories = useMemo(() => {
-    const hasCombination = categoryCombinations?.map((categories) =>
-      selectedCategories?.length
-        ? selectedCategories?.every((selected) => categories.includes(selected))
-        : true,
-    )
-
-    return categoryCombinations
-      ?.flatMap((categories, index) => {
-        if (hasCombination?.length && hasCombination[index])
-          return categories.filter(
-            (category) => !selectedCategories?.includes(category),
-          )
-      })
-      .filter((e): e is string => e !== undefined)
-  }, [categoryCombinations, selectedCategories])
 
   const handleSelectedCategoriesChange = (categories: string[]) => {
     const queryToSet = new URLSearchParams(query)
@@ -82,14 +79,14 @@ const CategorySelect = ({}: Props) => {
   }
 
   const handleCategorySelect = (category: string) => {
-    const nextSelectedCategories = [...selectedCategories, category]
+    const nextSelectedCategories = Array.from(selectedCategories)
+    nextSelectedCategories.push(category)
     handleSelectedCategoriesChange(nextSelectedCategories)
   }
 
   const handleCategoryDeselect = (category: string) => {
-    const nextSelectedCategories = selectedCategories.filter(
-      (selectedCategory) => selectedCategory !== category,
-    )
+    selectedCategories.delete(category)
+    const nextSelectedCategories = Array.from(selectedCategories)
     handleSelectedCategoriesChange(nextSelectedCategories)
   }
 
@@ -106,12 +103,8 @@ const CategorySelect = ({}: Props) => {
             hexColor={category.hexColor}
             onCategoryDeselect={handleCategoryDeselect}
             onCategorySelect={handleCategorySelect}
-            available={availableCategories?.some(
-              (availableCategory) => availableCategory === category.name,
-            )}
-            selected={selectedCategories?.some(
-              (selectedCategory) => selectedCategory === category.name,
-            )}
+            available={categoryCombinations?.has(category.name)}
+            selected={selectedCategories.has(category.name)}
           />
         ))}
       </div>
