@@ -35,6 +35,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react-dom", "npm:18.2.15"],\
           ["@types/validator", "npm:13.11.6"],\
           ["autoprefixer", "virtual:b12ba291ee2514a0e12483078237052dfe49637e15a84982389921d93eaedaf82cae0b5f1974777fc8769c04321f39e8dad0dd42ea5dbe2469ca2faf97651f79#npm:10.4.16"],\
+          ["clsx", "npm:2.0.0"],\
           ["dayjs", "npm:1.11.10"],\
           ["dotenv-cli", "npm:7.3.0"],\
           ["eslint", "npm:8.54.0"],\
@@ -1528,6 +1529,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/clsx-npm-1.1.1-362bec0598-ff05265032.zip/node_modules/clsx/",\
         "packageDependencies": [\
           ["clsx", "npm:1.1.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:2.0.0", {\
+        "packageLocation": "./.yarn/cache/clsx-npm-2.0.0-afafbbe44a-943766d1b0.zip/node_modules/clsx/",\
+        "packageDependencies": [\
+          ["clsx", "npm:2.0.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -4806,6 +4814,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react-dom", "npm:18.2.15"],\
           ["@types/validator", "npm:13.11.6"],\
           ["autoprefixer", "virtual:b12ba291ee2514a0e12483078237052dfe49637e15a84982389921d93eaedaf82cae0b5f1974777fc8769c04321f39e8dad0dd42ea5dbe2469ca2faf97651f79#npm:10.4.16"],\
+          ["clsx", "npm:2.0.0"],\
           ["dayjs", "npm:1.11.10"],\
           ["dotenv-cli", "npm:7.3.0"],\
           ["eslint", "npm:8.54.0"],\

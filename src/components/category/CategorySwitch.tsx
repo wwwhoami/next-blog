@@ -1,4 +1,5 @@
 import { Switch } from '@headlessui/react'
+import clsx from 'clsx'
 import React, { MutableRefObject, useEffect, useRef, useState } from 'react'
 
 type Props = {
@@ -47,11 +48,17 @@ const CategorySwitch = ({
         disabled={!available && !isChecked}
         value={name}
         onChange={handleChange}
-        className={`hover-ring focus-ring relative mb-4 mr-4 h-auto w-auto cursor-pointer rounded-full px-6 py-3 transition ${
-          isChecked ? 'bg-black text-white' : 'bg-slate-100 text-black'
-        } ${
-          !available && !isChecked ? 'cursor-default opacity-20' : 'opacity-100'
-        }`}
+        className={clsx(
+          `hover-ring focus-ring relative mb-4 mr-4 h-auto w-auto cursor-pointer rounded-full px-6 py-3 transition`,
+          {
+            'bg-black text-white': isChecked,
+            'bg-slate-100 text-black': !isChecked,
+          },
+          {
+            'cursor-default opacity-20': !available && !isChecked,
+            'opacity-100': available || isChecked,
+          },
+        )}
         style={{
           ['--tw-ring-color' as any]: hexColor,
         }}

@@ -2,6 +2,7 @@
 
 import fetcher from '@/lib/fetcher'
 import { UserSignInResponse } from '@/types/User'
+import clsx from 'clsx'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
@@ -136,11 +137,16 @@ const SignInForm = ({}: Props) => {
         />
         <button
           type="submit"
-          className={`focus-ring focus-within:ring-primary w-full rounded-lg bg-indigo-600 px-5 py-2.5 text-center text-sm font-medium text-white focus-within:ring focus-within:ring-opacity-50 hover:bg-indigo-500 focus:outline-none sm:w-auto ${
-            emailError || passwordError || !email.length || !password.length
-              ? 'cursor-not-allowed opacity-80'
-              : ''
-          }`}
+          className={clsx(
+            `focus-ring focus-within:ring-primary w-full rounded-lg bg-indigo-600 px-5 py-2.5 text-center text-sm font-medium text-white focus-within:ring focus-within:ring-opacity-50 hover:bg-indigo-500 focus:outline-none sm:w-auto`,
+            {
+              'cursor-not-allowed opacity-80':
+                emailError ||
+                passwordError ||
+                !email.length ||
+                !password.length,
+            },
+          )}
         >
           Sign in
         </button>

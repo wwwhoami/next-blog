@@ -3,6 +3,7 @@
 import { FetchError } from '@/entities/FetchError'
 import fetcher from '@/lib/fetcher'
 import { UserProfileResponse } from '@/types/User'
+import clsx from 'clsx'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
@@ -177,11 +178,13 @@ const ProfileEdit = ({}: Props) => {
       />
       <button
         type="submit"
-        className={`focus-ring focus-within:ring-primary w-full rounded-lg bg-indigo-600 px-5 py-2.5 text-center text-sm font-medium text-white focus-within:ring focus-within:ring-opacity-50 hover:bg-indigo-500 focus:outline-none sm:w-auto ${
-          emailError || nameError || !email?.length || !name?.length
-            ? 'cursor-not-allowed opacity-80'
-            : ''
-        }`}
+        className={clsx(
+          `focus-ring focus-within:ring-primary w-full rounded-lg bg-indigo-600 px-5 py-2.5 text-center text-sm font-medium text-white focus-within:ring focus-within:ring-opacity-50 hover:bg-indigo-500 focus:outline-none sm:w-auto`,
+          {
+            'cursor-not-allowed opacity-80':
+              emailError || nameError || !email?.length || !name?.length,
+          },
+        )}
       >
         Update profile
       </button>

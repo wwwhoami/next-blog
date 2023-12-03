@@ -12,6 +12,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
+    "clsx": "^2.0.0",
     "dayjs": "^1.11.10",
     "highlight.js": "^11.9.0",
     "lodash.debounce": "^4.0.8",

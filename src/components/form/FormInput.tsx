@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import React from 'react'
 
 type Props = {
@@ -27,7 +28,7 @@ const FormInput = ({
 }: Props) => {
   return (
     <div className="mb-6">
-      <label htmlFor={id} className="mb-2 block text-sm font-medium">
+      <label htmlFor={id} className="block mb-2 text-sm font-medium">
         {label}
       </label>
       <input
@@ -37,10 +38,10 @@ const FormInput = ({
         onBlur={onBlur}
         type={type}
         id={id}
-        className={`${className} ${
-          hasError &&
-          'focus-ring-error border border-red-500 bg-red-50 text-red-900 placeholder-red-700'
-        }`}
+        className={clsx(className, {
+          'focus-ring-error border border-red-500 bg-red-50 text-red-900 placeholder-red-700':
+            hasError,
+        })}
       />
       {hasError && (
         <p className="mt-2 text-sm text-red-600 dark:text-red-500">

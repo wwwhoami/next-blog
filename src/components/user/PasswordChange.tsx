@@ -3,6 +3,7 @@
 import { FetchError } from '@/entities/FetchError'
 import fetcher from '@/lib/fetcher'
 import { UserProfileResponse } from '@/types/User'
+import clsx from 'clsx'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { toast } from 'react-toastify'
@@ -245,14 +246,16 @@ const PasswordChange = ({}: Props) => {
       />
       <button
         type="submit"
-        className={`focus-ring focus-within:ring-primary w-full rounded-lg bg-indigo-600 px-5 py-2.5 text-center text-sm font-medium text-white focus-within:ring focus-within:ring-opacity-50 hover:bg-indigo-500 focus:outline-none sm:w-auto ${
-          newPasswordError ||
-          oldPasswordError ||
-          !newPassword?.length ||
-          !oldPassword?.length
-            ? 'cursor-not-allowed opacity-80'
-            : ''
-        }`}
+        className={clsx(
+          `focus-ring focus-within:ring-primary w-full rounded-lg bg-indigo-600 px-5 py-2.5 text-center text-sm font-medium text-white focus-within:ring focus-within:ring-opacity-50 hover:bg-indigo-500 focus:outline-none sm:w-auto`,
+          {
+            'cursor-not-allowed opacity-80':
+              newPasswordError ||
+              oldPasswordError ||
+              !newPassword?.length ||
+              !oldPassword?.length,
+          },
+        )}
       >
         Change password
       </button>

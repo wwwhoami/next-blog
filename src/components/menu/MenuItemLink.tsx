@@ -1,4 +1,5 @@
 import { Menu } from '@headlessui/react'
+import clsx from 'clsx'
 import { Url } from 'next/dist/shared/lib/router/router'
 import Link from 'next/link'
 import React from 'react'
@@ -15,16 +16,20 @@ const MenuItemLink = ({ Icon, text, href, scroll }: Props) => {
     <Menu.Item>
       {({ active }) => (
         <Link
-          className={`${
-            active ? 'bg-indigo-500 text-white' : 'text-gray-900'
-          } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+          className={clsx(
+            `group flex w-full items-center rounded-md px-2 py-2 text-sm`,
+            {
+              'bg-indigo-500 text-white': active,
+              'text-gray-900': !active,
+            },
+          )}
           href={href}
           scroll={scroll}
         >
           {active ? (
-            <Icon className="mr-2 h-5 w-5" aria-hidden="true" />
+            <Icon className="w-5 h-5 mr-2" aria-hidden="true" />
           ) : (
-            <Icon className="mr-2 h-5 w-5" aria-hidden="true" />
+            <Icon className="w-5 h-5 mr-2" aria-hidden="true" />
           )}
           {text}
         </Link>
