@@ -68,7 +68,7 @@ const PostCard = ({
             </div>
           </div>
           <div className="mt-2">
-            <a className="text-xl font-bold text-gray-700 dark:text-gray-300 hover:underline">
+            <a className="text-2xl font-bold text-gray-700 dark:text-gray-300 hover:underline">
               {title}
             </a>
             <p className="mt-2 text-gray-600 dark:text-gray-400">{excerpt}</p>

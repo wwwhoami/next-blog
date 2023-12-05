@@ -1,4 +1,5 @@
-import Header from '@/components/Header'
+import Header from '@/components/navHeader/Header'
+import ColorProvider from '@/context/ColorProvider'
 import UserProvider from '@/context/UserProvider'
 import '@/styles/globals.css'
 import { Metadata } from 'next'
@@ -20,8 +21,8 @@ export const metadata: Metadata = {
 const RootLayout: FC<RootLayoutProps> = ({ children, modal }) => {
   return (
     <UserProvider>
-      <html lang="en">
-        <body className="text-white dark:text-slate-300 dark:bg-slate-900">
+      <ColorProvider>
+        <body className="dark:text-slate-300 dark:bg-gray-900">
           <Header />
           <ToastProvider>
             <main className="container px-5 mx-auto my-4 max-w-screen-2xl">
@@ -30,7 +31,7 @@ const RootLayout: FC<RootLayoutProps> = ({ children, modal }) => {
             {modal}
           </ToastProvider>
         </body>
-      </html>
+      </ColorProvider>
     </UserProvider>
   )
 }

@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { ReactNode } from 'react'
-import Header from './Header'
+import Header from './navHeader/Header'
 
 type Props = {
   title: string

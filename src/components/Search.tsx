@@ -1,6 +1,7 @@
 'use client'
 
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
+import clsx from 'clsx'
 import debounce from 'lodash.debounce'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, {
@@ -65,7 +66,10 @@ const Search = ({ className }: Props) => {
 
   return (
     <div
-      className={`focus-ring focus-within:border-primary focus-within:ring-primary ml-10 rounded-xl bg-white/80 dark:bg-slate-700/80 focus-within:ring focus-within:ring-opacity-50 dark:focus-within:ring-opacity-80 ${className}`}
+      className={clsx(
+        'focus-ring focus-within:border-primary focus-within:ring-primary ml-10 rounded-xl bg-gray-200 dark:bg-slate-700/80 focus-within:ring focus-within:ring-opacity-50 dark:focus-within:ring-opacity-80 shadow-md border-slate-100 border dark:border-none',
+        className,
+      )}
     >
       <form
         onSubmit={handleSubmit}

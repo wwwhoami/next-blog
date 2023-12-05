@@ -3,8 +3,9 @@
 import { useUser } from '@/context/UserProvider'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import Search from './Search'
-import UserMenu from './menu/UserMenu'
+import Search from '../Search'
+import UserMenu from '../menu/UserMenu'
+import ColorThemeSwitch from './ColorThemeSwitch'
 
 type Props = {}
 
@@ -12,15 +13,15 @@ const Header = (props: Props) => {
   const pathname = usePathname()
   const { user } = useUser()
   const navLinkClass =
-    'px-3 py-2 rounded-lg focus-ring text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-100'
+    'px-3 py-2 rounded-lg focus-ring text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:hover:text-slate-900 dark:text-slate-100'
 
   return (
-    <header className="sticky top-0 z-50 w-full py-2 bg-white shadow dark:border-slate-50/[0.06] bg-opacity-60 backdrop-blur-xl backdrop-filter dark:bg-slate-900/75">
+    <header className="sticky top-0 z-50 w-full py-2 bg-white shadow dark:border-slate-50/[0.06] bg-opacity-60 backdrop-blur backdrop-filter dark:bg-slate-900/75 supports-backdrop-blur:bg-white/95">
       <div className="container flex flex-col flex-wrap items-center mx-auto md:flex-row">
         <Link
           href="/"
           passHref
-          className="ml-3 text-2xl font-light text-white focus-ring rounded-xl"
+          className="ml-3 text-2xl font-light dark:text-white focus-ring rounded-xl"
         >
           <span className="font-semibold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-500">
             Next
@@ -35,6 +36,7 @@ const Header = (props: Props) => {
           <Link href="/about" className={navLinkClass}>
             About
           </Link>
+          <ColorThemeSwitch />
           {!user?.id && (
             <>
               <Link

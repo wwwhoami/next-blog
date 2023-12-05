@@ -8,34 +8,22 @@ import ProfileEdit from './ProfileEdit'
 type Props = {}
 
 const UserProfileTabgroup = ({}: Props) => {
+  const tabClassName = ({ selected }: { selected: boolean }) =>
+    clsx(
+      `focus-ring w-full rounded-lg py-2.5 text-sm font-medium leading-5 focus:ring-opacity-60`,
+      selected
+        ? 'bg-white shadow dark:bg-slate-600 dark:text-slate-100'
+        : 'text-indigo-700 dark:text-indigo-200 dark:hover:bg-white/[0.12] hover:bg-indigo-600/80 hover:text-white',
+    )
+
   return (
     <div className="w-full max-w-md px-2 sm:px-0">
       <Tab.Group>
-        <Tab.List className="flex p-1 space-x-1 rounded-xl bg-blue-900/20 dark:bg-indigo-800/80">
-          <Tab
-            key="Account"
-            className={({ selected }) =>
-              clsx(
-                `focus-ring w-full rounded-lg py-2.5 text-sm font-medium leading-5 focus:ring-opacity-60`,
-                selected
-                  ? 'bg-white shadow dark:bg-slate-600 dark:text-slate-100'
-                  : 'text-indigo-700 dark:text-indigo-200 hover:bg-white/[0.12] hover:text-white',
-              )
-            }
-          >
+        <Tab.List className="flex p-1 space-x-1 rounded-xl bg-indigo-900/20 dark:bg-indigo-800/80">
+          <Tab key="Account" className={tabClassName}>
             Account
           </Tab>
-          <Tab
-            key="Password"
-            className={({ selected }) =>
-              clsx(
-                `focus-ring w-full rounded-lg py-2.5 text-sm font-medium leading-5 focus:ring-opacity-60`,
-                selected
-                  ? 'bg-white shadow dark:bg-slate-600 dark:text-slate-100'
-                  : 'text-indigo-700 dark:text-indigo-200 hover:bg-white/[0.12] hover:text-white',
-              )
-            }
-          >
+          <Tab key="Password" className={tabClassName}>
             Password
           </Tab>
         </Tab.List>

@@ -1,6 +1,6 @@
 import PostHeader from '@/components/post/PostHeader'
 import fetcher from '@/lib/fetcher'
-import { PostMdx, PostWithContent } from '@/types/Post'
+import { PostWithContent } from '@/types/Post'
 import clsx from 'clsx'
 import 'highlight.js/styles/atom-one-dark.css'
 import { Metadata } from 'next'
@@ -21,7 +21,6 @@ export const metadata: Metadata = {
 }
 
 type Props = {
-  post: PostMdx
   params: { slug: string }[]
 }
 
