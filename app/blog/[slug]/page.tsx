@@ -1,6 +1,7 @@
 import PostHeader from '@/components/post/PostHeader'
 import fetcher from '@/lib/fetcher'
 import { PostMdx, PostWithContent } from '@/types/Post'
+import clsx from 'clsx'
 import 'highlight.js/styles/atom-one-dark.css'
 import { Metadata } from 'next'
 import { MDXRemote } from 'next-mdx-remote/rsc'
@@ -35,7 +36,12 @@ const components = {
       {...props}
     />
   ),
-  a: (props: any) => <Link {...props} />,
+  a: (props: any) => (
+    <Link
+      {...props}
+      className={clsx(props.className, 'rounded-lg focus-ring')}
+    />
+  ),
 }
 
 export default async function PostPage({ params }: Props) {
@@ -69,7 +75,7 @@ export default async function PostPage({ params }: Props) {
         }}
       />
       {content && (
-        <article className="prose prose-lg mx-auto mt-2 w-full max-w-3xl bg-white prose-a:text-indigo-600 prose-a:no-underline hover:prose-a:underline">
+        <article className="relative w-full max-w-3xl mx-auto mt-2 prose prose-lg dark:prose-invert prose-a:text-indigo-600 dark:prose-a:text-indigo-400 prose-a:no-underline hover:prose-a:underline">
           <MDXRemote
             source={content}
             options={

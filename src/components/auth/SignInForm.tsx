@@ -10,6 +10,7 @@ import React, { useState } from 'react'
 import { toast } from 'react-toastify'
 import isEmail from 'validator/lib/isEmail'
 import isStrongPassword from 'validator/lib/isStrongPassword'
+import FormErrorResponse from '../form/FormErrorResponse'
 import FormInput from '../form/FormInput'
 import PasswordInput from '../form/PasswordInput'
 
@@ -66,13 +67,8 @@ const SignInForm = ({}: Props) => {
   return (
     <>
       <form className="w-80" onSubmit={handleSubmit}>
-        {!!errorResponse && (
-          <div
-            className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
-            role="alert"
-          >
-            <span className="font-medium">{errorResponse.message}</span>
-          </div>
+        {errorResponse?.message && (
+          <FormErrorResponse error={errorResponse.message} />
         )}
         <FormInput
           label="Email"
@@ -138,7 +134,7 @@ const SignInForm = ({}: Props) => {
         <button
           type="submit"
           className={clsx(
-            `focus-ring focus-within:ring-primary w-full rounded-lg bg-indigo-600 px-5 py-2.5 text-center text-sm font-medium text-white focus-within:ring focus-within:ring-opacity-50 hover:bg-indigo-500 focus:outline-none sm:w-auto`,
+            `focus-ring focus-within:ring-primary w-full rounded-lg bg-indigo-600 px-5 py-2.5 text-center text-sm font-medium text-white focus-within:ring focus-within:ring-opacity-80 hover:bg-indigo-500 focus:outline-none sm:w-auto`,
             {
               'cursor-not-allowed opacity-80':
                 emailError ||
@@ -156,7 +152,7 @@ const SignInForm = ({}: Props) => {
             href="/signUp"
             replace
             scroll={false}
-            className="mx-2 text-indigo-600 focus-ring rounded-xl hover:underline"
+            className="mx-2 text-indigo-600 dark:text-indigo-400 focus-ring rounded-xl hover:underline"
           >
             Sign up
           </Link>

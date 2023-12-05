@@ -21,10 +21,10 @@ const RootLayout: FC<RootLayoutProps> = ({ children, modal }) => {
   return (
     <UserProvider>
       <html lang="en">
-        <body>
+        <body className="text-white dark:text-slate-300 dark:bg-slate-900">
           <Header />
           <ToastProvider>
-            <main className="container px-5 mx-auto my-7 max-w-screen-2xl">
+            <main className="container px-5 mx-auto my-4 max-w-screen-2xl">
               {children}
             </main>
             {modal}

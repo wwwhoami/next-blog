@@ -38,13 +38,20 @@ const FormInput = ({
         onBlur={onBlur}
         type={type}
         id={id}
-        className={clsx(className, {
-          'focus-ring-error border border-red-500 bg-red-50 text-red-900 placeholder-red-700':
-            hasError,
-        })}
+        className={clsx(
+          className,
+          {
+            'dark:text-gray-200 dark:placeholder:text-gray-400 dark:focus-within:ring-opacity-80 dark:border-none dark:bg-slate-700 dark:autofill:bg-slate-700 dark:autofill:text-gray-200':
+              !hasError,
+          },
+          {
+            'focus-ring-error border dark:border-solid dark:bg-red-950/10 dark:text-gray-200 dark:placeholder-red-400 border-red-500 bg-red-50 text-red-900 placeholder-red-700':
+              hasError,
+          },
+        )}
       />
       {hasError && (
-        <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+        <p className="mt-2 text-sm text-red-600 dark:text-red-400">
           {errorMessage}
         </p>
       )}

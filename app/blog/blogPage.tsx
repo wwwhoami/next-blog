@@ -1,5 +1,6 @@
 'use client'
 
+import PageHeading from '@/components/PageHeading'
 import CategorySelect from '@/components/category/CategorySelect'
 import PostCard from '@/components/post/PostCard'
 import fetcher from '@/lib/fetcher'
@@ -48,7 +49,7 @@ export default function BlogPage({ fallbackData }: Props) {
 
   return (
     <>
-      <h1 className="p-3 text-4xl font-semibold border-b-4">Posts</h1>
+      <PageHeading title="Browse posts" />
       <CategorySelect />
       {isEmpty && (
         <div className="flex flex-col items-center mt-20">

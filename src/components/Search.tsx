@@ -65,16 +65,16 @@ const Search = ({ className }: Props) => {
 
   return (
     <div
-      className={`focus-ring focus-within:border-primary focus-within:ring-primary ml-10 rounded-xl border bg-white/80 focus-within:ring focus-within:ring-opacity-50 ${className}`}
+      className={`focus-ring focus-within:border-primary focus-within:ring-primary ml-10 rounded-xl bg-white/80 dark:bg-slate-700/80 focus-within:ring focus-within:ring-opacity-50 dark:focus-within:ring-opacity-80 ${className}`}
     >
       <form
         onSubmit={handleSubmit}
         className="flex flex-wrap items-center justify-between"
       >
         <input
-          className="flex-1 px-2 m-1 text-gray-700 placeholder-gray-400 bg-transparent w-60 focus:outline-none"
+          className="flex-1 px-2 m-1 text-gray-700 placeholder-gray-400 bg-transparent dark:text-gray-200 w-60 focus:outline-none"
           type="text"
-          placeholder="Search Posts"
+          placeholder="Type to find posts..."
           value={term}
           onChange={handleChange}
         />

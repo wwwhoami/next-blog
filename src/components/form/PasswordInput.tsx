@@ -19,7 +19,7 @@ const PasswordInput = ({
   value,
   id,
   label,
-  placeholder,
+  placeholder = '************',
   onChange,
   onBlur,
   hasError,
@@ -36,9 +36,10 @@ const PasswordInput = ({
       <div
         className={clsx(
           className,
+          'dark:focus-within:ring-opacity-80',
           hasError
-            ? 'focus-ring-error border border-red-500 bg-red-50 '
-            : 'focus-ring',
+            ? 'focus-ring-error border border-red-500 bg-red-50 focus-ring-error dark:border-solid dark:bg-red-950/10 dark:text-gray-200'
+            : 'focus-ring dark:border-none dark:bg-slate-700 dark:text-gray-200 dark:placeholder:text-gray-400 dark:autofill:bg-slate-700 dark:autofill:text-gray-200',
         )}
       >
         <input
@@ -47,9 +48,17 @@ const PasswordInput = ({
           onChange={onChange}
           onBlur={onBlur}
           type={passwordVisible ? 'text' : 'password'}
-          className={clsx(`w-full rounded-xl p-2.5 outline-none`, {
-            'bg-red-50 text-red-900 placeholder-red-700': hasError,
-          })}
+          className={clsx(
+            'w-full rounded-xl p-2.5 outline-none',
+            {
+              'dark:bg-red-950/10 dark:text-gray-200 dark:placeholder-red-400 text-red-900 placeholder-red-700':
+                hasError,
+            },
+            {
+              'dark:border-none dark:bg-slate-700 dark:text-gray-200 dark:placeholder:text-gray-400 dark:focus-within:ring-opacity-80':
+                !hasError,
+            },
+          )}
           id={id}
         />
         <button
@@ -57,13 +66,13 @@ const PasswordInput = ({
           onClick={() => {
             setPasswordVisible((prev) => !prev)
           }}
-          className="flex items-center justify-center w-8 h-8 p-0 m-1 text-indigo-500 transition-colors duration-300 transform focus-ring rounded-xl hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-indigo-500/70"
+          className="items-center w-8 h-8 p-0 m-1 text-indigo-500 transition-colors duration-300 transform flexjustify-center focus-ring rounded-xl hover:opacity-80 focus:outline-none focus:ring-2 dark:text-indigo-400"
         >
           {passwordVisible ? <EyeSlashIcon /> : <EyeIcon />}
         </button>
       </div>
       {hasError && (
-        <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+        <p className="mt-2 text-sm text-red-600 dark:text-red-400">
           {errorMessage}
         </p>
       )}

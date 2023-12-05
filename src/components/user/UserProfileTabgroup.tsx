@@ -11,15 +11,15 @@ const UserProfileTabgroup = ({}: Props) => {
   return (
     <div className="w-full max-w-md px-2 sm:px-0">
       <Tab.Group>
-        <Tab.List className="flex p-1 space-x-1 rounded-xl bg-blue-900/20">
+        <Tab.List className="flex p-1 space-x-1 rounded-xl bg-blue-900/20 dark:bg-indigo-800/80">
           <Tab
             key="Account"
             className={({ selected }) =>
               clsx(
-                `focus-ring w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-indigo-700 focus:ring-opacity-60`,
+                `focus-ring w-full rounded-lg py-2.5 text-sm font-medium leading-5 focus:ring-opacity-60`,
                 selected
-                  ? 'bg-white shadow'
-                  : 'text-indigo-100 hover:bg-white/[0.12] hover:text-white',
+                  ? 'bg-white shadow dark:bg-slate-600 dark:text-slate-100'
+                  : 'text-indigo-700 dark:text-indigo-200 hover:bg-white/[0.12] hover:text-white',
               )
             }
           >
@@ -29,11 +29,10 @@ const UserProfileTabgroup = ({}: Props) => {
             key="Password"
             className={({ selected }) =>
               clsx(
-                `focus-ring w-full rounded-lg py-2.5 text-sm font-medium leading-5
-              text-indigo-700 focus:ring-opacity-60`,
+                `focus-ring w-full rounded-lg py-2.5 text-sm font-medium leading-5 focus:ring-opacity-60`,
                 selected
-                  ? 'bg-white shadow'
-                  : 'text-indigo-100 hover:bg-white/[0.12] hover:text-white',
+                  ? 'bg-white shadow dark:bg-slate-600 dark:text-slate-100'
+                  : 'text-indigo-700 dark:text-indigo-200 hover:bg-white/[0.12] hover:text-white',
               )
             }
           >

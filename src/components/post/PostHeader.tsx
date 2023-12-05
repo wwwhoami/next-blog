@@ -27,33 +27,39 @@ const PostHeader = ({
           alt="Cover image"
           fill={true}
           sizes="100vw"
-          className="w-full rounded-xl object-cover object-center text-center"
+          className="object-cover object-center w-full text-center rounded-xl"
         />
       </span>
-      <div className="mx-auto my-8 max-w-3xl">
-        <div className="flex items-center gap-5 ">
-          <Link href={`/author/${author?.name}`} passHref>
-            <Image
-              src={String(author?.image)}
-              alt="Author image"
-              className="hidden h-auto w-full rounded-full object-cover hover:cursor-pointer sm:block"
-              width={50}
-              height={50}
-            />
-          </Link>
-          <div className="flex flex-col">
+      <div className="max-w-3xl mx-auto my-8">
+        <div className="flex flex-col gap-5 md:items-center md:flex-row">
+          <div className="flex items-center gap-5">
             <Link
               href={`/author/${author?.name}`}
-              className="text-lg font-medium"
+              passHref
+              className="rounded-full focus-ring"
             >
-              {author?.name ?? 'Deleted Author'}
+              <Image
+                src={String(author?.image)}
+                alt="Author image"
+                className="block object-cover rounded-full hover:cursor-pointer hover-ring focus-ring"
+                width={55}
+                height={55}
+              />
             </Link>
-            <p className="text-lg font-medium text-gray-500">
-              on {dayjs(createdAt).format('DD MMMM, YYYY')} —{' '}
-              {readingTimeMinutes} min read
-            </p>
+            <div className="flex flex-col">
+              <Link
+                href={`/author/${author?.name}`}
+                className="inline-block text-lg font-medium rounded-lg focus-ring hover:underline"
+              >
+                {author?.name ?? 'Deleted Author'}
+              </Link>
+              <p className="text-lg font-medium text-gray-500 dark:text-gray-400">
+                on {dayjs(createdAt).format('DD MMMM, YYYY')} —{' '}
+                {readingTimeMinutes} min read
+              </p>
+            </div>
           </div>
-          <div className="ml-auto">
+          <div className="text-lg md:ml-auto">
             {categories?.map((category, index) => (
               <CategoryLink
                 key={index}
@@ -63,7 +69,9 @@ const PostHeader = ({
             ))}
           </div>
         </div>
-        <h1 className="mb-7 mt-10 max-w-3xl text-5xl font-bold">{title}</h1>
+        <h1 className="max-w-3xl mt-10 text-5xl font-bold mb-7 dark:text-white">
+          {title}
+        </h1>
         <p className="text-xl font-medium">{excerpt}</p>
       </div>
     </header>

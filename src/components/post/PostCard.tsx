@@ -22,7 +22,7 @@ const PostCard = ({
       className="mt-6 hover-ring focus-ring rounded-xl"
     >
       <object
-        className={`w-full cursor-pointer rounded-xl bg-slate-100`}
+        className={`w-full cursor-pointer rounded-xl bg-slate-100 dark:bg-transparent`}
         style={{
           ['--tw-ring-color' as any]: categories
             ? categories[0].category.hexColor
@@ -48,10 +48,12 @@ const PostCard = ({
               width={45}
               className="object-cover rounded-full"
             />
-            <b className="font-semibold text-gray-700">{authorName}</b>
+            <b className="font-semibold text-gray-700 dark:text-gray-300">
+              {authorName}
+            </b>
           </Link>
           <div className="flex items-center justify-between mt-3">
-            <span className="font-light text-gray-600">
+            <span className="font-light text-gray-600 dark:text-gray-300">
               {dayjs(createdAt).format('DD MMMM, YYYY')}
             </span>
 
@@ -66,10 +68,10 @@ const PostCard = ({
             </div>
           </div>
           <div className="mt-2">
-            <a className="text-xl font-bold text-gray-700 hover:underline">
+            <a className="text-xl font-bold text-gray-700 dark:text-gray-300 hover:underline">
               {title}
             </a>
-            <p className="mt-2 text-gray-600">{excerpt}</p>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">{excerpt}</p>
           </div>
         </div>
       </object>

@@ -1,4 +1,5 @@
 import { Menu } from '@headlessui/react'
+import clsx from 'clsx'
 import React from 'react'
 
 type Props = {
@@ -12,15 +13,18 @@ const MenuItemButton = ({ Icon, text, onClick }: Props) => {
     <Menu.Item>
       {({ active }) => (
         <button
-          className={`${
-            active ? 'bg-indigo-500 text-white' : 'text-gray-900'
-          } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+          className={clsx(
+            `group flex w-full items-center rounded-md px-2 py-2 text-sm`,
+            active
+              ? 'bg-indigo-500 text-white'
+              : 'text-gray-900 dark:text-slate-100',
+          )}
           onClick={onClick}
         >
           {active ? (
-            <Icon className="mr-2 h-5 w-5" aria-hidden="true" />
+            <Icon className="w-5 h-5 mr-2" aria-hidden="true" />
           ) : (
-            <Icon className="mr-2 h-5 w-5" aria-hidden="true" />
+            <Icon className="w-5 h-5 mr-2" aria-hidden="true" />
           )}
           {text}
         </button>

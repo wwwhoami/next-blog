@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import isEmail from 'validator/lib/isEmail'
+import FormErrorResponse from '../form/FormErrorResponse'
 import FormInput from '../form/FormInput'
 
 const patchProfile = ({
@@ -136,13 +137,8 @@ const ProfileEdit = ({}: Props) => {
 
   return (
     <form className="w-80" onSubmit={handleSubmit}>
-      {!!errorResponse && (
-        <div
-          className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
-          role="alert"
-        >
-          <span className="font-medium">{errorResponse.message}</span>
-        </div>
+      {errorResponse?.message && (
+        <FormErrorResponse error={errorResponse.message} />
       )}
       <FormInput
         label="Name"

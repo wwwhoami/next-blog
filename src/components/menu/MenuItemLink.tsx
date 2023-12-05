@@ -20,7 +20,7 @@ const MenuItemLink = ({ Icon, text, href, scroll }: Props) => {
             `group flex w-full items-center rounded-md px-2 py-2 text-sm`,
             {
               'bg-indigo-500 text-white': active,
-              'text-gray-900': !active,
+              'text-gray-900 dark:text-slate-100': !active,
             },
           )}
           href={href}

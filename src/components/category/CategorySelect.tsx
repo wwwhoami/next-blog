@@ -92,7 +92,7 @@ const CategorySelect = ({}: Props) => {
 
   return (
     <>
-      <h2 className="mt-3 mb-6 text-2xl font-medium text-black col-span-full">
+      <h2 className="mt-3 mb-6 text-2xl font-medium col-span-full text-slate-200">
         Search posts by topics
       </h2>
       <div className="flex flex-wrap -mb-4 -mr-4">

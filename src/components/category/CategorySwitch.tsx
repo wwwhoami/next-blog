@@ -51,8 +51,9 @@ const CategorySwitch = ({
         className={clsx(
           `hover-ring focus-ring relative mb-4 mr-4 h-auto w-auto cursor-pointer rounded-full px-6 py-3 transition`,
           {
-            'bg-black text-white': isChecked,
-            'bg-slate-100 text-black': !isChecked,
+            'bg-black text-white dark:bg-slate-100 dark:text-black': isChecked,
+            'bg-slate-100 text-black dark:bg-slate-700 dark:text-white':
+              !isChecked,
           },
           {
             'cursor-default opacity-20': !available && !isChecked,

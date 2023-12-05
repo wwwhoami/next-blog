@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { toast } from 'react-toastify'
 import isStrongPassword from 'validator/lib/isStrongPassword'
+import FormErrorResponse from '../form/FormErrorResponse'
 import PasswordInput from '../form/PasswordInput'
 
 const patchProfilePassword = ({
@@ -130,26 +131,8 @@ const PasswordChange = ({}: Props) => {
 
   return (
     <form className="w-80" onSubmit={handleSubmit}>
-      {!!errorResponse && (
-        <div
-          className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
-          role="alert"
-        >
-          {Array.isArray(errorResponse.message) ? (
-            <ul className="mx-4 list-disc">
-              {(errorResponse.message as string[]).map((message, idx) => (
-                <li key={idx} className="font-medium">
-                  {message.charAt(0).toUpperCase() + message.slice(1)}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <span className="font-medium">
-              {errorResponse.message.charAt(0).toUpperCase() +
-                errorResponse.message.slice(1)}
-            </span>
-          )}
-        </div>
+      {errorResponse?.message && (
+        <FormErrorResponse error={errorResponse.message} />
       )}
       <PasswordInput
         label="Old password"

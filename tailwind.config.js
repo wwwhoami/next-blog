@@ -21,7 +21,6 @@ module.exports = {
         DEFAULT: {
           css: {
             'h1 a, h2 a, h3 a, h4 a, h5 a, h6 a': {
-              textDecoration: 'none !important',
               color: 'var(--tw-prose-headings) !important',
               fontWeight: 700,
               '&:hover': {
@@ -36,6 +35,9 @@ module.exports = {
                   paddingRight: '0.2ch',
                 },
               },
+            },
+            'h1, h2, h3, h4, h5, h6': {
+              scrollMarginTop: '5rem',
             },
           },
         }

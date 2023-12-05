@@ -38,14 +38,16 @@ const AuthModal: FC<Props> = ({ title, children }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="max-w-md p-6 overflow-hidden text-left align-middle transition-all transform shadow-xl rounded-2xl bg-slate-50">
+              <Dialog.Panel className="max-w-md p-6 overflow-hidden text-left align-middle transition-all transform shadow-xl rounded-2xl bg-slate-50 dark:bg-slate-800">
                 <Dialog.Title
                   as="h1"
-                  className="text-3xl font-semibold leading-6"
+                  className="text-3xl font-semibold leading-6 dark:text-white"
                 >
                   {title}
                 </Dialog.Title>
-                <div className="flex justify-between mt-6">{children}</div>
+                <div className="flex flex-wrap justify-between mt-6">
+                  {children}
+                </div>
               </Dialog.Panel>
             </Transition.Child>
           </div>

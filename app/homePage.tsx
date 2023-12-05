@@ -1,5 +1,6 @@
 'use client'
 
+import PageHeading from '@/components/PageHeading'
 import PostCard from '@/components/post/PostCard'
 import fetcher from '@/lib/fetcher'
 import { Post } from '@/types/Post'
@@ -33,7 +34,7 @@ export default function HomePage({ fallbackData }: Props) {
 
   return (
     <>
-      <h1 className="p-3 text-4xl font-semibold border-b-4">Latest Posts</h1>
+      <PageHeading title="Latest posts" />
       <div className="grid gap-5 my-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {posts?.map((post) => <PostCard key={post.id} post={post} />)}
       </div>
