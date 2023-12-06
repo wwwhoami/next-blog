@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
-
 @layer utilities {
   .hover-ring {
     @apply ring-indigo-600 dark:ring-indigo-400 dark:ring-offset-slate-900 hover:ring-2  hover:ring-offset-4 transition-all duration-300 ease-in-out;
@@ -21,8 +19,4 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-}
-
-body {
-  font-family: 'Poppins', sans-serif;
 }

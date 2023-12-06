@@ -1,3 +1,4 @@
+import Layout from '@/components/Layout'
 import Header from '@/components/navHeader/Header'
 import ColorProvider from '@/context/ColorProvider'
 import UserProvider from '@/context/UserProvider'
@@ -22,13 +23,15 @@ const RootLayout: FC<RootLayoutProps> = ({ children, modal }) => {
   return (
     <UserProvider>
       <ColorProvider>
-        <body className="bg-white text-black dark:text-gray-300 dark:bg-gray-900/[0.97]">
-          <Header />
-          <ToastProvider>
-            <main className="mx-auto my-4 max-w-screen-2xl">{children}</main>
-            {modal}
-          </ToastProvider>
-        </body>
+        <Layout>
+          <body className="bg-white text-black dark:text-gray-300 dark:bg-gray-900/[0.97]">
+            <Header />
+            <ToastProvider>
+              <main className="mx-auto max-w-screen-2xl">{children}</main>
+              {modal}
+            </ToastProvider>
+          </body>
+        </Layout>
       </ColorProvider>
     </UserProvider>
   )

@@ -43,13 +43,7 @@ export default function ColorProvider({ children }: Props) {
 
   return (
     <ColorContext.Provider value={{ isDarkTheme, setIsDarkTheme }}>
-      <html
-        lang="en"
-        className={clsx(isDarkTheme ? 'dark' : 'light')}
-        style={isDarkTheme ? { colorScheme: 'dark' } : { colorScheme: 'light' }}
-      >
         {children}
-      </html>
     </ColorContext.Provider>
   )
 }

@@ -1,48 +1,31 @@
-import Head from 'next/head'
+'use client'
+
+import { useColor } from '@/context/ColorProvider'
+import clsx from 'clsx'
+import { Inter } from 'next/font/google'
 import { ReactNode } from 'react'
-import Header from './navHeader/Header'
 
 type Props = {
-  title: string
   children: ReactNode
-  keywords: string
-  description: string
 }
 
-const Layout = ({ title, children, keywords, description }: Props) => {
+const inter = Inter({
+  weight: ['200', '300', '400', '500', '600', '700', '800'],
+  display: 'swap',
+  subsets: ['latin'],
+})
+
+const Layout = ({ children }: Props) => {
+  const { isDarkTheme } = useColor()
+
   return (
-    <div>
-      <Head>
-        <title>{title}</title>
-        <meta name="keywords" content={keywords} />
-        <meta name="description" content={description} />
-        <link type="image/x-icon" rel="shortcut icon" href="/favicon.ico" />
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="apple-touch-icon.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/favicon-16x16.png"
-        />
-        <link rel="manifest" href="/site.webmanifest" />
-      </Head>
-
-      <Header />
-
-      <main className="container px-5 mx-auto my-7 max-w-screen-2xl">
-        {children}
-      </main>
-    </div>
+    <html
+      lang="en"
+      className={clsx(inter.className, isDarkTheme ? 'dark' : 'light')}
+      style={isDarkTheme ? { colorScheme: 'dark' } : { colorScheme: 'light' }}
+    >
+      {children}
+    </html>
   )
 }
 
