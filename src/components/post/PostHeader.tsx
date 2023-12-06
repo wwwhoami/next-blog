@@ -27,7 +27,7 @@ const PostHeader = ({
           alt="Cover image"
           fill={true}
           sizes="100vw"
-          className="object-cover object-center w-full text-center rounded-xl"
+          className="object-cover object-center w-full text-center"
         />
       </span>
       <div className="max-w-3xl px-4 mx-auto my-8 lg:px-0">
