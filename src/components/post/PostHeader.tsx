@@ -30,7 +30,7 @@ const PostHeader = ({
           className="object-cover object-center w-full text-center rounded-xl"
         />
       </span>
-      <div className="max-w-3xl mx-auto my-8">
+      <div className="max-w-3xl px-4 mx-auto my-8 lg:px-0">
         <div className="flex flex-col gap-5 md:items-center md:flex-row">
           <div className="flex items-center gap-5">
             <Link
@@ -72,7 +72,9 @@ const PostHeader = ({
         <h1 className="max-w-3xl mt-10 text-5xl font-bold mb-7 dark:text-white">
           {title}
         </h1>
-        <p className="text-xl font-medium">{excerpt}</p>
+        <p className="text-xl font-medium text-gray-900 dark:text-gray-200">
+          {excerpt}
+        </p>
       </div>
     </header>
   )

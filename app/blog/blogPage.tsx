@@ -48,7 +48,7 @@ export default function BlogPage({ fallbackData }: Props) {
   const posts = data?.flatMap((page) => page) ?? []
 
   return (
-    <>
+    <section className="px-5">
       <PageHeading title="Browse posts" />
       <CategorySelect />
       {isEmpty && (
@@ -57,10 +57,10 @@ export default function BlogPage({ fallbackData }: Props) {
           <h2 className="text-4xl text-gray-400">No posts found :(</h2>
         </div>
       )}
-      <div className="grid gap-5 my-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="container grid gap-5 mx-auto my-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {posts?.map((post) => <PostCard key={post.id} post={post} />)}
       </div>
       <div ref={ref}></div>
-    </>
+    </section>
   )
 }

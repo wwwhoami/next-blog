@@ -28,13 +28,13 @@ export default function ColorThemeSwitch() {
           'inline-block h-5 w-5 transform transition rounded-full',
           isDarkTheme
             ? 'translate-x-5 bg-black'
-            : 'translate-x-0 bg-yellow-300',
+            : 'translate-x-0 bg-yellow-400',
         )}
       >
         {isDarkTheme ? (
-          <MoonIcon className="w-5 h-5 text-white" aria-hidden="true" />
+          <MoonIcon className="w-5 h-5 text-yellow-400" aria-hidden="true" />
         ) : (
-          <SunIcon className="w-5 h-5 text-black" aria-hidden="true" />
+          <SunIcon className="w-5 h-5 text-white" aria-hidden="true" />
         )}
       </span>
     </Switch>

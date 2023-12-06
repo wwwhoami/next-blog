@@ -22,7 +22,7 @@ const PostCard = ({
       className="mt-6 hover-ring focus-ring rounded-xl"
     >
       <object
-        className={`w-full cursor-pointer rounded-xl bg-slate-100 dark:bg-transparent`}
+        className={`w-full cursor-pointer rounded-xl shadow-lg bg-gray-50 dark:bg-gray-800/50`}
         style={{
           ['--tw-ring-color' as any]: categories
             ? categories[0].category.hexColor
@@ -68,10 +68,10 @@ const PostCard = ({
             </div>
           </div>
           <div className="mt-2">
-            <a className="text-2xl font-bold text-gray-700 dark:text-gray-300 hover:underline">
+            <a className="text-2xl font-bold text-gray-700 dark:text-gray-200 hover:underline">
               {title}
             </a>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">{excerpt}</p>
+            <p className="mt-2 text-gray-600 dark:text-gray-300">{excerpt}</p>
           </div>
         </div>
       </object>

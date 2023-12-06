@@ -59,7 +59,7 @@ export default async function PostPage({ params }: Props) {
   } = post
 
   return (
-    <>
+    <section className="max-w-full bg-gray-50 dark:bg-zinc-800/90">
       <PostHeader
         postHeader={{
           title,
@@ -74,7 +74,7 @@ export default async function PostPage({ params }: Props) {
         }}
       />
       {content && (
-        <article className="relative w-full max-w-3xl mx-auto mt-2 prose prose-lg dark:prose-invert prose-a:text-indigo-600 dark:prose-a:text-indigo-400 prose-a:no-underline hover:prose-a:underline">
+        <article className="relative w-full max-w-screen-md px-4 mx-auto mt-2 prose prose-lg lg:px-0 dark:prose-invert prose-a:text-indigo-600 dark:prose-a:text-indigo-400 prose-a:no-underline hover:prose-a:underline">
           <MDXRemote
             source={content}
             options={
@@ -101,7 +101,7 @@ export default async function PostPage({ params }: Props) {
           />
         </article>
       )}
-    </>
+    </section>
   )
 }
 

@@ -15,7 +15,7 @@ export default function UserMenu(props: Props) {
   const { user } = useUser()
 
   return (
-    <div className="px-3 py-2 text-right rounded-full text-slate-700 dark:text-slate-100">
+    <div className="px-3 py-2 text-right text-gray-700 rounded-full dark:text-gray-100">
       <Menu as="div" className="relative inline-block text-left">
         <Menu.Button className="w-10 h-10 align-bottom rounded-full hover-ring focus-ring">
           <Image
@@ -35,7 +35,7 @@ export default function UserMenu(props: Props) {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg dark:divide-gray-600 dark:bg-slate-800 ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg dark:divide-gray-600 dark:bg-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none">
             <div className="px-1 py-1 ">
               <MenuItemButton Icon={PlusCircleIcon} text="Create post" />
               <MenuItemLink

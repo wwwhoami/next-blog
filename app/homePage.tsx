@@ -33,14 +33,14 @@ export default function HomePage({ fallbackData }: Props) {
   const posts = data?.flatMap((page) => page) ?? []
 
   return (
-    <>
+    <section className="px-5">
       <PageHeading title="Latest posts" />
-      <div className="grid gap-5 my-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="container grid gap-5 mx-auto my-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {posts?.map((post) => <PostCard key={post.id} post={post} />)}
       </div>
       <div ref={ref}>
         {isLoadingMore ? 'Loading...' : isRefreshing ? 'Refreshing...' : ''}
       </div>
-    </>
+    </section>
   )
 }
