@@ -1,6 +1,6 @@
 'use client'
 
-import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/20/solid'
 import clsx from 'clsx'
 import debounce from 'lodash.debounce'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -35,6 +35,12 @@ const Search = ({ className }: Props) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTerm(e.target.value)
     if (pathname === '/blog') debounceSetSearchQuery(e.target.value)
+  }
+
+  const handleClearButtonClick = () => {
+    setTerm('')
+    inputRef.current?.focus()
+    if (pathname === '/blog') debounceSetSearchQuery('')
   }
 
   const setQueryParam = useCallback(
@@ -121,7 +127,15 @@ const Search = ({ className }: Props) => {
           onChange={handleInputChange}
           onKeyDown={handleInputKeyDown}
         />
-        {term.length === 0 && (
+        {term.length !== 0 ? (
+          <button
+            type="button"
+            className="inline w-5 h-5 mr-2 rounded-full focus-ring"
+            onClick={handleClearButtonClick}
+          >
+            <XMarkIcon />
+          </button>
+        ) : (
           <kbd className="inline mx-2 font-sans text-sm font-semibold text-gray-500 dark:text-gray-400">
             {isMacOsNavigator ? (
               <abbr
