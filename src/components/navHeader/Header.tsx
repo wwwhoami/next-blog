@@ -1,11 +1,18 @@
 'use client'
 
 import { useUser } from '@/context/UserProvider'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import Search from '../Search'
 import UserMenu from '../menu/UserMenu'
 import ColorThemeSwitch from './ColorThemeSwitch'
+
+const Search = dynamic(() => import('../Search'), {
+  ssr: false,
+  loading: () => (
+    <div className="h-10 ml-10 transition-shadow bg-white border border-indigo-100 shadow-md w-72 rounded-xl dark:bg-gray-700/80 dark:border-none"></div>
+  ),
+})
 
 type Props = {}
 
@@ -17,7 +24,7 @@ const Header = (props: Props) => {
 
   return (
     <header className="sticky top-0 z-50 w-full py-1 bg-gray-50 shadow dark:border-gray-50/[0.06] bg-opacity-60 backdrop-blur backdrop-filter dark:bg-gray-900/80 supports-backdrop-blur:bg-white/95">
-      <div className="flex flex-col flex-wrap items-center px-4 mx-auto max-w-screen-2xl md:flex-row">
+      <div className="flex flex-col flex-wrap items-center mx-auto max-w-screen-2xl md:flex-row">
         <Link
           href="/"
           passHref

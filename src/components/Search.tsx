@@ -1,6 +1,6 @@
 'use client'
 
-import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
+import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import clsx from 'clsx'
 import debounce from 'lodash.debounce'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -23,13 +23,16 @@ const Search = ({ className }: Props) => {
   const query = useSearchParams()
   const [term, setTerm] = useState(query.get('searchQuery') ?? '')
   const termNotLoadedFromQuery = useRef(true)
+  const inputRef = useRef<HTMLInputElement>(null)
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const isMacOsNavigator = navigator.platform.indexOf('Mac') === 0
+
+  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (pathname !== '/blog') router.push(`/blog?searchQuery=${term.trim()}`)
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTerm(e.target.value)
     if (pathname === '/blog') debounceSetSearchQuery(e.target.value)
   }
@@ -64,27 +67,80 @@ const Search = ({ className }: Props) => {
     }
   }, [debounceSetSearchQuery, query])
 
+  useEffect(() => {
+    const handleKeyDownMac = (e: KeyboardEvent) => {
+      if (e.key === 'k' && e.metaKey) {
+        e.preventDefault()
+        inputRef.current?.focus()
+      }
+    }
+    const handleKeyDownWindows = (e: KeyboardEvent) => {
+      if (e.key === 'k' && e.ctrlKey) {
+        e.preventDefault()
+        inputRef.current?.focus()
+      }
+    }
+    const handleKeyDown =
+      navigator.platform.indexOf('Mac') === 0
+        ? handleKeyDownMac
+        : handleKeyDownWindows
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [])
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Escape') {
+      e.preventDefault()
+      setTerm('')
+      inputRef.current?.blur()
+    }
+  }
+
   return (
     <div
       className={clsx(
-        'focus-ring focus-within:border-primary focus-within:ring-primary ml-10 rounded-xl bg-indigo-50/80 hover:bg-white focus-within:bg-white dark:bg-gray-700/80 dark:hover:bg-gray-800 dark:focus-within:bg-gray-800 focus-within:ring focus-within:ring-opacity-50 dark:focus-within:ring-opacity-80 shadow-md border-indigo-100 border dark:border-none',
+        'focus-ring focus-within:border-primary focus-within:ring-primary ml-10 rounded-xl bg-white hover:bg-gray-50 focus-within:bg-gray-50 dark:bg-gray-700/80 dark:hover:bg-gray-800 dark:focus-within:bg-gray-800 focus-within:ring focus-within:ring-opacity-50 dark:focus-within:ring-opacity-80 shadow-md border-indigo-100 border dark:border-none w-72',
         className,
       )}
     >
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleFormSubmit}
         className="flex flex-wrap items-center justify-between"
       >
+        <MagnifyingGlassIcon className="w-5 h-5 mx-2" />
         <input
-          className="flex-1 px-2 m-1 text-gray-700 placeholder-gray-400 bg-transparent dark:text-gray-200 w-60 focus:outline-none"
+          className="flex-1 h-8 my-1 text-gray-700 placeholder-gray-400 bg-transparent dark:text-gray-200 focus:outline-none"
           type="text"
           placeholder="Type to find posts..."
           value={term}
-          onChange={handleChange}
+          ref={inputRef}
+          onChange={handleInputChange}
+          onKeyDown={handleInputKeyDown}
         />
-        <button className="m-0.5 flex transform items-center justify-center rounded-xl bg-indigo-500 p-2 text-white transition-colors duration-300 hover:bg-indigo-500/70 focus:bg-indigo-500/70 focus:outline-none">
-          <MagnifyingGlassIcon className="w-5 h-5" />
-        </button>
+        {term.length === 0 && (
+          <kbd className="inline mx-2 font-sans text-sm font-semibold text-gray-500 dark:text-gray-400">
+            {isMacOsNavigator ? (
+              <abbr
+                title="Command"
+                className="text-gray-500 no-underline dark:text-gray-400"
+              >
+                ⌘
+              </abbr>
+            ) : (
+              <abbr
+                title="Control"
+                className="text-xs text-gray-500 no-underline dark:text-gray-400"
+              >
+                Ctrl
+              </abbr>
+            )}{' '}
+            K
+          </kbd>
+        )}
       </form>
     </div>
   )
