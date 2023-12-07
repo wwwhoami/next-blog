@@ -9,9 +9,6 @@ import ColorThemeSwitch from './ColorThemeSwitch'
 
 const Search = dynamic(() => import('../Search'), {
   ssr: false,
-  loading: () => (
-    <div className="h-10 ml-10 transition-shadow bg-white border border-indigo-100 shadow-md w-72 rounded-xl dark:bg-gray-700/80 dark:border-none"></div>
-  ),
 })
 
 type Props = {}
