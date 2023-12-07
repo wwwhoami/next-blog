@@ -14,7 +14,7 @@ const AuthModal: FC<Props> = ({ title, children }) => {
 
   return (
     <Transition show appear as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={router.back}>
+      <Dialog as="div" className="relative z-50" onClose={router.back}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"

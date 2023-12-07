@@ -23,7 +23,7 @@ const Header = (props: Props) => {
     'px-3 py-2 rounded-lg focus-ring text-gray-700 hover:bg-gray-200 hover:text-gray-900 dark:hover:text-gray-900 dark:text-gray-100'
 
   return (
-    <header className="sticky top-0 z-50 w-full py-1 bg-gray-50 shadow dark:border-gray-50/[0.06] bg-opacity-60 backdrop-blur backdrop-filter dark:bg-gray-900/80 supports-backdrop-blur:bg-white/95">
+    <header className="sticky top-0 z-20 w-full py-1 bg-gray-50 shadow dark:border-gray-50/[0.06] bg-opacity-60 backdrop-blur backdrop-filter dark:bg-gray-900/80 supports-backdrop-blur:bg-white/95">
       <div className="flex flex-col flex-wrap items-center mx-auto max-w-screen-2xl md:flex-row">
         <Link
           href="/"
