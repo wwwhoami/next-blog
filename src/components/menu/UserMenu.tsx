@@ -3,6 +3,7 @@
 import { useUser } from '@/context/UserProvider'
 import { Menu, Transition } from '@headlessui/react'
 import { PencilIcon, PlusCircleIcon } from '@heroicons/react/20/solid'
+import { UserCircleIcon } from '@heroicons/react/24/solid'
 import Image from 'next/image'
 import { Fragment } from 'react'
 import SignOut from '../auth/SignOut'
@@ -18,13 +19,17 @@ export default function UserMenu(props: Props) {
     <div className="py-2 pl-3 text-right text-gray-700 rounded-full dark:text-gray-100">
       <Menu as="div" className="relative inline-block text-left">
         <Menu.Button className="w-10 h-10 align-bottom rounded-full hover-ring focus-ring">
-          <Image
-            className="object-center rounded-full"
-            src={user?.image ?? ''}
-            width={40}
-            height={40}
-            alt="User avatar"
-          />
+          {user?.image ? (
+            <Image
+              className="object-center rounded-full"
+              src={user.image}
+              width={40}
+              height={40}
+              alt="User avatar"
+            />
+          ) : (
+            <UserCircleIcon className="w-10 h-10 text-gray-700 rounded-full dark:text-gray-100" />
+          )}
         </Menu.Button>
         <Transition
           as={Fragment}
