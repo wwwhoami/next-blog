@@ -46,15 +46,7 @@ const SignInForm = ({}: Props) => {
         setUser(loginRes)
         setError(null)
 
-        toast.success('🦄 Logged in successfully!', {
-          position: 'bottom-center',
-          autoClose: 5000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
+        toast.success('🦄 Logged in successfully!')
 
         router.back()
       } catch (err: any) {

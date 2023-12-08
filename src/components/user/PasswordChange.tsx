@@ -61,15 +61,7 @@ const PasswordChange = ({}: Props) => {
         setUser(profileData)
         setErrorResponse(undefined)
 
-        toast.success('🦄 Password changed successfully!', {
-          position: 'bottom-center',
-          autoClose: 5000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
+        toast.success('🦄 Password changed successfully!')
 
         router.back()
       }
@@ -104,15 +96,7 @@ const PasswordChange = ({}: Props) => {
             // If the refresh failed, redirect to the login page
             const error = new Error('Session refresh failed, try logging in')
             setError(error)
-            toast.error(error.message, {
-              position: 'bottom-center',
-              autoClose: 5000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            })
+            toast.error(error.message)
 
             router.replace('/signIn')
           }

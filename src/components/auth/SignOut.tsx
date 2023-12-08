@@ -33,15 +33,7 @@ const SignOut = (props: Props) => {
       setUser(undefined)
       setError(null)
 
-      toast.success('🦄 Logged out', {
-        position: 'bottom-center',
-        autoClose: 5000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
+      toast.success('🦄 Logged out')
     }
 
     if (user?.accessToken) {
@@ -60,15 +52,7 @@ const SignOut = (props: Props) => {
 
         setError(err)
 
-        toast.error('Something went wrong', {
-          position: 'bottom-center',
-          autoClose: 5000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
+        toast.error('Something went wrong')
       }
     } else {
       // If the user has no access token, we just clear the session
