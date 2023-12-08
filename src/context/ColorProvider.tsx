@@ -1,6 +1,5 @@
 'use client'
 
-import clsx from 'clsx'
 import {
   Dispatch,
   SetStateAction,
@@ -43,7 +42,7 @@ export default function ColorProvider({ children }: Props) {
 
   return (
     <ColorContext.Provider value={{ isDarkTheme, setIsDarkTheme }}>
-        {children}
+      {children}
     </ColorContext.Provider>
   )
 }
