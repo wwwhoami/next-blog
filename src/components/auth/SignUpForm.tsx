@@ -40,7 +40,7 @@ const SignUpForm = ({}: Props) => {
     ) {
       try {
         const signInRes = await fetcher<UserSignInResponse>(
-          `${process.env.NEXT_PUBLIC_API_URL}/auth/sign-in`,
+          `${process.env.NEXT_PUBLIC_API_URL}/auth/sign-up`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -56,15 +56,7 @@ const SignUpForm = ({}: Props) => {
         setUser(signInRes)
         setError(null)
 
-        toast.success('🦄 Logged in successfully!', {
-          position: 'bottom-center',
-          autoClose: 5000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
+        toast.success('🦄 Signed up successfully!')
 
         router.back()
       } catch (err: any) {
