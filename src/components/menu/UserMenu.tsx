@@ -15,7 +15,7 @@ export default function UserMenu(props: Props) {
   const { user } = useUser()
 
   return (
-    <div className="px-3 py-2 text-right text-gray-700 rounded-full dark:text-gray-100">
+    <div className="py-2 pl-3 text-right text-gray-700 rounded-full dark:text-gray-100">
       <Menu as="div" className="relative inline-block text-left">
         <Menu.Button className="w-10 h-10 align-bottom rounded-full hover-ring focus-ring">
           <Image
