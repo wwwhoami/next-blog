@@ -21,7 +21,7 @@ const Header = (props: Props) => {
 
   return (
     <header className="lg:px-2 sticky top-0 z-20 w-full py-1 bg-gray-50 shadow dark:border-gray-50/[0.06] bg-opacity-60 backdrop-blur backdrop-filter dark:bg-gray-900/80 supports-backdrop-blur:bg-white/95">
-      <div className="flex flex-col flex-wrap items-center h-16 mx-auto max-w-screen-2xl md:flex-row">
+      <div className="flex flex-col flex-wrap items-center mx-auto md:h-16 max-w-screen-2xl md:flex-row">
         <Link
           href="/"
           passHref
