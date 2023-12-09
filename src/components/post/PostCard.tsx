@@ -22,7 +22,7 @@ const PostCard = ({
       className="mt-6 hover-ring focus-ring rounded-xl"
     >
       <object
-        className={`w-full cursor-pointer rounded-xl shadow-lg bg-gray-50 dark:bg-gray-800/50`}
+        className={`w-full h-full cursor-pointer rounded-xl shadow-lg bg-gray-50 dark:bg-gray-800/50`}
         style={{
           ['--tw-ring-color' as any]: categories
             ? categories[0].category.hexColor
