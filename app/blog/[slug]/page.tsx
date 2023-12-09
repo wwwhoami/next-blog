@@ -1,19 +1,19 @@
 import PostHeader from '@/components/post/PostHeader'
+import PostPre from '@/components/post/PostPre'
 import fetcher from '@/lib/fetcher'
 import { PostWithContent } from '@/types/Post'
 import clsx from 'clsx'
-import 'highlight.js/styles/atom-one-dark.css'
 import { Metadata } from 'next'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import Image from 'next/image'
 import Link from 'next/link'
 import readingTime from 'reading-time'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
-import rehypeCodeTitles from 'rehype-code-titles'
-import rehypeHighlight from 'rehype-highlight'
 import rehypeImgSize from 'rehype-img-size'
+import rehypePrettyCode from 'rehype-pretty-code'
 import rehypeSanitize from 'rehype-sanitize'
 import rehypeSlug from 'rehype-slug'
+import { visit } from 'unist-util-visit'
 
 export const metadata: Metadata = {
   title: 'About Next Blog',
@@ -41,6 +41,13 @@ const components = {
       className={clsx(props.className, 'rounded-lg focus-ring')}
     />
   ),
+  div: (props: any) =>
+    props['data-rehype-pretty-code-fragment'] != null ? (
+      props.children
+    ) : (
+      <div {...props} />
+    ),
+  pre: (props: any) => <PostPre {...props} />,
 }
 
 export default async function PostPage({ params }: Props) {
@@ -59,7 +66,7 @@ export default async function PostPage({ params }: Props) {
   } = post
 
   return (
-    <section className="max-w-full bg-gray-50 dark:bg-zinc-800/90">
+    <section className="w-full max-w-full bg-gray-50 dark:bg-zinc-800/90">
       <PostHeader
         postHeader={{
           title,
@@ -74,7 +81,7 @@ export default async function PostPage({ params }: Props) {
         }}
       />
       {content && (
-        <article className="relative w-full max-w-screen-md px-4 mx-auto mt-2 prose prose-lg lg:px-0 dark:prose-invert prose-a:text-indigo-600 dark:prose-a:text-indigo-400 prose-a:no-underline hover:prose-a:underline">
+        <article className="article">
           <MDXRemote
             source={content}
             options={
@@ -90,8 +97,53 @@ export default async function PostPage({ params }: Props) {
                         behavior: 'wrap',
                       },
                     ],
-                    rehypeHighlight as any,
-                    rehypeCodeTitles,
+                    // extract raw code from all code elements inside pre
+                    // and forward it to pretty code in raw property
+                    () => (tree) => {
+                      visit(tree, (node) => {
+                        if (
+                          node?.type === 'element' &&
+                          node?.tagName === 'pre'
+                        ) {
+                          const [codeEl] = node.children
+
+                          if (codeEl.tagName !== 'code') return
+
+                          node.raw = codeEl.children?.[0].value
+                        }
+                      })
+                    },
+                    [
+                      rehypePrettyCode,
+                      {
+                        // will create two div elements with dark and light themes respectively
+                        theme: { dark: 'one-dark-pro', light: 'github-light' },
+                      },
+                    ],
+                    // forward raw property to both pretty code div elements
+                    () => (tree) => {
+                      visit(tree, (node) => {
+                        if (
+                          node?.type === 'element' &&
+                          node?.tagName === 'div'
+                        ) {
+                          if (
+                            !(
+                              'data-rehype-pretty-code-fragment' in
+                              node.properties
+                            )
+                          ) {
+                            return
+                          }
+
+                          for (const child of node.children) {
+                            if (child.tagName === 'pre') {
+                              child.properties['raw'] = node.raw
+                            }
+                          }
+                        }
+                      })
+                    },
                     rehypeImgSize,
                   ],
                 },

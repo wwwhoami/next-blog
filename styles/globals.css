@@ -15,6 +15,45 @@
   }
 }
 
+@layer components {
+  .article {
+    display: grid;
+    grid-template-columns: 1fr min(65ch, calc(100% - 2rem)) 1fr;
+    @apply w-full max-w-full gap-x-4 mt-2 prose prose-base md:prose-lg md:px-0 dark:prose-invert prose-a:text-indigo-600 dark:prose-a:text-indigo-400 prose-a:no-underline hover:prose-a:underline;
+  }
+
+  .article > * {
+    @apply col-start-2 col-span-1;
+  }
+
+  .article pre {
+    @apply col-span-full lg:col-start-2 lg:col-span-1 focus-ring;
+  }
+
+  article > pre > code {
+    counter-reset: line;
+  }
+
+  article > pre > code > [data-line]::before {
+    counter-increment: line;
+    content: counter(line);
+
+    display: inline-block;
+    width: 1rem;
+    margin-right: 1.5rem;
+    text-align: right;
+    color: gray;
+  }
+
+  article > pre > code[data-line-numbers-max-digits='2'] > [data-line]::before {
+    width: 2rem;
+  }
+
+  article > pre > code[data-line-numbers-max-digits='3'] > [data-line]::before {
+    width: 3rem;
+  }
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
