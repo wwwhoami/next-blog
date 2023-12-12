@@ -2,14 +2,14 @@
 
 import { ReactNode } from 'react'
 import { ToastContainer } from 'react-toastify'
-import { useColor } from './ColorProvider'
+import { useTheme } from './ThemeProvider'
 
 type Props = {
   children: ReactNode
 }
 
 export default function ToastProvider({ children }: Props) {
-  const { isDarkTheme } = useColor()
+  const { isDarkTheme } = useTheme()
 
   return (
     <>

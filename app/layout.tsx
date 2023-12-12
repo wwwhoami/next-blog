@@ -1,9 +1,9 @@
-import Layout from '@/components/Layout'
 import Header from '@/components/navHeader/Header'
-import ColorProvider from '@/context/ColorProvider'
+import ThemeProvider from '@/context/ThemeProvider'
 import UserProvider from '@/context/UserProvider'
 import '@/styles/globals.css'
 import { Metadata } from 'next'
+import { Inter } from 'next/font/google'
 import { FC, ReactNode } from 'react'
 import 'react-toastify/dist/ReactToastify.min.css'
 import ToastProvider from 'src/context/ToastProvider'
@@ -19,21 +19,27 @@ export const metadata: Metadata = {
   description: 'The next info and news in dev',
 }
 
+const inter = Inter({
+  weight: ['200', '300', '400', '500', '600', '700', '800'],
+  display: 'swap',
+  subsets: ['latin'],
+})
+
 const RootLayout: FC<RootLayoutProps> = ({ children, modal }) => {
   return (
-    <UserProvider>
-      <ColorProvider>
-        <Layout>
-          <body className="bg-white text-black dark:text-gray-300 dark:bg-gray-900/[0.97]">
-            <Header />
+    <html lang="en" className={`${inter.className}`} suppressHydrationWarning>
+      <body className="bg-white text-black dark:text-gray-300 dark:bg-gray-900/[0.97]">
+        <UserProvider>
+          <ThemeProvider>
             <ToastProvider>
+              <Header />
               <main className="mx-auto max-w-screen-2xl">{children}</main>
               {modal}
             </ToastProvider>
-          </body>
-        </Layout>
-      </ColorProvider>
-    </UserProvider>
+          </ThemeProvider>
+        </UserProvider>
+      </body>
+    </html>
   )
 }
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useColor } from '@/context/ColorProvider'
+import { useTheme } from '@/context/ThemeProvider'
 import { ClipboardDocumentIcon } from '@heroicons/react/20/solid'
 import React from 'react'
 import { toast } from 'react-toastify'
@@ -13,7 +13,7 @@ type Props = {
 }
 
 export default function PostPre(props: Props) {
-  const { isDarkTheme } = useColor()
+  const { isDarkTheme } = useTheme()
   const currentTheme = isDarkTheme ? 'dark' : 'light'
 
   const copyToClipboard = async () => {

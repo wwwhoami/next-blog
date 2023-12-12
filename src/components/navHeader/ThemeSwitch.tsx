@@ -1,16 +1,15 @@
 'use client'
 
-import { useColor } from '@/context/ColorProvider'
+import { useTheme } from '@/context/ThemeProvider'
 import { Switch } from '@headlessui/react'
 import { MoonIcon, SunIcon } from '@heroicons/react/20/solid'
 import clsx from 'clsx'
 
-export default function ColorThemeSwitch() {
-  const { isDarkTheme, setIsDarkTheme } = useColor()
+export default function ThemeSwitch() {
+  const { isDarkTheme, changeTheme } = useTheme()
 
   const onSwitch = () => {
-    setIsDarkTheme(!isDarkTheme)
-    localStorage.theme = isDarkTheme ? 'light' : 'dark'
+    changeTheme(!isDarkTheme)
   }
 
   return (
