@@ -2,8 +2,11 @@
 
 import { useUser } from '@/context/UserProvider'
 import { Menu, Transition } from '@headlessui/react'
-import { PencilIcon, PlusCircleIcon } from '@heroicons/react/20/solid'
-import { UserCircleIcon } from '@heroicons/react/24/solid'
+import {
+  PencilIcon,
+  PlusCircleIcon,
+  UserCircleIcon,
+} from '@heroicons/react/20/solid'
 import Image from 'next/image'
 import { Fragment } from 'react'
 import SignOut from '../auth/SignOut'
@@ -13,10 +16,17 @@ import MenuItemLink from './MenuItemLink'
 type Props = {}
 
 export default function UserMenu(props: Props) {
-  const { user } = useUser()
+  const { user, isLoading } = useUser()
+
+  if (isLoading)
+    return (
+      <div className="w-10 h-10 ml-3 align-bottom bg-gray-300 rounded-full animate-pulse dark:bg-gray-700">
+        <UserCircleIcon className="w-10 h-10 text-gray-700 rounded-full dark:text-gray-100 blur-[2px]" />
+      </div>
+    )
 
   return (
-    <div className="py-2 pl-3 text-right text-gray-700 rounded-full dark:text-gray-100">
+    <div className="ml-3 text-right text-gray-700 rounded-full dark:text-gray-100">
       <Menu as="div" className="relative inline-block text-left">
         <Menu.Button className="w-10 h-10 align-bottom rounded-full hover-ring focus-ring">
           {user?.image ? (
