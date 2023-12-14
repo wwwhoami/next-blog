@@ -4,7 +4,7 @@
 
 @layer utilities {
   .hover-ring {
-    @apply ring-indigo-600 dark:ring-indigo-400 dark:ring-offset-slate-900 hover:ring-2  hover:ring-offset-4 transition-all duration-300 ease-in-out;
+    @apply ring-indigo-600 dark:ring-indigo-400 dark:ring-offset-slate-900 hover:ring-2 hover:ring-offset-4 transition-all duration-300 ease-in-out;
   }
   .focus-ring {
     @apply ring-indigo-600 dark:ring-indigo-400 dark:ring-offset-slate-900 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-offset-2 transition-all duration-300 ease-in-out;
@@ -54,8 +54,7 @@
   }
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+:root {
+  --toastify-color-dark: #18181b;
+  --toastify-text-color-dark: #d1d5db;
 }
