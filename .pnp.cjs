@@ -57,6 +57,7 @@ const RAW_RUNTIME_STATE =
           ["rehype-slug", "npm:6.0.0"],\
           ["shiki", "npm:0.14.6"],\
           ["swr", "virtual:b12ba291ee2514a0e12483078237052dfe49637e15a84982389921d93eaedaf82cae0b5f1974777fc8769c04321f39e8dad0dd42ea5dbe2469ca2faf97651f79#npm:2.2.4"],\
+          ["tailwind-variants", "virtual:b12ba291ee2514a0e12483078237052dfe49637e15a84982389921d93eaedaf82cae0b5f1974777fc8769c04321f39e8dad0dd42ea5dbe2469ca2faf97651f79#npm:0.1.19"],\
           ["tailwindcss", "npm:3.3.5"],\
           ["typescript", "patch:typescript@npm%3A5.2.2#optional!builtin<compat/typescript>::version=5.2.2&hash=f3b441"],\
           ["unist-util-visit", "npm:5.0.0"],\
@@ -4832,6 +4833,7 @@ const RAW_RUNTIME_STATE =
           ["rehype-slug", "npm:6.0.0"],\
           ["shiki", "npm:0.14.6"],\
           ["swr", "virtual:b12ba291ee2514a0e12483078237052dfe49637e15a84982389921d93eaedaf82cae0b5f1974777fc8769c04321f39e8dad0dd42ea5dbe2469ca2faf97651f79#npm:2.2.4"],\
+          ["tailwind-variants", "virtual:b12ba291ee2514a0e12483078237052dfe49637e15a84982389921d93eaedaf82cae0b5f1974777fc8769c04321f39e8dad0dd42ea5dbe2469ca2faf97651f79#npm:0.1.19"],\
           ["tailwindcss", "npm:3.3.5"],\
           ["typescript", "patch:typescript@npm%3A5.2.2#optional!builtin<compat/typescript>::version=5.2.2&hash=f3b441"],\
           ["unist-util-visit", "npm:5.0.0"],\
@@ -6383,6 +6385,38 @@ const RAW_RUNTIME_STATE =
         "packagePeers": [\
           "@types/react",\
           "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["tailwind-merge", [\
+      ["npm:1.14.0", {\
+        "packageLocation": "./.yarn/cache/tailwind-merge-npm-1.14.0-f448a138df-35ff3c3a7f.zip/node_modules/tailwind-merge/",\
+        "packageDependencies": [\
+          ["tailwind-merge", "npm:1.14.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["tailwind-variants", [\
+      ["npm:0.1.19", {\
+        "packageLocation": "./.yarn/cache/tailwind-variants-npm-0.1.19-7122188c2c-60ddf9f6a8.zip/node_modules/tailwind-variants/",\
+        "packageDependencies": [\
+          ["tailwind-variants", "npm:0.1.19"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:b12ba291ee2514a0e12483078237052dfe49637e15a84982389921d93eaedaf82cae0b5f1974777fc8769c04321f39e8dad0dd42ea5dbe2469ca2faf97651f79#npm:0.1.19", {\
+        "packageLocation": "./.yarn/__virtual__/tailwind-variants-virtual-a43e6d8874/0/cache/tailwind-variants-npm-0.1.19-7122188c2c-60ddf9f6a8.zip/node_modules/tailwind-variants/",\
+        "packageDependencies": [\
+          ["tailwind-variants", "virtual:b12ba291ee2514a0e12483078237052dfe49637e15a84982389921d93eaedaf82cae0b5f1974777fc8769c04321f39e8dad0dd42ea5dbe2469ca2faf97651f79#npm:0.1.19"],\
+          ["@types/tailwindcss", null],\
+          ["tailwind-merge", "npm:1.14.0"],\
+          ["tailwindcss", "npm:3.3.5"]\
+        ],\
+        "packagePeers": [\
+          "@types/tailwindcss",\
+          "tailwindcss"\
         ],\
         "linkType": "HARD"\
       }]\

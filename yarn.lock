@@ -3985,6 +3985,7 @@ __metadata:
     rehype-slug: "npm:^6.0.0"
     shiki: "npm:^0.14.6"
     swr: "npm:^2.2.4"
+    tailwind-variants: "npm:^0.1.19"
     tailwindcss: "npm:^3.3.5"
     typescript: "npm:5.2.2"
     unist-util-visit: "npm:^5.0.0"
@@ -5354,6 +5355,24 @@ __metadata:
   peerDependencies:
     react: ^16.11.0 || ^17.0.0 || ^18.0.0
   checksum: feb2fb5d3feb5accf93ce81108d659b941f9df6114d7744ccd148349255ed4d072e228e269d5aa3f81e4198cc120672929f5d1709cd52169d8e279314a5af4fd
+  languageName: node
+  linkType: hard
+
+"tailwind-merge@npm:^1.14.0":
+  version: 1.14.0
+  resolution: "tailwind-merge@npm:1.14.0"
+  checksum: 35ff3c3a7f89111acbdef879130064229ce7deee017fd75f17d07135aa4bcc213e049c35d6bd5000de4dc3219e25f7a03295952736d1fee1423535c55775b1e7
+  languageName: node
+  linkType: hard
+
+"tailwind-variants@npm:^0.1.19":
+  version: 0.1.19
+  resolution: "tailwind-variants@npm:0.1.19"
+  dependencies:
+    tailwind-merge: "npm:^1.14.0"
+  peerDependencies:
+    tailwindcss: "*"
+  checksum: 60ddf9f6a84506dbaf5e4e8b5c7971bbe77879473c7f194c1578d86f1ab56116af68f799b52531255f522350f23b3f79ad0200f25e2060d6fa037ce3a50c7ace
   languageName: node
   linkType: hard
 
