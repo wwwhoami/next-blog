@@ -48,7 +48,7 @@ type Props = {
 function UserProvider({ children }: Props) {
   const [user, setUser] = useState<UserSession>()
   const [error, setError] = useState<Error | null>()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   const getCurrentUserData = useCallback(async (accessToken: string) => {
     try {
