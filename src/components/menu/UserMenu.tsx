@@ -10,7 +10,6 @@ import {
 import Image from 'next/image'
 import { Fragment } from 'react'
 import SignOut from '../auth/SignOut'
-import MenuItemButton from './MenuItemButton'
 import MenuItemLink from './MenuItemLink'
 
 type Props = {}
@@ -52,7 +51,12 @@ export default function UserMenu(props: Props) {
         >
           <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg dark:divide-gray-600 dark:bg-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none">
             <div className="px-1 py-1 ">
-              <MenuItemButton Icon={PlusCircleIcon} text="Create post" />
+              <MenuItemLink
+                Icon={PlusCircleIcon}
+                text="Create post"
+                href="/new"
+                scroll={false}
+              />
               <MenuItemLink
                 Icon={PencilIcon}
                 text="Edit profile"
