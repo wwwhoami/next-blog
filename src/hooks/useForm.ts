@@ -8,6 +8,14 @@ export type UseFormProps<T extends {}, K extends keyof T> = {
   onSubmitError?: (error: Error) => void
 }
 
+/**
+ * Hook for handling forms.
+ * @param initialData Initial data for the form.
+ * @param validators Validators for each field.
+ * @param onSubmit Function to call when the form is submitted.
+ * @param onSubmitError Function to call when the form submission fails.
+ * @returns Form state, form status and handlers.
+ */
 const useForm = <T extends {}, K extends keyof T>({
   initialData,
   validators,
@@ -30,6 +38,11 @@ const useForm = <T extends {}, K extends keyof T>({
     return !hasErrors && !hasMissingFields
   }, [error, data])
 
+  /**
+   * Handles change event in form fields.
+   * Updates data and error state.
+   * @param e Change event.
+   */
   const handleChange = (e: React.ChangeEvent<any>) => {
     const { name, value } = e.target
 
@@ -51,6 +64,11 @@ const useForm = <T extends {}, K extends keyof T>({
     })
   }
 
+  /**
+   * Handles blur event in form fields.
+   * Updates error state.
+   * @param e Blur event.
+   */
   const handleBlur = (e: React.FocusEvent<any>) => {
     const { name, value } = e.target
 
@@ -66,6 +84,11 @@ const useForm = <T extends {}, K extends keyof T>({
     })
   }
 
+  /**
+   * Handles form submission.
+   * @param e Form event.
+   * @returns Promise that resolves when the form is submitted.
+   */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)

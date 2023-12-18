@@ -18,6 +18,16 @@ export type UseAuthorizedFormProps<T extends {}, K extends keyof T> = Omit<
   }) => Promise<void>
 }
 
+/**
+ * Hook for handling forms that require authentication.
+ * Attempts to resubmit the form if the access token is expired,
+ * retries with fresh access token if it is.
+ * @param initialData Initial data for the form.
+ * @param validators Validators for each field.
+ * @param onSubmit Function to call when the form is submitted.
+ * @param onSubmitError Function to call when the form submission fails.
+ * @returns Form state, form status and handlers.
+ */
 const useAuthorizedForm = <T extends {}, K extends keyof T>({
   initialData,
   validators,
@@ -47,6 +57,13 @@ const useAuthorizedForm = <T extends {}, K extends keyof T>({
 
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  /**
+   * Handles form submission.
+   * Attempts to resubmit the form if the access token is expired,
+   * refreshes the access token if it is.
+   * @param e Form event.
+   * @returns Promise that resolves when the form is submitted.
+   */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
