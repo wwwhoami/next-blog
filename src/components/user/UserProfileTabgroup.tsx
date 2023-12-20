@@ -30,13 +30,13 @@ const UserProfileTabgroup = ({}: Props) => {
         <Tab.Panels className="mt-2">
           <Tab.Panel
             key="Account"
-            className="p-3 focus-ring rounded-xl focus:ring-opacity-60"
+            className="flex flex-wrap justify-between w-full max-w-md p-3 focus-ring rounded-xl focus:ring-opacity-60"
           >
             <ProfileEdit />
           </Tab.Panel>
           <Tab.Panel
             key="Password"
-            className="p-3 focus-ring rounded-xl focus:ring-opacity-60"
+            className="flex flex-wrap justify-between w-full max-w-md p-3 focus-ring rounded-xl focus:ring-opacity-60"
           >
             <PasswordChange />
           </Tab.Panel>
