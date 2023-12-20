@@ -1,12 +1,13 @@
 import { useUser } from '@/context/UserProvider'
 import { FetchError } from '@/entities/FetchError'
+import { FormRecord } from '@/types/Form'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import useForm, { UseFormProps } from './useForm'
 
-export type UseAuthorizedFormProps<T extends {}, K extends keyof T> = Omit<
-  UseFormProps<T, K>,
+export type UseAuthorizedFormProps<TFormData extends FormRecord> = Omit<
+  UseFormProps<TFormData>,
   'onSubmit'
 > & {
   onSubmit: ({
@@ -28,12 +29,12 @@ export type UseAuthorizedFormProps<T extends {}, K extends keyof T> = Omit<
  * @param onSubmitError Function to call when the form submission fails.
  * @returns Form state, form status and handlers.
  */
-const useAuthorizedForm = <T extends {}, K extends keyof T>({
+const useAuthorizedForm = <TFormData extends FormRecord = FormRecord>({
   initialData,
   validators,
   onSubmit,
   onSubmitError,
-}: UseAuthorizedFormProps<T, K>) => {
+}: UseAuthorizedFormProps<TFormData>) => {
   const {
     data,
     setData,

@@ -1,9 +1,10 @@
+import { FormErrors, FormRecord, Validators } from '@/types/Form'
 import cloneWithDefaultValues from '@/utils/cloneWithDefaultValues'
 import React, { useMemo } from 'react'
 
-export type UseFormProps<T extends {}, K extends keyof T> = {
-  initialData: T
-  validators?: Record<K, (value: string) => boolean | undefined>
+export type UseFormProps<TFormData extends FormRecord> = {
+  initialData: TFormData
+  validators?: Validators<TFormData>
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>
   onSubmitError?: (error: Error) => void
 }
@@ -16,14 +17,14 @@ export type UseFormProps<T extends {}, K extends keyof T> = {
  * @param onSubmitError Function to call when the form submission fails.
  * @returns Form state, form status and handlers.
  */
-const useForm = <T extends {}, K extends keyof T>({
+const useForm = <TFormData extends FormRecord = FormRecord>({
   initialData,
   validators,
   onSubmit,
   onSubmitError,
-}: UseFormProps<T, K>) => {
-  const [data, setData] = React.useState<T>(initialData)
-  const [error, setError] = React.useState<Record<keyof T, boolean>>(
+}: UseFormProps<TFormData>) => {
+  const [data, setData] = React.useState<TFormData>(initialData)
+  const [error, setError] = React.useState<FormErrors<TFormData>>(
     cloneWithDefaultValues(initialData, false),
   )
   const [errorResponse, setErrorResponse] = React.useState<Error>()
@@ -31,10 +32,8 @@ const useForm = <T extends {}, K extends keyof T>({
 
   // if there are any errors or missing fields, form is not valid
   const isValid = useMemo(() => {
-    const hasErrors = Object.keys(error).some((key) => error[key as K])
-    const hasMissingFields = Object.keys(data).some(
-      (key) => data[key as K] === '',
-    )
+    const hasErrors = Object.keys(error).some((key) => error[key])
+    const hasMissingFields = Object.keys(data).some((key) => data[key] === '')
     return !hasErrors && !hasMissingFields
   }, [error, data])
 
@@ -54,7 +53,7 @@ const useForm = <T extends {}, K extends keyof T>({
 
     // if valirator for this field exists, validate it
     // otherwise, do nothing
-    const validator = validators ? validators[name as K] : undefined
+    const validator = validators ? validators[name] : undefined
     if (validator === undefined) return
 
     const isValid = validator(value)
@@ -74,7 +73,7 @@ const useForm = <T extends {}, K extends keyof T>({
 
     // if valirator for this field exists, validate it
     // otherwise, do nothing
-    const validator = validators ? validators[name as K] : undefined
+    const validator = validators ? validators[name] : undefined
     if (validator === undefined) return
 
     const isValid = validator(value)
