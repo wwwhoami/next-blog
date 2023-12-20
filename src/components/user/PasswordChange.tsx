@@ -1,15 +1,14 @@
 'use client'
 
 import { useUser } from '@/context/UserProvider'
-import { FetchError } from '@/entities/FetchError'
+import useAuthorizedForm from '@/hooks/useAuthorizedForm'
 import fetcher from '@/lib/fetcher'
 import { UserProfileResponse } from '@/types/User'
-import clsx from 'clsx'
+import validatePassword from '@/utils/validatePassword'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
 import { toast } from 'react-toastify'
-import isStrongPassword from 'validator/lib/isStrongPassword'
 import FormErrorResponse from '../form/FormErrorResponse'
+import FormSubmit from '../form/FormSubmit'
 import PasswordInput from '../form/PasswordInput'
 
 const patchProfilePassword = ({
@@ -39,78 +38,41 @@ const patchProfilePassword = ({
 type Props = {}
 
 const PasswordChange = ({}: Props) => {
-  const [oldPassword, setOldPassword] = useState<string>()
-  const [newPassword, setNewPassword] = useState<string>()
-  const [oldPasswordError, setOldPasswordError] = useState(false)
-  const [newPasswordError, setNewPasswordError] = useState(false)
-  const [errorResponse, setErrorResponse] = useState<Error>()
-
-  const { user, setUser, setError, refreshSession } = useUser()
+  const { setUser } = useUser()
   const router = useRouter()
+  const {
+    data: formData,
+    error: formError,
+    errorResponse,
+    isValid: formIsValid,
+    isSubmitting,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+  } = useAuthorizedForm({
+    initialData: {
+      oldPassword: '',
+      newPassword: '',
+    },
+    validators: {
+      oldPassword: validatePassword,
+      newPassword: validatePassword,
+    },
+    onSubmit,
+  })
+  const { oldPassword, newPassword } = formData
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (
-      user?.accessToken &&
-      !oldPasswordError &&
-      !newPasswordError &&
-      oldPassword?.length &&
-      newPassword?.length
-    ) {
-      const onSuccessfulPasswordChange = (profileData: UserProfileResponse) => {
-        setUser(profileData)
-        setErrorResponse(undefined)
+  async function onSubmit({ accessToken }: { accessToken: string }) {
+    const profileData = await patchProfilePassword({
+      accessToken,
+      oldPassword,
+      newPassword,
+    })
+    setUser(profileData)
 
-        toast.success('🦄 Password changed successfully!')
+    toast.success('🦄 Password changed successfully!')
 
-        router.back()
-      }
-
-      try {
-        const profileData = await patchProfilePassword({
-          accessToken: user.accessToken,
-          oldPassword,
-          newPassword,
-        })
-
-        onSuccessfulPasswordChange(profileData)
-      } catch (err: any) {
-        // If the access token is expired, try to refresh it
-        if (
-          err instanceof FetchError &&
-          err.status === 401 &&
-          err.message === 'Unauthorized'
-        ) {
-          const newAccessToken = await refreshSession()
-
-          // If the refresh was successful, try to change the password again
-          if (newAccessToken) {
-            patchProfilePassword({
-              accessToken: newAccessToken,
-              oldPassword,
-              newPassword,
-            })
-              .then(onSuccessfulPasswordChange)
-              .catch(setErrorResponse)
-          } else {
-            // If the refresh failed, redirect to the login page
-            const error = new Error('Session refresh failed, try logging in')
-            setError(error)
-            toast.error(error.message)
-
-            router.replace('/signIn')
-          }
-
-          return
-        }
-
-        setErrorResponse(err)
-      }
-    } else if (user?.accessToken === undefined) {
-      // If the user has no access token, redirect to the login page
-      setError(new Error('Authentication token is missing'))
-      router.replace('/signIn')
-    }
+    router.back()
   }
 
   return (
@@ -121,111 +83,28 @@ const PasswordChange = ({}: Props) => {
       <PasswordInput
         label="Old password"
         value={oldPassword}
-        onChange={(e) => {
-          setOldPassword(e.target.value)
-          if (oldPasswordError)
-            setOldPasswordError(
-              !isStrongPassword(e.target.value, {
-                minLength: 8,
-                minLowercase: 0,
-                minUppercase: 0,
-                minNumbers: 0,
-                minSymbols: 0,
-                returnScore: false,
-                pointsPerUnique: 1,
-                pointsPerRepeat: 0.5,
-                pointsForContainingLower: 10,
-                pointsForContainingUpper: 10,
-                pointsForContainingNumber: 10,
-                pointsForContainingSymbol: 10,
-              }),
-            )
-        }}
-        onBlur={(e) => {
-          setOldPasswordError(
-            !isStrongPassword(e.target.value, {
-              minLength: 8,
-              minLowercase: 0,
-              minUppercase: 0,
-              minNumbers: 0,
-              minSymbols: 0,
-              returnScore: false,
-              pointsPerUnique: 1,
-              pointsPerRepeat: 0.5,
-              pointsForContainingLower: 10,
-              pointsForContainingUpper: 10,
-              pointsForContainingNumber: 10,
-              pointsForContainingSymbol: 10,
-            }),
-          )
-        }}
+        onChange={handleChange}
+        onBlur={handleBlur}
         type="text"
         id="oldPassword"
         placeholder="************"
-        hasError={oldPasswordError}
+        hasError={formError.oldPassword}
         errorMessage="Password should be at least 8 characters long"
       />
       <PasswordInput
         label="New password"
         value={newPassword}
-        onChange={(e) => {
-          setNewPassword(e.target.value)
-          if (newPasswordError)
-            setNewPasswordError(
-              !isStrongPassword(e.target.value, {
-                minLength: 8,
-                minLowercase: 0,
-                minUppercase: 0,
-                minNumbers: 0,
-                minSymbols: 0,
-                returnScore: false,
-                pointsPerUnique: 1,
-                pointsPerRepeat: 0.5,
-                pointsForContainingLower: 10,
-                pointsForContainingUpper: 10,
-                pointsForContainingNumber: 10,
-                pointsForContainingSymbol: 10,
-              }),
-            )
-        }}
-        onBlur={(e) => {
-          setNewPasswordError(
-            !isStrongPassword(e.target.value, {
-              minLength: 8,
-              minLowercase: 0,
-              minUppercase: 0,
-              minNumbers: 0,
-              minSymbols: 0,
-              returnScore: false,
-              pointsPerUnique: 1,
-              pointsPerRepeat: 0.5,
-              pointsForContainingLower: 10,
-              pointsForContainingUpper: 10,
-              pointsForContainingNumber: 10,
-              pointsForContainingSymbol: 10,
-            }),
-          )
-        }}
+        onChange={handleChange}
+        onBlur={handleBlur}
         id="newPassword"
         placeholder="************"
-        hasError={newPasswordError}
+        hasError={formError.newPassword}
         errorMessage="Password should be at least 8 characters long"
       />
-      <button
-        type="submit"
-        className={clsx(
-          `focus-ring focus-within:ring-primary w-full rounded-lg bg-indigo-600 px-5 py-2.5 text-center text-sm font-medium text-white focus-within:ring focus-within:ring-opacity-50 hover:bg-indigo-500 focus:outline-none sm:w-auto`,
-          {
-            'cursor-not-allowed opacity-80':
-              newPasswordError ||
-              oldPasswordError ||
-              !newPassword?.length ||
-              !oldPassword?.length,
-          },
-        )}
-      >
+
+      <FormSubmit formIsValid={formIsValid} isSubmitting={isSubmitting}>
         Change password
-      </button>
+      </FormSubmit>
     </form>
   )
 }

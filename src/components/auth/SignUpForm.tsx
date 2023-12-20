@@ -1,69 +1,72 @@
 'use client'
 
 import { useUser } from '@/context/UserProvider'
+import useForm from '@/hooks/useForm'
 import fetcher from '@/lib/fetcher'
 import { UserSignInResponse } from '@/types/User'
-import clsx from 'clsx'
+import validatePassword from '@/utils/validatePassword'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
 import { toast } from 'react-toastify'
 import isEmail from 'validator/lib/isEmail'
-import isStrongPassword from 'validator/lib/isStrongPassword'
 import FormErrorResponse from '../form/FormErrorResponse'
 import FormInput from '../form/FormInput'
+import FormSubmit from '../form/FormSubmit'
 import PasswordInput from '../form/PasswordInput'
 
 type Props = {}
 
 const SignUpForm = ({}: Props) => {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [nameError, setNameError] = useState(false)
-  const [emailError, setEmailError] = useState(false)
-  const [passwordError, setPasswordError] = useState(false)
-  const [errorResponse, setErrorResponse] = useState<Error>()
-
   const router = useRouter()
   const { setUser, setError } = useUser()
+  const {
+    data: formData,
+    error: formError,
+    errorResponse,
+    isValid: formIsValid,
+    isSubmitting,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+  } = useForm({
+    initialData: {
+      name: '',
+      email: '',
+      password: '',
+    },
+    validators: {
+      name: (value: string) => value.length > 0,
+      email: isEmail,
+      password: validatePassword,
+    },
+    onSubmit,
+    onSubmitError: (err: any) => {
+      setError(err)
+    },
+  })
+  const { name, email, password } = formData
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (
-      !nameError &&
-      !emailError &&
-      !passwordError &&
-      name.length &&
-      email.length &&
-      password.length
-    ) {
-      try {
-        const signInRes = await fetcher<UserSignInResponse>(
-          `${process.env.NEXT_PUBLIC_API_URL}/auth/sign-up`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify({
-              name,
-              email,
-              password,
-            }),
-          },
-        )
+  async function onSubmit() {
+    const signInRes = await fetcher<UserSignInResponse>(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/sign-up`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+        }),
+      },
+    )
 
-        setUser(signInRes)
-        setError(null)
+    setUser(signInRes)
+    setError(null)
 
-        toast.success('🦄 Signed up successfully!')
+    toast.success('🦄 Signed up successfully!')
 
-        router.back()
-      } catch (err: any) {
-        setErrorResponse(err)
-        setError(err)
-      }
-    }
+    router.back()
   }
 
   return (
@@ -74,97 +77,37 @@ const SignUpForm = ({}: Props) => {
       <FormInput
         label="Name"
         value={name}
-        onChange={(e) => {
-          setName(e.target.value)
-          if (nameError) setNameError(!e.target.value.length)
-        }}
-        onBlur={(e) => {
-          setNameError(!e.target.value)
-        }}
+        onChange={handleChange}
+        onBlur={handleBlur}
         type="text"
         id="name"
         placeholder="Enter preferred username"
-        hasError={nameError}
+        hasError={formError.name}
         errorMessage="Name should not be empty"
       />
       <FormInput
         label="Email"
         value={email}
-        onChange={(e) => {
-          setEmail(e.target.value)
-          if (emailError) setEmailError(!isEmail(e.target.value))
-        }}
-        onBlur={(e) => {
-          setEmailError(!isEmail(e.target.value))
-        }}
+        onChange={handleChange}
+        onBlur={handleBlur}
         type="email"
         id="email"
         placeholder="somemail@example.com"
-        hasError={emailError}
+        hasError={formError.email}
         errorMessage="Wrong email format"
       />
       <PasswordInput
         label="Password"
         value={password}
-        onChange={(e) => {
-          setPassword(e.target.value)
-          if (passwordError)
-            setPasswordError(
-              !isStrongPassword(e.target.value, {
-                minLength: 8,
-                minLowercase: 0,
-                minUppercase: 0,
-                minNumbers: 0,
-                minSymbols: 0,
-                returnScore: false,
-                pointsPerUnique: 1,
-                pointsPerRepeat: 0.5,
-                pointsForContainingLower: 10,
-                pointsForContainingUpper: 10,
-                pointsForContainingNumber: 10,
-                pointsForContainingSymbol: 10,
-              }),
-            )
-        }}
-        onBlur={(e) => {
-          setPasswordError(
-            !isStrongPassword(e.target.value, {
-              minLength: 8,
-              minLowercase: 0,
-              minUppercase: 0,
-              minNumbers: 0,
-              minSymbols: 0,
-              returnScore: false,
-              pointsPerUnique: 1,
-              pointsPerRepeat: 0.5,
-              pointsForContainingLower: 10,
-              pointsForContainingUpper: 10,
-              pointsForContainingNumber: 10,
-              pointsForContainingSymbol: 10,
-            }),
-          )
-        }}
+        onChange={handleChange}
+        onBlur={handleBlur}
         id="password"
-        hasError={passwordError}
+        hasError={formError.password}
         errorMessage="Password should be at least 8 characters long"
       />
-      <button
-        type="submit"
-        className={clsx(
-          'focus-ring focus-within:ring-primary w-full rounded-lg bg-indigo-600 px-5 py-2.5 text-center text-sm font-medium text-white focus-within:ring focus-within:ring-opacity-50 hover:bg-indigo-500 focus:outline-none sm:w-auto',
-          {
-            'cursor-not-allowed opacity-80':
-              emailError ||
-              passwordError ||
-              nameError ||
-              !email.length ||
-              !password.length ||
-              !name.length,
-          },
-        )}
-      >
+      <FormSubmit formIsValid={formIsValid} isSubmitting={isSubmitting}>
         Sign up
-      </button>
+      </FormSubmit>
       <p className="mt-8 font-light text-center">
         Already have an account?
         <Link
