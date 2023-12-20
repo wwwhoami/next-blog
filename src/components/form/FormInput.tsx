@@ -5,6 +5,7 @@ type Props = {
   value?: string | number | readonly string[]
   type?: React.HTMLInputTypeAttribute
   id?: string
+  name?: string
   label?: string
   placeholder?: string
   onChange?: React.ChangeEventHandler<HTMLInputElement>
@@ -18,6 +19,7 @@ const FormInput = ({
   value,
   type,
   id,
+  name,
   label,
   placeholder,
   onChange,
@@ -38,6 +40,7 @@ const FormInput = ({
         onBlur={onBlur}
         type={type}
         id={id}
+        name={name ?? id}
         className={clsx(
           className,
           {

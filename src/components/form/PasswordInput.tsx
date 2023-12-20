@@ -6,6 +6,7 @@ type Props = {
   value?: string | number | readonly string[]
   type?: React.HTMLInputTypeAttribute
   id?: string
+  name?: string
   label?: string
   placeholder?: string
   onChange?: React.ChangeEventHandler<HTMLInputElement>
@@ -18,6 +19,7 @@ type Props = {
 const PasswordInput = ({
   value,
   id,
+  name,
   label,
   placeholder = '************',
   onChange,
@@ -60,6 +62,7 @@ const PasswordInput = ({
             },
           )}
           id={id}
+          name={name ?? id}
         />
         <button
           type="button"
