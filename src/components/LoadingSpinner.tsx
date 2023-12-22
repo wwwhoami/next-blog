@@ -14,11 +14,12 @@ const loadingSpinner = tv({
       primary: 'text-indigo-600',
       white: 'text-white',
       black: 'text-black',
+      inherit: 'text-inherit',
     },
   },
   defaultVariants: {
     size: 'md',
-    color: 'white',
+    color: 'inherit',
   },
 })
 
