@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+import Button from '../Button'
 import LoadingSpinner from '../LoadingSpinner'
 
 type Props = {
@@ -15,18 +15,14 @@ export default function FormSubmit({
   const disabled = !formIsValid || isSubmitting
 
   return (
-    <button
-      type="submit"
+    <Button
       disabled={disabled}
-      className={clsx(
-        `inline-flex items-center focus-ring focus-within:ring-primary w-full justify-center rounded-lg bg-indigo-600 px-5 py-2.5 text-center font-medium text-sm text-white focus-within:ring focus-within:ring-opacity-50 hover:bg-indigo-500 focus:outline-none sm:w-auto`,
-        {
-          'cursor-not-allowed opacity-80': disabled,
-        },
-      )}
+      variant="solid"
+      color="primary"
+      className="w-full sm:w-auto"
     >
-      {isSubmitting && <LoadingSpinner color="white" size="md" />}
+      {isSubmitting && <LoadingSpinner size="md" />}
       {children}
-    </button>
+    </Button>
   )
 }
