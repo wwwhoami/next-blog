@@ -64,6 +64,8 @@ const ProfileEdit = ({}: Props) => {
   })
   const { name, email } = formData
 
+  const formUnchanged = name === user?.name && email === user?.email
+
   // Reinitialize name and email formData states on page refresh
   useEffect(() => {
     setFormData({
@@ -116,7 +118,10 @@ const ProfileEdit = ({}: Props) => {
         errorMessage="Wrong email format"
       />
 
-      <FormSubmit formIsValid={formIsValid} isSubmitting={isSubmitting}>
+      <FormSubmit
+        formIsValid={formIsValid && !formUnchanged}
+        isSubmitting={isSubmitting}
+      >
         Update profile
       </FormSubmit>
     </form>
