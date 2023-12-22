@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 import { tv, type VariantProps } from 'tailwind-variants'
 
 const textarea = tv({
-  base: 'w-full p-2 my-2 overflow-hidden text-3xl border-b-2 border-gray-300 rounded-md resize-none dark:bg-gray-800 dark:border-gray-600 focus:outline-none focus-ring',
+  base: 'w-full p-2 my-2 overflow-hidden text-3xl border-b-2 border-gray-300 rounded-md resize-none dark:bg-gray-800 dark:border-gray-600 focus:outline-none focus-ring-primary',
   variants: {
     size: {
       sm: 'text-sm',

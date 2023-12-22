@@ -26,7 +26,7 @@ const FormInput = ({
   onBlur,
   hasError,
   errorMessage,
-  className = 'border focus-ring rounded-xl focus-within:border-primary focus-within:ring focus-within:ring-primary focus-within:ring-opacity-50 text-sm block w-full p-2.5',
+  className = 'border rounded-xl focus-within:border-primary focus-within:ring focus-within:ring-opacity-50 text-sm block w-full p-2.5',
 }: Props) => {
   return (
     <div className="mb-6">
@@ -44,11 +44,11 @@ const FormInput = ({
         className={clsx(
           className,
           {
-            'dark:text-gray-200 dark:placeholder:text-gray-400 dark:focus-within:ring-opacity-80 dark:border-none dark:bg-slate-700 dark:autofill:bg-slate-700 dark:autofill:text-gray-200':
+            'focus-ring-primary dark:text-gray-200 dark:placeholder:text-gray-400 dark:focus-within:ring-opacity-80 dark:border-none dark:bg-slate-700 dark:autofill:bg-slate-700 dark:autofill:text-gray-200':
               !hasError,
           },
           {
-            'focus-ring-error border dark:border-solid dark:bg-red-950/10 dark:text-gray-200 dark:placeholder-red-400 border-red-500 bg-red-50 text-red-900 placeholder-red-700':
+            'focus-ring-danger border dark:border-solid dark:bg-red-950/10 dark:text-gray-200 dark:placeholder-red-400 border-red-500 bg-red-50 text-red-900 placeholder-red-700':
               hasError,
           },
         )}

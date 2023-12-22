@@ -36,7 +36,7 @@ const PostHeader = ({
             <Link
               href={`/author/${author?.name}`}
               passHref
-              className="relative block w-12 h-12 rounded-full hover-ring focus-ring md:w-14 md:h-14 lg:w-16 lg:h-16"
+              className="relative block w-12 h-12 rounded-full hover-ring-primary focus-ring-primary md:w-14 md:h-14 lg:w-16 lg:h-16"
             >
               <Image
                 src={String(author?.image)}
@@ -48,7 +48,7 @@ const PostHeader = ({
             <div className="flex flex-col">
               <Link
                 href={`/author/${author?.name}`}
-                className="inline-block font-medium rounded-lg focus-ring hover:underline"
+                className="inline-block font-medium rounded-lg focus-ring-primary hover:underline"
               >
                 {author?.name ?? 'Deleted Author'}
               </Link>

@@ -10,7 +10,7 @@ type Props = {}
 const UserProfileTabgroup = ({}: Props) => {
   const tabClassName = ({ selected }: { selected: boolean }) =>
     clsx(
-      `focus-ring w-full rounded-lg py-2.5 text-sm font-medium leading-5 focus:ring-opacity-60`,
+      `focus-ring-primary w-full rounded-lg py-2.5 text-sm font-medium leading-5 focus:ring-opacity-60`,
       selected
         ? 'bg-white shadow dark:bg-slate-600 dark:text-slate-100'
         : 'text-indigo-700 dark:text-indigo-200 dark:hover:bg-white/[0.12] hover:bg-indigo-600/80 hover:text-white',
@@ -30,13 +30,13 @@ const UserProfileTabgroup = ({}: Props) => {
         <Tab.Panels className="mt-2">
           <Tab.Panel
             key="Account"
-            className="flex flex-wrap justify-between w-full max-w-md p-3 focus-ring rounded-xl focus:ring-opacity-60"
+            className="flex flex-wrap justify-between w-full max-w-md p-3 focus-ring-primary rounded-xl focus:ring-opacity-60"
           >
             <ProfileEdit />
           </Tab.Panel>
           <Tab.Panel
             key="Password"
-            className="flex flex-wrap justify-between w-full max-w-md p-3 focus-ring rounded-xl focus:ring-opacity-60"
+            className="flex flex-wrap justify-between w-full max-w-md p-3 focus-ring-primary rounded-xl focus:ring-opacity-60"
           >
             <PasswordChange />
           </Tab.Panel>

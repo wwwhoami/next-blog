@@ -19,7 +19,7 @@ const PostCard = ({
   return (
     <Link
       href={`/blog/${slug}`}
-      className="mt-6 hover-ring focus-ring rounded-xl"
+      className="mt-6 hover-ring-primary focus-ring-primary rounded-xl"
     >
       <object
         className={`w-full h-full cursor-pointer rounded-xl shadow-lg bg-gray-50 dark:bg-gray-800/50`}
@@ -38,7 +38,7 @@ const PostCard = ({
         />
         <div className="px-6 py-3">
           <Link
-            className="inline-flex items-center gap-2 mt-1 rounded-xl focus-ring hover:underline"
+            className="inline-flex items-center gap-2 mt-1 rounded-xl focus-ring-primary hover:underline"
             href={''}
           >
             <Image

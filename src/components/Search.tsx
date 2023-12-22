@@ -109,7 +109,7 @@ const Search = ({ className }: Props) => {
   return (
     <div
       className={clsx(
-        'focus-ring focus-within:border-primary focus-within:ring-primary mx-auto md:ml-5 lg:ml-10 rounded-xl bg-white hover:bg-gray-50 focus-within:bg-gray-50 dark:bg-gray-700/80 dark:hover:bg-gray-800 dark:focus-within:bg-gray-800 focus-within:ring focus-within:ring-opacity-50 dark:focus-within:ring-opacity-80 shadow-md border-indigo-100 border dark:border-none w-72',
+        'focus-ring-primary focus-within:border-primary focus-within:ring-primary mx-auto md:ml-5 lg:ml-10 rounded-xl bg-white hover:bg-gray-50 focus-within:bg-gray-50 dark:bg-gray-700/80 dark:hover:bg-gray-800 dark:focus-within:bg-gray-800 focus-within:ring focus-within:ring-opacity-50 dark:focus-within:ring-opacity-80 shadow-md border-indigo-100 border dark:border-none w-72',
         className,
       )}
     >
@@ -130,7 +130,7 @@ const Search = ({ className }: Props) => {
         {term.length !== 0 ? (
           <button
             type="button"
-            className="inline w-5 h-5 mr-2 rounded-full focus-ring"
+            className="inline w-5 h-5 mr-2 rounded-full focus-ring-primary"
             onClick={handleClearButtonClick}
           >
             <XMarkIcon />

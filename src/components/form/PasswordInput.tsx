@@ -26,7 +26,7 @@ const PasswordInput = ({
   onBlur,
   hasError,
   errorMessage,
-  className = 'flex justify-between w-full text-sm bg-white border rounded-xl focus-within:border-primary focus-within:ring focus-within:ring-primary focus-within:ring-opacity-50 focus:ring-offset-4',
+  className = 'flex justify-between w-full text-sm bg-white border rounded-xl focus-within:border-primary focus-within:ring focus-within:ring-opacity-50',
 }: Props) => {
   const [passwordVisible, setPasswordVisible] = useState(false)
 
@@ -40,8 +40,8 @@ const PasswordInput = ({
           className,
           'dark:focus-within:ring-opacity-80',
           hasError
-            ? 'focus-ring-error border border-red-500 bg-red-50 focus-ring-error dark:border-solid dark:bg-red-950/10 dark:text-gray-200'
-            : 'focus-ring dark:border-none dark:bg-slate-700 dark:text-gray-200 dark:placeholder:text-gray-400 dark:autofill:bg-slate-700 dark:autofill:text-gray-200',
+            ? 'focus-ring-danger border border-red-500 bg-red-50 dark:border-solid dark:bg-red-950/10 dark:text-gray-200'
+            : 'focus-ring-primary dark:border-none dark:bg-slate-700 dark:text-gray-200 dark:placeholder:text-gray-400 dark:autofill:bg-slate-700 dark:autofill:text-gray-200',
         )}
       >
         <input
@@ -69,7 +69,7 @@ const PasswordInput = ({
           onClick={() => {
             setPasswordVisible((prev) => !prev)
           }}
-          className="items-center w-8 h-8 p-0 m-1 text-indigo-500 transition-colors duration-300 transform flexjustify-center focus-ring rounded-xl hover:opacity-80 focus:outline-none focus:ring-2 dark:text-indigo-400"
+          className="items-center w-8 h-8 p-0 m-1 text-indigo-500 transition-colors duration-300 transform flexjustify-center focus-ring-primary rounded-xl hover:opacity-80 focus:outline-none focus:ring-2 dark:text-indigo-400"
         >
           {passwordVisible ? <EyeSlashIcon /> : <EyeIcon />}
         </button>

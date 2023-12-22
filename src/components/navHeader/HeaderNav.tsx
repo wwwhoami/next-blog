@@ -12,7 +12,7 @@ export default function HeaderNav({}: Props) {
   const pathname = usePathname()
   const { user } = useUser()
 
-  const navLinkClass = `px-3 py-2 rounded-lg focus-ring text-gray-700 
+  const navLinkClass = `px-3 py-2 rounded-lg focus-ring-primary text-gray-700 
   hover:bg-gray-200 hover:text-gray-900 dark:hover:text-gray-900 dark:text-gray-100
   focus:bg-gray-200 focus:text-gray-900 dark:focus:text-gray-900`
 

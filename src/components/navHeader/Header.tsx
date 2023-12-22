@@ -15,7 +15,7 @@ const Header = (props: Props) => {
         <Link
           href="/"
           passHref
-          className="ml-3 text-2xl font-light dark:text-white focus-ring rounded-xl"
+          className="ml-3 text-2xl font-light dark:text-white focus-ring-primary rounded-xl"
         >
           <span className="font-semibold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-500">
             Next

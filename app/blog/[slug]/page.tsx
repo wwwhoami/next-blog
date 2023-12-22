@@ -38,7 +38,7 @@ const components = {
   a: (props: any) => (
     <Link
       {...props}
-      className={clsx(props.className, 'rounded-lg focus-ring')}
+      className={clsx(props.className, 'rounded-lg focus-ring-primary')}
     />
   ),
   div: (props: any) =>

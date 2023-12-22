@@ -27,7 +27,7 @@ export default function UserMenu(props: Props) {
   return (
     <div className="ml-3 text-right text-gray-700 rounded-full dark:text-gray-100">
       <Menu as="div" className="relative inline-block text-left">
-        <Menu.Button className="w-10 h-10 align-bottom rounded-full hover-ring focus-ring">
+        <Menu.Button className="w-10 h-10 align-bottom rounded-full hover-ring-primary focus-ring-primary">
           {user?.image ? (
             <Image
               className="object-center rounded-full"
