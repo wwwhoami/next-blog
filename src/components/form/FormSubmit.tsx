@@ -19,7 +19,7 @@ export default function FormSubmit({
       disabled={disabled}
       variant="solid"
       color="primary"
-      className="w-full sm:w-auto"
+      className="w-full mt-3 sm:w-auto"
     >
       {isSubmitting && <LoadingSpinner size="md" />}
       {children}
