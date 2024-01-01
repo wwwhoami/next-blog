@@ -1,6 +1,5 @@
-import { Switch } from '@headlessui/react'
 import clsx from 'clsx'
-import React, { useEffect, useState } from 'react'
+import React, { forwardRef, useEffect, useState } from 'react'
 
 type Props = {
   name: string
@@ -10,45 +9,45 @@ type Props = {
   onCategoryDeselect: (category: string) => void
   available?: boolean
   selected?: boolean
+  tabIndex?: number
 }
 
-const CategorySwitch = ({
-  name,
-  hexColor,
-  onCategorySelect,
-  onCategoryDeselect,
-  available = true,
-  selected = false,
-}: Props) => {
-  const [isChecked, setIsChecked] = useState(false)
+const CategorySwitch = forwardRef<HTMLInputElement, Props>(
+  (
+    {
+      name,
+      hexColor,
+      onCategorySelect,
+      onCategoryDeselect,
+      available = true,
+      selected = false,
+      tabIndex,
+    },
+    ref,
+  ) => {
+    const [isChecked, setIsChecked] = useState(false)
 
-  const handleChange = (checked: boolean) => {
-    if (!available && !isChecked) return
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!available && !isChecked) return
 
-    setIsChecked(checked)
+      setIsChecked(e.target.checked)
 
-    const value = name
-
-    if (checked) {
-      onCategorySelect(value)
-    } else {
-      onCategoryDeselect(value)
+      const value = e.target.value
+      if (e.target.checked) {
+        onCategorySelect(value)
+      } else if (!e.target.checked) {
+        onCategoryDeselect(value)
+      }
     }
-  }
 
-  useEffect(() => {
-    setIsChecked(selected)
-  }, [selected])
+    useEffect(() => {
+      setIsChecked(selected)
+    }, [selected])
 
-  return (
-    <>
-      <Switch
-        checked={isChecked}
-        disabled={!available && !isChecked}
-        value={name}
-        onChange={handleChange}
+    return (
+      <label
         className={clsx(
-          `hover-ring-primary focus-ring-primary relative mb-4 mr-4 h-auto w-auto cursor-pointer rounded-full px-6 py-3 transition`,
+          `focus-within:ring hover-ring-primary focus-ring-primary relative h-auto w-auto cursor-pointer rounded-full px-6 py-3 transition`,
           {
             'bg-black text-white dark:bg-slate-100 dark:text-black': isChecked,
             'bg-slate-100 text-black dark:bg-gray-700 dark:text-white':
@@ -63,10 +62,22 @@ const CategorySwitch = ({
           ['--tw-ring-color' as any]: hexColor,
         }}
       >
+        <input
+          type="checkbox"
+          value={name}
+          checked={isChecked}
+          disabled={!available && !isChecked}
+          className="sr-only"
+          onChange={handleChange}
+          ref={ref}
+          tabIndex={tabIndex}
+        />
         <span>{name}</span>
-      </Switch>
-    </>
-  )
-}
+      </label>
+    )
+  },
+)
+
+CategorySwitch.displayName = 'CategorySwitch'
 
 export default CategorySwitch
