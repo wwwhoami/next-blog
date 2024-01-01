@@ -1,6 +1,6 @@
 import { Switch } from '@headlessui/react'
 import clsx from 'clsx'
-import React, { MutableRefObject, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 type Props = {
   name: string
@@ -21,7 +21,6 @@ const CategorySwitch = ({
   selected = false,
 }: Props) => {
   const [isChecked, setIsChecked] = useState(false)
-  const ref = useRef() as MutableRefObject<HTMLInputElement>
 
   const handleChange = (checked: boolean) => {
     if (!available && !isChecked) return
