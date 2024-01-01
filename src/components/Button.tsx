@@ -9,7 +9,7 @@ type Props = React.DetailedHTMLProps<
   ButtonVariants & {}
 
 const button = tv({
-  base: 'inline-flex items-center justify-center  text-center focus-within:ring focus:outline-none',
+  base: 'inline-flex items-center justify-center text-center focus-within:ring focus:outline-none',
   variants: {
     size: {
       sm: 'text-sm px-3 py-1.5',
