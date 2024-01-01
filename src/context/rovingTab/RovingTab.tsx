@@ -40,6 +40,8 @@ interface RovingTabIndexProviderProps {
   as?: ElementType
   className?: string
   style?: React.CSSProperties
+  orientation?: 'horizontal' | 'vertical'
+  direction?: 'standart' | 'reverse'
 }
 
 /**
@@ -48,6 +50,8 @@ interface RovingTabIndexProviderProps {
  * @param Component - wrapper component to render
  * @param className - className to apply to the wrapper component
  * @param style - style to apply to the wrapper component
+ * @param orientation - the axis to move on
+ * @param direction - the direction to move in
  * @description - provider for the roving tab index context
  * Controls the focus of children based on arrow keys
  */
@@ -56,6 +60,8 @@ const RovingTab = ({
   as: Component = 'div',
   className,
   style,
+  orientation = 'horizontal',
+  direction = 'standart',
 }: RovingTabIndexProviderProps) => {
   const [focusedItemIndex, setFocusedItemIndex] = useState(0)
   const [elementsCount, setElementsCount] = useState(0)
@@ -124,32 +130,81 @@ const RovingTab = ({
    * @description - Handle the keydown event
    */
   const handleKeyDown = (event: KeyboardEvent) => {
+    // If there are no elements, return
+    if (elementsCount === 0) return
+
+    const positiveMoveKey =
+      orientation === 'horizontal'
+        ? direction === 'standart'
+          ? 'ArrowRight'
+          : 'ArrowLeft'
+        : direction === 'standart'
+          ? 'ArrowDown'
+          : 'ArrowUp'
+    const negativeMoveKey =
+      orientation === 'horizontal'
+        ? direction === 'standart'
+          ? 'ArrowLeft'
+          : 'ArrowRight'
+        : direction === 'standart'
+          ? 'ArrowUp'
+          : 'ArrowDown'
+
+    const moveToFirstKey = direction === 'standart' ? 'Home' : 'End'
+    const moveToLastKey = direction === 'standart' ? 'End' : 'Home'
+
+    let newFocusedItemIndex: number
+    let focusMoveDirIsPos: boolean
+
+    // Move to the previous item, or the last item if the index is out of bounds
+    const moveInNegDir = (index: number) =>
+      index > 0 ? index - 1 : elementsCount - 1
+
+    // Move to the next item, or the first item if the index is out of bounds
+    const moveInPosDir = (index: number) =>
+      index < elementsCount - 1 ? index + 1 : 0
+
     switch (event.code) {
-      case 'ArrowUp':
-      case 'ArrowLeft':
+      case negativeMoveKey:
         event.preventDefault()
-        // If the focusedItemIndex is out of bounds, set it to the last item
-        // Otherwise, decrement it
-        setFocusedItemIndex((prev) => (prev > 0 ? prev - 1 : elementsCount - 1))
+        newFocusedItemIndex = moveInNegDir(focusedItemIndex)
+        focusMoveDirIsPos = false
         break
-      case 'ArrowDown':
-      case 'ArrowRight':
+      case positiveMoveKey:
         event.preventDefault()
-        // If the focusedItemIndex is out of bounds, set it to the first item
-        // Otherwise, increment it
-        setFocusedItemIndex((prev) => (prev < elementsCount - 1 ? prev + 1 : 0))
+        newFocusedItemIndex = moveInPosDir(focusedItemIndex)
+        focusMoveDirIsPos = true
         break
-      case 'Home':
+      case moveToFirstKey:
         event.preventDefault()
-        setFocusedItemIndex(0)
+        newFocusedItemIndex = 0
+        focusMoveDirIsPos = true
         break
-      case 'End':
+      case moveToLastKey:
         event.preventDefault()
-        setFocusedItemIndex(elementsCount - 1)
+        newFocusedItemIndex = elementsCount - 1
+        focusMoveDirIsPos = false
         break
       default:
         return
     }
+
+    // If the new focused item is disabled, move in the same direction until
+    // an enabled item is found
+    while (
+      (refs.current.get(newFocusedItemIndex) as HTMLInputElement | null)
+        ?.disabled
+    ) {
+      // if the direction is positive, move in positive direction, else move in negative direction
+      if (focusMoveDirIsPos) {
+        newFocusedItemIndex = moveInPosDir(newFocusedItemIndex)
+      } else {
+        newFocusedItemIndex = moveInNegDir(newFocusedItemIndex)
+      }
+    }
+
+    // Set the new focused item index
+    setFocusedItemIndex(newFocusedItemIndex)
   }
 
   const value = {
