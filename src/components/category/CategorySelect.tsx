@@ -1,5 +1,6 @@
 'use_client'
 
+import RovingTab from '@/context/rovingTab/RovingTab'
 import fetcher from '@/lib/fetcher'
 import { Category } from '@/types/Category'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -95,19 +96,25 @@ const CategorySelect = ({}: Props) => {
       <h2 className="mt-3 mb-6 text-2xl font-medium col-span-full dark:text-slate-200">
         Search posts by topics
       </h2>
-      <div className="flex flex-wrap -mb-4 -mr-4">
+      <RovingTab className="flex flex-wrap gap-x-4 gap-y-2" as="ul">
         {categories?.map((category, index) => (
-          <CategorySwitch
-            key={index}
-            name={category.name}
-            hexColor={category.hexColor}
-            onCategoryDeselect={handleCategoryDeselect}
-            onCategorySelect={handleCategorySelect}
-            available={categoryCombinations?.has(category.name)}
-            selected={selectedCategories.has(category.name)}
-          />
+          <RovingTab.Item key={category.name} as="li" className="py-3">
+            {({ tabIndex, ref }) => (
+              <CategorySwitch
+                key={index}
+                name={category.name}
+                hexColor={category.hexColor}
+                onCategoryDeselect={handleCategoryDeselect}
+                onCategorySelect={handleCategorySelect}
+                available={categoryCombinations?.has(category.name)}
+                selected={selectedCategories.has(category.name)}
+                ref={ref as React.Ref<HTMLInputElement>}
+                tabIndex={tabIndex}
+              />
+            )}
+          </RovingTab.Item>
         ))}
-      </div>
+      </RovingTab>
     </>
   )
 }
