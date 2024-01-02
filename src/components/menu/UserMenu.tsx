@@ -19,25 +19,25 @@ export default function UserMenu(props: Props) {
 
   if (isLoading)
     return (
-      <div className="w-10 h-10 ml-3 align-bottom bg-gray-300 rounded-full animate-pulse dark:bg-gray-700">
-        <UserCircleIcon className="w-10 h-10 text-gray-700 rounded-full dark:text-gray-100 blur-[2px]" />
+      <div className="ml-3 h-10 w-10 animate-pulse rounded-full bg-gray-300 align-bottom dark:bg-gray-700">
+        <UserCircleIcon className="h-10 w-10 rounded-full text-gray-700 blur-[2px] dark:text-gray-100" />
       </div>
     )
 
   return (
-    <div className="ml-3 text-right text-gray-700 rounded-full dark:text-gray-100">
+    <div className="ml-3 rounded-full text-right text-gray-700 dark:text-gray-100">
       <Menu as="div" className="relative inline-block text-left">
-        <Menu.Button className="w-10 h-10 align-bottom rounded-full hover-ring-primary focus-ring-primary">
+        <Menu.Button className="hover-ring-primary focus-ring-primary h-10 w-10 rounded-full align-bottom">
           {user?.image ? (
             <Image
-              className="object-center rounded-full"
+              className="rounded-full object-center"
               src={user.image}
               width={40}
               height={40}
               alt="User avatar"
             />
           ) : (
-            <UserCircleIcon className="w-10 h-10 text-gray-700 rounded-full dark:text-gray-100" />
+            <UserCircleIcon className="h-10 w-10 rounded-full text-gray-700 dark:text-gray-100" />
           )}
         </Menu.Button>
         <Transition
@@ -49,8 +49,8 @@ export default function UserMenu(props: Props) {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg dark:divide-gray-600 dark:bg-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none">
-            <div className="px-1 py-1 ">
+          <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none dark:divide-gray-600 dark:bg-gray-800">
+            <div className="p-1 ">
               <MenuItemLink
                 Icon={PlusCircleIcon}
                 text="Create post"
@@ -64,7 +64,7 @@ export default function UserMenu(props: Props) {
                 scroll={false}
               />
             </div>
-            <div className="px-1 py-1 ">
+            <div className="p-1 ">
               <SignOut />
             </div>
           </Menu.Items>

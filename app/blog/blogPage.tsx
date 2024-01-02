@@ -52,12 +52,12 @@ export default function BlogPage({ fallbackData }: Props) {
       <PageHeading title="Browse posts" />
       <CategorySelect />
       {isEmpty && (
-        <div className="flex flex-col items-center mt-20">
+        <div className="mt-20 flex flex-col items-center">
           <h1 className="my-5 text-6xl">Whoops</h1>
           <h2 className="text-4xl text-gray-400">No posts found :(</h2>
         </div>
       )}
-      <div className="container grid gap-5 mx-auto my-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="container mx-auto my-3 grid gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {posts?.map((post) => <PostCard key={post.id} post={post} />)}
       </div>
       <div ref={ref}></div>

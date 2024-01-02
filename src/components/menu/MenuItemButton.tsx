@@ -14,7 +14,7 @@ const MenuItemButton = ({ Icon, text, onClick }: Props) => {
       {({ active }) => (
         <button
           className={clsx(
-            `group flex w-full items-center rounded-md px-2 py-2 text-sm`,
+            `group flex w-full items-center rounded-md p-2 text-sm`,
             active
               ? 'bg-indigo-500 text-white'
               : 'text-gray-900 dark:text-slate-100',
@@ -22,9 +22,9 @@ const MenuItemButton = ({ Icon, text, onClick }: Props) => {
           onClick={onClick}
         >
           {active ? (
-            <Icon className="w-5 h-5 mr-2" aria-hidden="true" />
+            <Icon className="mr-2 h-5 w-5" aria-hidden="true" />
           ) : (
-            <Icon className="w-5 h-5 mr-2" aria-hidden="true" />
+            <Icon className="mr-2 h-5 w-5" aria-hidden="true" />
           )}
           {text}
         </button>

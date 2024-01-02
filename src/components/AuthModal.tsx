@@ -24,11 +24,11 @@ const AuthModal: FC<Props> = ({ title, children }) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black/10 backdrop-blur-xl backdrop-filter" />
+          <div className="fixed inset-0 bg-black/10 backdrop-blur-xl" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-full p-4 text-center">
+          <div className="flex min-h-full items-center justify-center p-4 text-center">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -38,16 +38,14 @@ const AuthModal: FC<Props> = ({ title, children }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="p-6 overflow-hidden text-left align-middle transition-all transform shadow-xl rounded-2xl bg-slate-50 dark:bg-slate-800">
+              <Dialog.Panel className="overflow-hidden rounded-2xl bg-slate-50 p-6 text-left align-middle shadow-xl transition-all dark:bg-slate-800">
                 <Dialog.Title
                   as="h1"
                   className="mb-6 text-3xl font-semibold leading-6 dark:text-white"
                 >
                   {title}
                 </Dialog.Title>
-                <div className="flex justify-center flex-shrink">
-                  {children}
-                </div>
+                <div className="flex shrink justify-center">{children}</div>
               </Dialog.Panel>
             </Transition.Child>
           </div>

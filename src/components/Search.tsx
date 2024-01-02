@@ -109,7 +109,7 @@ const Search = ({ className }: Props) => {
   return (
     <div
       className={clsx(
-        'focus-ring-primary focus-within:border-primary focus-within:ring-primary mx-auto md:ml-5 lg:ml-10 rounded-xl bg-white hover:bg-gray-50 focus-within:bg-gray-50 dark:bg-gray-700/80 dark:hover:bg-gray-800 dark:focus-within:bg-gray-800 focus-within:ring focus-within:ring-opacity-50 dark:focus-within:ring-opacity-80 shadow-md border-indigo-100 border dark:border-none w-72',
+        'focus-ring-primary focus-within:ring-primary mx-auto w-72 rounded-xl border border-indigo-100 bg-white shadow-md focus-within:bg-gray-50 focus-within:ring focus-within:ring-indigo-600/50 hover:bg-gray-50 dark:border-none dark:bg-gray-700/80 dark:focus-within:bg-gray-800 dark:focus-within:ring-indigo-600/80 dark:hover:bg-gray-800 md:ml-5 lg:ml-10',
         className,
       )}
     >
@@ -117,9 +117,9 @@ const Search = ({ className }: Props) => {
         onSubmit={handleFormSubmit}
         className="flex flex-wrap items-center justify-between"
       >
-        <MagnifyingGlassIcon className="w-5 h-5 mx-2" />
+        <MagnifyingGlassIcon className="mx-2 h-5 w-5" />
         <input
-          className="flex-1 h-8 my-1 text-gray-700 placeholder-gray-400 bg-transparent dark:text-gray-200 focus:outline-none"
+          className="my-1 h-8 flex-1 bg-transparent text-gray-700 placeholder:text-gray-400 focus:outline-none dark:text-gray-200"
           type="text"
           placeholder="Type to find posts..."
           value={term}
@@ -130,13 +130,13 @@ const Search = ({ className }: Props) => {
         {term.length !== 0 ? (
           <button
             type="button"
-            className="inline w-5 h-5 mr-2 rounded-full focus-ring-primary"
+            className="focus-ring-primary mr-2 inline h-5 w-5 rounded-full"
             onClick={handleClearButtonClick}
           >
             <XMarkIcon />
           </button>
         ) : (
-          <kbd className="inline mx-2 font-sans text-sm font-semibold text-gray-500 dark:text-gray-400">
+          <kbd className="mx-2 inline font-sans text-sm font-semibold text-gray-500 dark:text-gray-400">
             {isMacOsNavigator ? (
               <abbr
                 title="Command"

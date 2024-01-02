@@ -93,7 +93,7 @@ const CategorySelect = ({}: Props) => {
 
   return (
     <>
-      <h2 className="mt-3 mb-6 text-2xl font-medium col-span-full dark:text-slate-200">
+      <h2 className="col-span-full mb-6 mt-3 text-2xl font-medium dark:text-slate-200">
         Search posts by topics
       </h2>
       <RovingTab className="flex flex-wrap gap-x-4 gap-y-2" as="ul">

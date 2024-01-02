@@ -27,7 +27,7 @@ export default function CategoryInput({}: Props) {
   )
 
   return (
-    <div className="flex flex-wrap flex-shrink w-full gap-2">
+    <div className="flex w-full shrink flex-wrap gap-2">
       <CategoryList
         categories={selectedCategories}
         setCategories={setSelectedCategories}

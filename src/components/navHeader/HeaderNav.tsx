@@ -13,7 +13,7 @@ export default function HeaderNav({}: Props) {
   const { user } = useUser()
 
   return (
-    <nav className="flex flex-wrap items-center justify-end mr-3 text-base gap-x-4 md:ml-auto">
+    <nav className="mr-3 flex flex-wrap items-center justify-end gap-x-4 text-base md:ml-auto">
       <NavLink href="/blog">Blog</NavLink>
       <NavLink href="/about">About</NavLink>
       <ThemeSwitch />

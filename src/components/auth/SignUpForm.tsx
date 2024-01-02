@@ -108,13 +108,13 @@ const SignUpForm = ({}: Props) => {
       <FormSubmit formIsValid={formIsValid} isSubmitting={isSubmitting}>
         Sign up
       </FormSubmit>
-      <p className="mt-8 font-light text-center">
+      <p className="mt-8 text-center font-light">
         Already have an account?
         <Link
           href="/signIn"
           replace
           scroll={false}
-          className="mx-2 text-indigo-600 dark:text-indigo-400 focus-ring-primary rounded-xl hover:underline"
+          className="focus-ring-primary mx-2 rounded-xl text-indigo-600 hover:underline dark:text-indigo-400"
         >
           Sign in
         </Link>

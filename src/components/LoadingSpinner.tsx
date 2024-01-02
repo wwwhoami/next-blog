@@ -4,11 +4,11 @@ const loadingSpinner = tv({
   base: 'animate-spin',
   variants: {
     size: {
-      xs: 'w-3 h-3 mr-2 -ml-1',
-      sm: 'w-4 h-4 mr-2 -ml-1',
-      md: 'w-5 h-5 mr-3 -ml-1',
-      lg: 'w-6 h-6 mr-3 -ml-1',
-      xl: 'w-7 h-7 mr-4 -ml-1',
+      xs: '-ml-1 mr-2 h-3 w-3',
+      sm: '-ml-1 mr-2 h-4 w-4',
+      md: '-ml-1 mr-3 h-5 w-5',
+      lg: '-ml-1 mr-3 h-6 w-6',
+      xl: '-ml-1 mr-4 h-7 w-7',
     },
     color: {
       primary: 'text-indigo-600',

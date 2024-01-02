@@ -5,7 +5,7 @@ type Props = {
 export default function FormErrorResponse({ error }: Props) {
   return (
     <div
-      className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-900/60 dark:text-red-100"
+      className="mb-4 rounded-lg bg-red-100 p-4 text-sm text-red-700 dark:bg-red-900/60 dark:text-red-100"
       role="alert"
     >
       {Array.isArray(error) ? (

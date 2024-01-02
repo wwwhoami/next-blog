@@ -28,7 +28,7 @@ const inter = Inter({
 const RootLayout: FC<RootLayoutProps> = ({ children, modal }) => {
   return (
     <html lang="en" className={`${inter.className}`} suppressHydrationWarning>
-      <body className="bg-white text-black dark:text-gray-300 dark:bg-gray-900/[0.97]">
+      <body className="bg-white text-black dark:bg-gray-900/[0.97] dark:text-gray-300">
         <UserProvider>
           <ThemeProvider>
             <ToastProvider>

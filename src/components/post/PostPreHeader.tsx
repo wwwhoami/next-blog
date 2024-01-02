@@ -20,14 +20,14 @@ export default function PostPreHeader({ dataLanguage, rawText }: Props) {
     toast.success(
       <p>
         Copied to clipboard
-        <ClipboardDocumentIcon className="inline-block w-5 h-5 ml-2" />
+        <ClipboardDocumentIcon className="ml-2 inline-block h-5 w-5" />
       </p>,
     )
 
     setTimeout(() => setCopied(false), 5000)
   }
   return (
-    <div className="sticky left-0 flex items-center justify-between w-full pb-3 text-sm text-gray-600 dark:text-gray-300">
+    <div className="sticky left-0 flex w-full items-center justify-between pb-3 text-sm text-gray-600 dark:text-gray-300">
       <span>{dataLanguage}</span>
       <Button
         color="secondary"

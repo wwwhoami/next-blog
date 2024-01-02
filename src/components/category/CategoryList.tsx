@@ -22,7 +22,7 @@ export default function CategoryList({ categories, setCategories }: Props) {
               {category.name}
               <button
                 type="button"
-                className="inline w-6 h-6 ml-3 rounded-full hover:bg-red-500 focus:bg-red-500 focus:outline-none"
+                className="ml-3 inline h-6 w-6 rounded-full hover:bg-red-500 focus:bg-red-500 focus:outline-none"
                 ref={ref as React.RefObject<HTMLButtonElement>}
                 onClick={() => {
                   onRemove(index)

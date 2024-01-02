@@ -32,13 +32,13 @@ const PasswordInput = ({
 
   return (
     <div className="mb-6">
-      <label htmlFor={id} className="block mb-2 text-sm font-medium">
+      <label htmlFor={id} className="mb-2 block text-sm font-medium">
         {label}
       </label>
       <div
         className={clsx(
           className,
-          'dark:focus-within:ring-opacity-80',
+          'dark:focus-within:ring-indigo-600/80',
           hasError
             ? 'focus-ring-danger border border-red-500 bg-red-50 dark:border-solid dark:bg-red-950/10 dark:text-gray-200'
             : 'focus-ring-primary dark:border-none dark:bg-slate-700 dark:text-gray-200 dark:placeholder:text-gray-400 dark:autofill:bg-slate-700 dark:autofill:text-gray-200',
@@ -53,11 +53,11 @@ const PasswordInput = ({
           className={clsx(
             'w-full rounded-xl p-2.5 outline-none',
             {
-              'dark:bg-red-950/10 dark:text-gray-200 dark:placeholder-red-400 text-red-900 placeholder-red-700':
+              'text-red-900 placeholder:text-red-700 dark:bg-red-950/10 dark:text-gray-200 dark:placeholder:text-red-400':
                 hasError,
             },
             {
-              'dark:border-none dark:bg-slate-700 dark:text-gray-200 dark:placeholder:text-gray-400 dark:focus-within:ring-opacity-80':
+              'dark:border-none dark:bg-slate-700 dark:text-gray-200 dark:placeholder:text-gray-400 dark:focus-within:ring-indigo-600/80':
                 !hasError,
             },
           )}
@@ -69,7 +69,7 @@ const PasswordInput = ({
           onClick={() => {
             setPasswordVisible((prev) => !prev)
           }}
-          className="items-center w-8 h-8 p-0 m-1 text-indigo-500 transition-colors duration-300 transform flexjustify-center focus-ring-primary rounded-xl hover:opacity-80 focus:outline-none focus:ring-2 dark:text-indigo-400"
+          className="focus-ring-primary m-1 flex h-8 w-8 items-center justify-center rounded-xl p-0 text-indigo-500 transition-colors duration-300 hover:opacity-80 focus:outline-none focus:ring-2 dark:text-indigo-400"
         >
           {passwordVisible ? <EyeSlashIcon /> : <EyeIcon />}
         </button>

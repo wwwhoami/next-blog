@@ -30,7 +30,7 @@ const FormInput = ({
 }: Props) => {
   return (
     <div className="mb-6">
-      <label htmlFor={id} className="block mb-2 text-sm font-medium">
+      <label htmlFor={id} className="mb-2 block text-sm font-medium">
         {label}
       </label>
       <input
@@ -44,11 +44,11 @@ const FormInput = ({
         className={clsx(
           className,
           {
-            'focus-ring-primary dark:text-gray-200 dark:placeholder:text-gray-400 dark:focus-within:ring-opacity-80 dark:border-none dark:bg-slate-700 dark:autofill:bg-slate-700 dark:autofill:text-gray-200':
+            'focus-ring-primary dark:border-none dark:bg-slate-700 dark:text-gray-200 dark:placeholder:text-gray-400 dark:autofill:bg-slate-700 dark:autofill:text-gray-200 dark:focus-within:ring-indigo-600/80':
               !hasError,
           },
           {
-            'focus-ring-danger border dark:border-solid dark:bg-red-950/10 dark:text-gray-200 dark:placeholder-red-400 border-red-500 bg-red-50 text-red-900 placeholder-red-700':
+            'focus-ring-danger border border-red-500 bg-red-50 text-red-900 placeholder:text-red-700 dark:border-solid dark:bg-red-950/10 dark:text-gray-200 dark:placeholder:text-red-400':
               hasError,
           },
         )}

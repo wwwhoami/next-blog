@@ -30,25 +30,25 @@ const PostHeader = ({
           className="object-cover"
         />
       </span>
-      <div className="sm:w-[65ch] w-full px-4 mx-auto my-8 text-base md:px-0 md:text-lg box-border">
-        <div className="flex flex-col gap-5 md:items-center md:flex-row">
+      <div className="mx-auto my-8 box-border w-full px-4 text-base sm:w-[65ch] md:px-0 md:text-lg">
+        <div className="flex flex-col gap-5 md:flex-row md:items-center">
           <div className="flex items-center gap-5">
             <Link
               href={`/author/${author?.name}`}
               passHref
-              className="relative block w-12 h-12 rounded-full hover-ring-primary focus-ring-primary md:w-14 md:h-14 lg:w-16 lg:h-16"
+              className="hover-ring-primary focus-ring-primary relative block h-12 w-12 rounded-full md:h-14 md:w-14 lg:h-16 lg:w-16"
             >
               <Image
                 src={String(author?.image)}
                 alt="Author image"
-                className="object-cover rounded-full hover:cursor-pointer"
+                className="rounded-full object-cover hover:cursor-pointer"
                 fill={true}
               />
             </Link>
             <div className="flex flex-col">
               <Link
                 href={`/author/${author?.name}`}
-                className="inline-block font-medium rounded-lg focus-ring-primary hover:underline"
+                className="focus-ring-primary inline-block rounded-lg font-medium hover:underline"
               >
                 {author?.name ?? 'Deleted Author'}
               </Link>
@@ -68,10 +68,10 @@ const PostHeader = ({
             ))}
           </div>
         </div>
-        <h1 className="mt-5 mb-4 text-3xl font-bold sm:mt-10 md:text-4xl md:mb-7 dark:text-white">
+        <h1 className="mb-4 mt-5 text-3xl font-bold dark:text-white sm:mt-10 md:mb-7 md:text-4xl">
           {title}
         </h1>
-        <p className="text-base font-medium text-gray-900 md:text-lg dark:text-gray-200">
+        <p className="text-base font-medium text-gray-900 dark:text-gray-200 md:text-lg">
           {excerpt}
         </p>
       </div>
