@@ -1,7 +1,7 @@
 {
   "name": "next-blog",
   "private": true,
-  "packageManager": "yarn@4.0.2",
+  "packageManager": "pnpm@8.14.0+sha256.9cebf61abd83f68177b29484da72da9751390eaad46dfc3072d266bfbb1ba7bf",
   "scripts": {
     "dev": "next dev -p 8080",
     "build": "next build",
@@ -51,12 +51,8 @@
     "postcss": "^8.4.31",
     "prettier": "3.1.1",
     "prettier-plugin-organize-imports": "^3.2.4",
+    "prettier-plugin-tailwindcss": "^0.5.10",
     "tailwindcss": "^3.3.5",
     "typescript": "5.2.2"
-  },
-  "dependenciesMeta": {
-    "prettier-plugin-organize-imports@3.2.4": {
-      "unplugged": true
-    }
   }
 }

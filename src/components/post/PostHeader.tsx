@@ -68,10 +68,10 @@ const PostHeader = ({
             ))}
           </div>
         </div>
-        <h1 className="mb-4 mt-5 text-3xl font-bold dark:text-white sm:mt-10 md:mb-7 md:text-4xl">
+        <h1 className="mb-4 mt-5 text-3xl font-bold sm:mt-10 md:mb-7 md:text-4xl dark:text-white">
           {title}
         </h1>
-        <p className="text-base font-medium text-gray-900 dark:text-gray-200 md:text-lg">
+        <p className="text-base font-medium text-gray-900 md:text-lg dark:text-gray-200">
           {excerpt}
         </p>
       </div>

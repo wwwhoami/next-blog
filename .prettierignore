@@ -1,6 +1,5 @@
-# build
-# coverage
-# .vscode
-# node_modules
-# .yarn
-# .next
+build
+coverage
+.vscode
+node_modules
+.next

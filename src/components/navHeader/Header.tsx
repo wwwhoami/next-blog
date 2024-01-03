@@ -10,7 +10,7 @@ type Props = {}
 
 const Header = (props: Props) => {
   return (
-    <header className="supports-backdrop-blur:bg-white/95 sticky top-0 z-20 w-full bg-gray-50/60 shadow backdrop-blur dark:border-gray-50/[0.06] dark:bg-gray-900/80 lg:px-2">
+    <header className="supports-backdrop-blur:bg-white/95 sticky top-0 z-20 w-full bg-gray-50/60 shadow backdrop-blur lg:px-2 dark:border-gray-50/[0.06] dark:bg-gray-900/80">
       <div className="mx-auto flex max-w-screen-2xl flex-col flex-wrap items-center md:h-16 md:flex-row">
         <Link
           href="/"

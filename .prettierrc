@@ -1,0 +1,14 @@
+{
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "organizeImportsSkipDestructiveCodeActions": true,
+  "tailwindFunctions": [
+    "clsx",
+    "tv"
+  ],
+  "plugins": [
+    "prettier-plugin-organize-imports",
+    "prettier-plugin-tailwindcss"
+  ]
+}

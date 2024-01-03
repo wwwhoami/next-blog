@@ -109,7 +109,7 @@ const Search = ({ className }: Props) => {
   return (
     <div
       className={clsx(
-        'focus-ring-primary focus-within:ring-primary mx-auto w-72 rounded-xl border border-indigo-100 bg-white shadow-md focus-within:bg-gray-50 focus-within:ring focus-within:ring-indigo-600/50 hover:bg-gray-50 dark:border-none dark:bg-gray-700/80 dark:focus-within:bg-gray-800 dark:focus-within:ring-indigo-600/80 dark:hover:bg-gray-800 md:ml-5 lg:ml-10',
+        'focus-ring-primary focus-within:ring-primary mx-auto w-72 rounded-xl border border-indigo-100 bg-white shadow-md focus-within:bg-gray-50 focus-within:ring focus-within:ring-indigo-600/50 hover:bg-gray-50 md:ml-5 lg:ml-10 dark:border-none dark:bg-gray-700/80 dark:focus-within:bg-gray-800 dark:focus-within:ring-indigo-600/80 dark:hover:bg-gray-800',
         className,
       )}
     >
