@@ -109,7 +109,7 @@ const Search = ({ className }: Props) => {
   return (
     <div
       className={clsx(
-        'focus-ring-primary focus-within:ring-primary mx-auto w-72 rounded-xl border border-indigo-100 bg-white shadow-md focus-within:bg-gray-50 focus-within:ring focus-within:ring-indigo-600/50 hover:bg-gray-50 md:ml-5 lg:ml-10 dark:border-none dark:bg-gray-700/80 dark:focus-within:bg-gray-800 dark:focus-within:ring-indigo-600/80 dark:hover:bg-gray-800',
+        'focus-ring-primary focus-within:ring-primary mx-auto w-72 rounded-xl border border-indigo-100 bg-white shadow-md focus-within:bg-gray-50 focus-within:ring focus-within:ring-indigo-600/50 hover:bg-gray-50 dark:border-none dark:bg-gray-700/80 dark:focus-within:bg-gray-800 dark:focus-within:ring-indigo-600/80 dark:hover:bg-gray-800 md:ml-5 lg:ml-10',
         className,
       )}
     >
@@ -117,7 +117,7 @@ const Search = ({ className }: Props) => {
         onSubmit={handleFormSubmit}
         className="flex flex-wrap items-center justify-between"
       >
-        <MagnifyingGlassIcon className="mx-2 h-5 w-5" />
+        <MagnifyingGlassIcon className="mx-2 size-5" />
         <input
           className="my-1 h-8 flex-1 bg-transparent text-gray-700 placeholder:text-gray-400 focus:outline-none dark:text-gray-200"
           type="text"
@@ -130,7 +130,7 @@ const Search = ({ className }: Props) => {
         {term.length !== 0 ? (
           <button
             type="button"
-            className="focus-ring-primary mr-2 inline h-5 w-5 rounded-full"
+            className="focus-ring-primary mr-2 inline size-5 rounded-full"
             onClick={handleClearButtonClick}
           >
             <XMarkIcon />

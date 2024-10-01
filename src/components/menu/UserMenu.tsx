@@ -19,15 +19,15 @@ export default function UserMenu(props: Props) {
 
   if (isLoading)
     return (
-      <div className="ml-3 h-10 w-10 animate-pulse rounded-full bg-gray-300 align-bottom dark:bg-gray-700">
-        <UserCircleIcon className="h-10 w-10 rounded-full text-gray-700 blur-[2px] dark:text-gray-100" />
+      <div className="ml-3 size-10 animate-pulse rounded-full bg-gray-300 align-bottom dark:bg-gray-700">
+        <UserCircleIcon className="size-10 rounded-full text-gray-700 blur-[2px] dark:text-gray-100" />
       </div>
     )
 
   return (
     <div className="ml-3 rounded-full text-right text-gray-700 dark:text-gray-100">
       <Menu as="div" className="relative inline-block text-left">
-        <Menu.Button className="hover-ring-primary focus-ring-primary h-10 w-10 rounded-full align-bottom">
+        <Menu.Button className="hover-ring-primary focus-ring-primary size-10 rounded-full align-bottom">
           {user?.image ? (
             <Image
               className="rounded-full object-center"
@@ -37,7 +37,7 @@ export default function UserMenu(props: Props) {
               alt="User avatar"
             />
           ) : (
-            <UserCircleIcon className="h-10 w-10 rounded-full text-gray-700 dark:text-gray-100" />
+            <UserCircleIcon className="size-10 rounded-full text-gray-700 dark:text-gray-100" />
           )}
         </Menu.Button>
         <Transition

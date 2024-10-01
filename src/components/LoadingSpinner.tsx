@@ -1,14 +1,14 @@
 import { VariantProps, tv } from 'tailwind-variants'
 
 const loadingSpinner = tv({
-  base: 'animate-spin',
+  base: 'inline-block animate-spin',
   variants: {
     size: {
-      xs: '-ml-1 mr-2 h-3 w-3',
-      sm: '-ml-1 mr-2 h-4 w-4',
-      md: '-ml-1 mr-3 h-5 w-5',
-      lg: '-ml-1 mr-3 h-6 w-6',
-      xl: '-ml-1 mr-4 h-7 w-7',
+      xs: '-ml-1 mr-2 size-3',
+      sm: '-ml-1 mr-2 size-4',
+      md: '-ml-1 mr-3 size-5',
+      lg: '-ml-1 mr-3 size-6',
+      xl: '-ml-1 mr-4 size-7',
     },
     color: {
       primary: 'text-indigo-600',

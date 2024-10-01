@@ -20,7 +20,7 @@ export default function PostPreHeader({ dataLanguage, rawText }: Props) {
     toast.success(
       <p>
         Copied to clipboard
-        <ClipboardDocumentIcon className="ml-2 inline-block h-5 w-5" />
+        <ClipboardDocumentIcon className="ml-2 inline-block size-5" />
       </p>,
     )
 

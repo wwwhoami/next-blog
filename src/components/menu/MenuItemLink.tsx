@@ -27,9 +27,9 @@ const MenuItemLink = ({ Icon, text, href, scroll }: Props) => {
           scroll={scroll}
         >
           {active ? (
-            <Icon className="mr-2 h-5 w-5" aria-hidden="true" />
+            <Icon className="mr-2 size-5" aria-hidden="true" />
           ) : (
-            <Icon className="mr-2 h-5 w-5" aria-hidden="true" />
+            <Icon className="mr-2 size-5" aria-hidden="true" />
           )}
           {text}
         </Link>

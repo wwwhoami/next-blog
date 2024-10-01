@@ -8,12 +8,11 @@ const round = (num) =>
 const rem = (px) => `${round(px / 16)}rem`
 const em = (px, base) => `${round(px / base)}em`
 
-
 module.exports = {
   content: [
     // "./pages/**/*.{js,ts,jsx,tsx}",
-    "./app/**/*.{js,ts,jsx,tsx}",
-    "./src/components/**/*.{js,ts,jsx,tsx}",
+    './app/**/*.{js,ts,jsx,tsx}',
+    './src/components/**/*.{js,ts,jsx,tsx}',
   ],
   darkMode: 'class',
   theme: {
@@ -41,11 +40,9 @@ module.exports = {
               scrollMarginTop: '5rem',
             },
           },
-        }
-      })
+        },
+      }),
     },
   },
-  plugins: [
-    require('@tailwindcss/typography'),
-  ],
+  plugins: [require('@tailwindcss/typography')],
 }

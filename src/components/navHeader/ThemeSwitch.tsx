@@ -24,14 +24,14 @@ export default function ThemeSwitch() {
       <span className="sr-only">Enable dark color theme</span>
       <span
         className={clsx(
-          'inline-block h-5 w-5 rounded-full bg-gray-50 transition',
+          'inline-block size-5 rounded-full bg-gray-50 transition',
           isDarkTheme ? 'translate-x-5' : 'translate-x-0',
         )}
       >
         {isDarkTheme ? (
-          <MoonIcon className="h-5 w-5 text-gray-700/80" aria-hidden="true" />
+          <MoonIcon className="size-5 text-gray-700/80" aria-hidden="true" />
         ) : (
-          <SunIcon className="h-5 w-5 text-indigo-600" aria-hidden="true" />
+          <SunIcon className="size-5 text-indigo-600" aria-hidden="true" />
         )}
       </span>
     </Switch>

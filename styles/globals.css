@@ -4,11 +4,11 @@
 
 @layer utilities {
   .hover-ring {
-    @apply dark:ring-offset-slate-900 hover:ring-2 hover:ring-offset-4 transition-all duration-300 ease-in-out;
+    @apply transition-all duration-300 ease-in-out hover:ring-2 hover:ring-offset-4 dark:ring-offset-slate-900;
   }
 
   .focus-ring {
-    @apply dark:ring-offset-slate-900 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-offset-2 transition-all duration-300 ease-in-out;
+    @apply ring-offset-2 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 dark:ring-offset-slate-900;
   }
 
   .ring-primary {
@@ -64,15 +64,15 @@
   .article {
     display: grid;
     grid-template-columns: 1fr min(65ch, calc(100% - 2rem)) 1fr;
-    @apply w-full max-w-full gap-x-4 mt-2 prose prose-base md:prose-lg md:px-0 dark:prose-invert prose-a:text-indigo-600 dark:prose-a:text-indigo-400 prose-a:no-underline hover:prose-a:underline;
+    @apply prose prose-base mt-2 w-full max-w-full gap-x-4 dark:prose-invert md:prose-lg prose-a:text-indigo-600 prose-a:no-underline hover:prose-a:underline dark:prose-a:text-indigo-400 md:px-0;
   }
 
   .article > * {
-    @apply col-start-2 col-span-1;
+    @apply col-span-1 col-start-2;
   }
 
   .article pre {
-    @apply col-span-full lg:col-start-2 lg:col-span-1 focus-ring-primary;
+    @apply focus-ring-primary col-span-full lg:col-span-1 lg:col-start-2;
   }
 
   article > pre > code {
