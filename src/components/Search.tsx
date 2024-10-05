@@ -17,55 +17,85 @@ type Props = {
   className?: string
 }
 
+/**
+ * @description The debounce wait time for the search query.
+ */
+const queryDebounceWait = 500
+
 const Search = ({ className }: Props) => {
   const router = useRouter()
   const pathname = usePathname()
   const query = useSearchParams()
+
   const [term, setTerm] = useState(query.get('searchQuery') ?? '')
-  const termNotLoadedFromQuery = useRef(true)
+
+  /**
+   * @description This ref prevents the search term from being loaded from the query
+   * after the component has been mounted and the search term has been set from the query.
+   */
+  const termLoadedFromQuery = useRef(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
   const isMacOsNavigator = navigator.platform.indexOf('Mac') === 0
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
     if (pathname !== '/blog') router.push(`/blog?searchQuery=${term.trim()}`)
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTerm(e.target.value)
+
     if (pathname === '/blog') debounceSetSearchQuery(e.target.value)
+  }
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Escape') {
+      e.preventDefault()
+
+      setTerm('')
+      inputRef.current?.blur()
+
+      if (pathname === '/blog') debounceSetSearchQuery('')
+    }
   }
 
   const handleClearButtonClick = () => {
     setTerm('')
     inputRef.current?.focus()
+
     if (pathname === '/blog') debounceSetSearchQuery('')
   }
 
   const setQueryParam = useCallback(
     (searchTerm: string) => {
-      const queryToSet = new URLSearchParams()
+      const searchParams = new URLSearchParams()
 
-      if (!searchTerm) queryToSet.delete('searchQuery')
-      else queryToSet.set('searchQuery', searchTerm.trim())
+      if (!searchTerm) searchParams.delete('searchQuery')
+      else
+        searchParams.set('searchQuery', searchTerm.replace(/\s+/g, ' ').trim())
 
-      router.push(`/blog?${queryToSet.toString()}`)
+      router.push(`/blog?${searchParams.toString()}`)
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [query],
   )
 
   const debounceSetSearchQuery = useMemo(
-    () => debounce(setQueryParam, 500),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [query],
+    () => debounce(setQueryParam, queryDebounceWait),
+    [setQueryParam],
   )
 
+  /**
+   * @description This effect sets the search term from the query when the component is mounted.
+   * It also prevents the search term from being loaded from the query after the component has been mounted
+   * and the search term has been set from the query.
+   */
   useEffect(() => {
-    if (query.get('searchQuery') && termNotLoadedFromQuery) {
+    if (query.get('searchQuery') && !termLoadedFromQuery.current) {
       setTerm(query.get('searchQuery') || '')
-      termNotLoadedFromQuery.current = false
+      termLoadedFromQuery.current = true
     }
 
     return () => {
@@ -73,6 +103,9 @@ const Search = ({ className }: Props) => {
     }
   }, [debounceSetSearchQuery, query])
 
+  /**
+   * @description This effect focuses the input when the user presses the keyboard shortcut.
+   */
   useEffect(() => {
     const handleKeyDownMac = (e: KeyboardEvent) => {
       if (e.key === 'k' && e.metaKey) {
@@ -97,14 +130,6 @@ const Search = ({ className }: Props) => {
       window.removeEventListener('keydown', handleKeyDown)
     }
   }, [])
-
-  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Escape') {
-      e.preventDefault()
-      setTerm('')
-      inputRef.current?.blur()
-    }
-  }
 
   return (
     <div
