@@ -45,14 +45,13 @@ interface RovingTabIndexProviderProps {
 }
 
 /**
- *
  * @param children - children to render
  * @param Component - wrapper component to render
  * @param className - className to apply to the wrapper component
  * @param style - style to apply to the wrapper component
  * @param orientation - the axis to move on
  * @param direction - the direction to move in
- * @description - provider for the roving tab index context
+ * @description Provider for the roving tab index context
  * Controls the focus of children based on arrow keys
  */
 const RovingTab = ({
@@ -68,6 +67,11 @@ const RovingTab = ({
 
   const refs = useRef<Map<number, HTMLElement | null>>(new Map())
   const parentRef = useRef<HTMLElement>(null)
+
+  const focusedItemDisabled = (
+    refs.current.get(focusedItemIndex) as HTMLInputElement | null
+  )?.disabled
+  console.log(focusedItemDisabled)
 
   /**
    *
@@ -123,6 +127,39 @@ const RovingTab = ({
       setFocusedItemIndex(elementsCount - 1)
     }
   }, [elementsCount, focusedItemIndex])
+
+  /**
+   * @description - Update the focused item index based on the focused item
+   * element being disabled or not existing anymore (due to dynamic removal)
+   * If the focused item is disabled or doesn't exist anymore, move in the same direction
+   * till an enabled item is found or if all items are disabled, return
+   */
+  useEffect(() => {
+    //  If there are no elements or focused item is enabled, return
+    if (elementsCount === 0 || !focusedItemDisabled) return
+
+    let newFocusedItemIndex = 0
+    let newFocusedItem = refs.current.get(
+      newFocusedItemIndex,
+    ) as HTMLInputElement | null
+
+    // If the new focused item is disabled or doesn't exist anymore,
+    // move in the same direction till an enabled item is found
+    while (newFocusedItem == null || newFocusedItem?.disabled) {
+      newFocusedItemIndex += 1
+      newFocusedItem = refs.current.get(
+        newFocusedItemIndex,
+      ) as HTMLInputElement | null
+
+      // If all items are disabled, return
+      if (newFocusedItemIndex >= elementsCount) {
+        return
+      }
+    }
+
+    // Set the new focused item index
+    setFocusedItemIndex(newFocusedItemIndex)
+  }, [elementsCount, focusedItemDisabled])
 
   /**
    *
@@ -189,18 +226,23 @@ const RovingTab = ({
         return
     }
 
-    // If the new focused item is disabled, move in the same direction until
-    // an enabled item is found
-    while (
-      (refs.current.get(newFocusedItemIndex) as HTMLInputElement | null)
-        ?.disabled
-    ) {
+    let focusedItem = refs.current.get(
+      newFocusedItemIndex,
+    ) as HTMLInputElement | null
+
+    // If the new focused item is disabled or doesn't exist anymore,
+    // move in the same direction till an enabled item is found
+    while (focusedItem == null || focusedItem?.disabled) {
       // if the direction is positive, move in positive direction, else move in negative direction
       if (focusMoveDirIsPos) {
         newFocusedItemIndex = moveInPosDir(newFocusedItemIndex)
       } else {
         newFocusedItemIndex = moveInNegDir(newFocusedItemIndex)
       }
+
+      focusedItem = refs.current.get(
+        newFocusedItemIndex,
+      ) as HTMLInputElement | null
     }
 
     // Set the new focused item index
