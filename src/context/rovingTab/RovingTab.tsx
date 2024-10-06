@@ -71,7 +71,6 @@ const RovingTab = ({
   const focusedItemDisabled = (
     refs.current.get(focusedItemIndex) as HTMLInputElement | null
   )?.disabled
-  console.log(focusedItemDisabled)
 
   /**
    *
@@ -152,9 +151,7 @@ const RovingTab = ({
       ) as HTMLInputElement | null
 
       // If all items are disabled, return
-      if (newFocusedItemIndex >= elementsCount) {
-        return
-      }
+      if (newFocusedItemIndex >= elementsCount) return
     }
 
     // Set the new focused item index
