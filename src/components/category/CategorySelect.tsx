@@ -4,7 +4,7 @@ import RovingTab from '@/context/rovingTab/RovingTab'
 import fetcher from '@/lib/fetcher'
 import { Category } from '@/types/Category'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import useSWR from 'swr'
 import CategorySwitch from './CategorySwitch'
 
@@ -37,6 +37,12 @@ const CategorySelect = ({}: Props) => {
   const router = useRouter()
   const query = useSearchParams()
 
+  /** @description
+   * Ref of previously selected categories.
+   * Used to restore the selected categories intersecting with the category combinations.
+   */
+  const prevSelectedCategories = useRef<Array<string>>(new Array())
+
   const selectedCategories = useMemo(
     () => new Set(query.get('category')?.split(' ')),
     [query],
@@ -67,29 +73,77 @@ const CategorySelect = ({}: Props) => {
     },
   )
 
-  const handleSelectedCategoriesChange = (categories: string[]) => {
-    const queryToSet = new URLSearchParams(query)
+  /**
+   * @param categories - The selected categories to update the query with.
+   * @description Updates the query with the selected categories. If there are no
+   * selected categories, the category query parameter is removed from the query.
+   */
+  const handleSelectedCategoriesChange = useCallback(
+    (categories: string[]) => {
+      const queryToSet = new URLSearchParams(query)
 
-    if (categories.length === 0) queryToSet.delete('category')
-    else {
-      const selectedCategoryQuery = categories.join(' ')
-      queryToSet.set('category', selectedCategoryQuery)
-    }
+      if (categories.length === 0) queryToSet.delete('category')
+      else {
+        const selectedCategoryQuery = categories.join(' ')
+        queryToSet.set('category', selectedCategoryQuery)
+      }
 
-    router.push(`/blog?${queryToSet.toString()}`)
-  }
+      console.log('queryToSet', queryToSet.toString())
+      router.push(`/blog?${queryToSet.toString()}`)
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [query],
+  )
 
   const handleCategorySelect = (category: string) => {
     const nextSelectedCategories = Array.from(selectedCategories)
     nextSelectedCategories.push(category)
+
     handleSelectedCategoriesChange(nextSelectedCategories)
   }
 
   const handleCategoryDeselect = (category: string) => {
     selectedCategories.delete(category)
     const nextSelectedCategories = Array.from(selectedCategories)
+
     handleSelectedCategoriesChange(nextSelectedCategories)
   }
+
+  /**
+   * @description This effect is used to update the selected categories when the category combinations change.
+   * If the category combinations are empty and there are selected categories, then clear the selected categories.
+   * If the category combinations are not empty and there are selected categories that are not in the category combinations,
+   * then remove the selected categories that are not in the category combinations and update the query with the new selected categories.
+   * This effect is used to ensure that the selected categories are always in the category combinations.
+   */
+  useEffect(() => {
+    if (!categoryCombinations) return
+
+    // If the category combinations are empty and there are selected categories,
+    // then clear the selected categories, while keeping track of them in the ref.
+    if (categoryCombinations.size === 0) {
+      prevSelectedCategories.current = Array.from(selectedCategories)
+
+      handleSelectedCategoriesChange([])
+    }
+
+    // If the category combinations are not empty, there are no currently selected categories,
+    // and there are previously selected categories, then set the previously selected categories,
+    // intersecting with the category combinations as the new selected categories.
+    if (
+      categoryCombinations.size > 0 &&
+      prevSelectedCategories.current.length > 0 &&
+      selectedCategories.size === 0
+    ) {
+      const newSelectedCategories = prevSelectedCategories.current.filter(
+        (category) => categoryCombinations.has(category),
+      )
+      // Reset the previous selected categories to an empty array.
+      prevSelectedCategories.current = []
+
+      handleSelectedCategoriesChange(newSelectedCategories)
+    }
+  }, [categoryCombinations, handleSelectedCategoriesChange, selectedCategories])
 
   return (
     <>

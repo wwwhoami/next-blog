@@ -70,7 +70,7 @@ const Search = ({ className }: Props) => {
 
   const setQueryParam = useCallback(
     (searchTerm: string) => {
-      const searchParams = new URLSearchParams()
+      const searchParams = new URLSearchParams(query)
 
       if (!searchTerm) searchParams.delete('searchQuery')
       else
