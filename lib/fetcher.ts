@@ -8,6 +8,13 @@ type Options = {
   }
 }
 
+/**
+ * @param url The URL to fetch data from.
+ * @param options [options={cache: 'force-cache'}] The options to use when fetching data.
+ * @description Fetches data from the specified URL.
+ * And parses the response as JSON.
+ * @throws {FetchError} If the response is not OK.
+ */
 export default async function fetcher<T>(
   url: string,
   options: Options & RequestInit = {
