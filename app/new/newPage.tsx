@@ -2,6 +2,7 @@
 
 import PageHeading from '@/components/PageHeading'
 import CategoryInput from '@/components/category/CategoryInput'
+import Editor from '@/components/editor/Editor'
 import { TextareaAutoExpand } from '@/components/form/TextareaAutoExpand'
 import withAuth from 'src/hocs/withAuth'
 
@@ -20,6 +21,7 @@ function NewPage({}: Props) {
       <CategoryInput />
 
       <TextareaAutoExpand placeholder="Excerpt of your post..." rows={3} />
+      <Editor />
     </div>
   )
 }

@@ -1,7 +1,6 @@
 import { fixupConfigRules } from '@eslint/compat'
 import { FlatCompat } from '@eslint/eslintrc'
 import js from '@eslint/js'
-import tailwindcss from 'eslint-plugin-tailwindcss'
 import unusedImports from 'eslint-plugin-unused-imports'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -20,6 +19,7 @@ const patchedConfig = fixupConfigRules([
     'next/core-web-vitals',
     'prettier',
     'plugin:tailwindcss/recommended',
+    'plugin:@lexical/recommended',
   ),
 ])
 
