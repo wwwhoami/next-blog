@@ -88,7 +88,6 @@ const CategorySelect = ({}: Props) => {
         queryToSet.set('category', selectedCategoryQuery)
       }
 
-      console.log('queryToSet', queryToSet.toString())
       router.push(`/blog?${queryToSet.toString()}`)
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
