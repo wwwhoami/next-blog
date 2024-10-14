@@ -17,7 +17,7 @@ export default function CategoryList({ categories, setCategories }: Props) {
     <RovingTab as="ul" className="flex flex-wrap gap-1">
       {categories.map((category, index) => (
         <RovingTab.Item key={category.name} as="li">
-          {({ tabIndex, ref, refocus }) => (
+          {({ tabIndex, ref, focusNextItem }) => (
             <CategoryLabel key={category.name} hexColor={category.hexColor}>
               {category.name}
               <button
@@ -26,14 +26,14 @@ export default function CategoryList({ categories, setCategories }: Props) {
                 ref={ref as React.RefObject<HTMLButtonElement>}
                 onClick={() => {
                   onRemove(index)
-                  refocus()
+                  focusNextItem()
                 }}
                 onKeyDown={(event) => {
                   switch (event.code) {
                     case 'Backspace':
                     case 'Delete':
                       onRemove(index)
-                      refocus()
+                      focusNextItem()
                       break
                     default:
                       return

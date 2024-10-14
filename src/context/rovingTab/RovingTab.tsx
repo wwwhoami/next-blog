@@ -12,11 +12,39 @@ import React, {
 import RovingTabItem from './RovingTabItem'
 
 interface RovingTabIndexContextValue {
+  /**
+   * @param node - The node to register
+   * @param index - The index of the node
+   * @description - Register the node in the refs array, update
+   * the elements count
+   */
   registerRef: (node: HTMLElement | null, index: number) => void
+  /**
+   * @param index - The index of the node
+   * @description - Unregister the node in the refs array, update
+   * the elements count
+   */
   unregisterRef: (index: number) => void
   handleKeyDown: (event: KeyboardEvent) => void
+  /** The index of the focused item */
   focusedItemIndex: number
-  refocus: () => void
+  /**
+   * @description - Focus on the previous item
+   * Used on dynamically removing items for focus to be maintained
+   * From inside the item, call focusPrevItem (via render props) to focus on the next item
+   */
+  focusNextItem: () => void
+  /**
+   * @description - Focus on the previous item
+   * Used on dynamically removing items for focus to be maintained
+   * From inside the item, call focusPrevItem (via render props) to focus on the previous item
+   */
+  focusPrevItem: () => void
+  /**
+   * @description - Focus the next enabled
+   * item when the focused item is disabled or doesn't exist anymore
+   */
+  focusClosestEnabledItem: () => void
 }
 
 const RovingTabIndexContext = createContext<
@@ -72,6 +100,18 @@ const RovingTab = ({
     refs.current.get(focusedItemIndex) as HTMLInputElement | null
   )?.disabled
 
+  /** Move to the previous item, or the last item if the index is out of bounds */
+  const moveInNegDir = useCallback(
+    (index: number) => (index > 0 ? index - 1 : elementsCount - 1),
+    [elementsCount],
+  )
+
+  /** Move to the next item, or the first item if the index is out of bounds */
+  const moveInPosDir = useCallback(
+    (index: number) => (index < elementsCount - 1 ? index + 1 : 0),
+    [elementsCount],
+  )
+
   /**
    *
    * @param node - The node to register
@@ -81,6 +121,7 @@ const RovingTab = ({
     refs.current.set(index, node)
 
     setElementsCount((prev) => prev + 1)
+    // setElementsCount((prev) => Math.max(prev, index + 1))
   }, [])
 
   /**
@@ -92,15 +133,15 @@ const RovingTab = ({
     refs.current.delete(index)
 
     setElementsCount((prev) => prev - 1)
+    // setElementsCount(() => index - 1)
   }, [])
 
   /**
-   *
-   * @description - Focus the next item
+   * @description - Focus on the next item
    * Used on dynamically removing items for focus to be maintained
-   * From inside the item, call refocus (via render props) to focus the next item
+   * From inside the item, call focusNextItem (via render props) to focus on the next item
    */
-  const refocus = useCallback(() => {
+  const focusNextItem = useCallback(() => {
     // If there are no elements, return
     if (elementsCount === 0) return
 
@@ -112,6 +153,83 @@ const RovingTab = ({
       refs.current.get(focusedItemIndex + 1)?.focus()
     }
   }, [focusedItemIndex, elementsCount])
+
+  /**
+   * @description - Focus on the previous item
+   * Used on dynamically removing items for focus to be maintained
+   * From inside the item, call focusPrevItem (via render props) to focus on the previous item
+   */
+  const focusPrevItem = useCallback(() => {
+    // If there are no elements, return
+    if (elementsCount === 0) return
+
+    // If the focused item is the first item, focus on the last item
+    if (focusedItemIndex === 0) {
+      refs.current.get(elementsCount + 1)?.focus()
+      // If the focused item is not the first item, focus on the previous item
+    } else if (focusedItemIndex >= 0) {
+      refs.current.get(focusedItemIndex - 1)?.focus()
+    }
+  }, [focusedItemIndex, elementsCount])
+
+  /**
+   * @description - Focus the next enabled
+   * item when the focused item is disabled or doesn't exist anymore
+   */
+  const focusClosestEnabledItem = useCallback(() => {
+    // If there are no elements, return
+    if (elementsCount === 0) return
+
+    let newFocusedItemIndex = moveInPosDir(focusedItemIndex)
+    let newFocusedItem = refs.current.get(
+      newFocusedItemIndex,
+    ) as HTMLInputElement | null
+
+    // If the new focused item is disabled or doesn't exist anymore,
+    // move in the same direction till an enabled item is found
+    while (newFocusedItem == null || newFocusedItem?.disabled) {
+      newFocusedItemIndex = moveInPosDir(newFocusedItemIndex)
+      newFocusedItem = refs.current.get(
+        newFocusedItemIndex,
+      ) as HTMLInputElement | null
+
+      // If we got bask to the original index, all items are disabled
+      // So, return
+      if (newFocusedItemIndex === focusedItemIndex) return
+    }
+
+    // Set the new focused item index
+    setFocusedItemIndex(newFocusedItemIndex)
+  }, [elementsCount, moveInPosDir, focusedItemIndex])
+
+  /**
+   * @description - Focus the first enabled item from the start
+   * when the focused item is disabled or doesn't exist anymore
+   */
+  const focusFirstEnabledItem = useCallback(() => {
+    if (elementsCount === 0) return
+
+    let newFocusedItemIndex = 0
+    let newFocusedItem = refs.current.get(
+      newFocusedItemIndex,
+    ) as HTMLInputElement | null
+
+    // If the new focused item is disabled or doesn't exist anymore,
+    // move in the same direction till an enabled item is found
+    while (newFocusedItem == null || newFocusedItem?.disabled) {
+      newFocusedItemIndex = moveInPosDir(newFocusedItemIndex)
+      newFocusedItem = refs.current.get(
+        newFocusedItemIndex,
+      ) as HTMLInputElement | null
+
+      // If we got bask to the original index, all items are disabled
+      // So, return
+      if (newFocusedItemIndex == 0) return
+    }
+
+    // Set the new focused item index
+    setFocusedItemIndex(newFocusedItemIndex)
+  }, [elementsCount, moveInPosDir])
 
   // Focus the item when the focusedItemIndex changes and focus is within the parent
   useEffect(() => {
@@ -135,28 +253,10 @@ const RovingTab = ({
    */
   useEffect(() => {
     //  If there are no elements or focused item is enabled, return
-    if (elementsCount === 0 || !focusedItemDisabled) return
+    if (!focusedItemDisabled) return
 
-    let newFocusedItemIndex = 0
-    let newFocusedItem = refs.current.get(
-      newFocusedItemIndex,
-    ) as HTMLInputElement | null
-
-    // If the new focused item is disabled or doesn't exist anymore,
-    // move in the same direction till an enabled item is found
-    while (newFocusedItem == null || newFocusedItem?.disabled) {
-      newFocusedItemIndex += 1
-      newFocusedItem = refs.current.get(
-        newFocusedItemIndex,
-      ) as HTMLInputElement | null
-
-      // If all items are disabled, return
-      if (newFocusedItemIndex >= elementsCount) return
-    }
-
-    // Set the new focused item index
-    setFocusedItemIndex(newFocusedItemIndex)
-  }, [elementsCount, focusedItemDisabled])
+    focusFirstEnabledItem()
+  }, [focusFirstEnabledItem, focusedItemDisabled])
 
   /**
    *
@@ -167,6 +267,7 @@ const RovingTab = ({
     // If there are no elements, return
     if (elementsCount === 0) return
 
+    // Define the keys based on the orientation and direction
     const positiveMoveKey =
       orientation === 'horizontal'
         ? direction === 'standart'
@@ -189,14 +290,6 @@ const RovingTab = ({
 
     let newFocusedItemIndex: number
     let focusMoveDirIsPos: boolean
-
-    // Move to the previous item, or the last item if the index is out of bounds
-    const moveInNegDir = (index: number) =>
-      index > 0 ? index - 1 : elementsCount - 1
-
-    // Move to the next item, or the first item if the index is out of bounds
-    const moveInPosDir = (index: number) =>
-      index < elementsCount - 1 ? index + 1 : 0
 
     switch (event.code) {
       case negativeMoveKey:
@@ -231,11 +324,9 @@ const RovingTab = ({
     // move in the same direction till an enabled item is found
     while (focusedItem == null || focusedItem?.disabled) {
       // if the direction is positive, move in positive direction, else move in negative direction
-      if (focusMoveDirIsPos) {
-        newFocusedItemIndex = moveInPosDir(newFocusedItemIndex)
-      } else {
-        newFocusedItemIndex = moveInNegDir(newFocusedItemIndex)
-      }
+      newFocusedItemIndex = focusMoveDirIsPos
+        ? moveInPosDir(newFocusedItemIndex)
+        : moveInNegDir(newFocusedItemIndex)
 
       focusedItem = refs.current.get(
         newFocusedItemIndex,
@@ -251,7 +342,33 @@ const RovingTab = ({
     unregisterRef,
     handleKeyDown,
     focusedItemIndex,
-    refocus,
+    focusNextItem,
+    focusPrevItem,
+    focusClosestEnabledItem,
+    setFocusedItemIndex,
+  }
+
+  const mapRovingTabChildren = () => {
+    let rovingTabIndex = 0
+
+    // If the child is a RovingTabItem, clone it and pass the index
+    // Else, clone the child and pass the props
+    // So that the index is passed to the RovingTabItem only,
+    // so we manage the focus only for the RovingTabItem children
+    return React.Children.map(children, (child) => {
+      if (React.isValidElement(child)) {
+        if (child.type === RovingTabItem) {
+          return React.cloneElement(child, {
+            ...child.props,
+            index: rovingTabIndex++,
+          })
+        }
+        return React.cloneElement(child, {
+          ...child.props,
+        })
+      }
+      return child
+    })
   }
 
   return (
@@ -262,18 +379,7 @@ const RovingTab = ({
         className={className}
         style={style}
       >
-        {
-          // Add the index prop to each child
-          React.Children.map(children, (child, index) => {
-            if (React.isValidElement(child)) {
-              return React.cloneElement(child, {
-                ...child.props,
-                index,
-              })
-            }
-            return child
-          })
-        }
+        {mapRovingTabChildren()}
       </Component>
     </RovingTabIndexContext.Provider>
   )
