@@ -1,3 +1,5 @@
+'use client'
+
 import fetcher from '@/lib/fetcher'
 import { Category } from '@/types/Category'
 import { useState } from 'react'
