@@ -1,3 +1,4 @@
+import { forwardRef } from 'react'
 import { tv, VariantProps } from 'tailwind-variants'
 
 type ButtonVariants = VariantProps<typeof button>
@@ -40,11 +41,12 @@ const button = tv({
       full: 'rounded-full',
     },
     disabled: {
-      true: 'cursor-not-allowed opacity-80',
+      true: 'cursor-not-allowed opacity-50',
     },
     variant: {
       outline: 'border-2 bg-transparent',
       solid: '',
+      text: '',
     },
     color: {
       primary: 'focus-ring-primary',
@@ -101,6 +103,30 @@ const button = tv({
       className:
         'bg-green-500 text-black hover:bg-green-400 focus:bg-green-400',
     },
+    {
+      variant: 'text',
+      color: 'primary',
+      className:
+        'text-indigo-900 hover:bg-indigo-500 hover:text-white focus:bg-indigo-500 focus:text-white dark:text-indigo-50',
+    },
+    {
+      variant: 'text',
+      color: 'secondary',
+      className:
+        'text-gray-700 hover:bg-gray-300 hover:text-gray-900 focus:bg-gray-300 focus:text-gray-900 dark:text-gray-100 dark:hover:text-gray-900 dark:focus:text-gray-900',
+    },
+    {
+      variant: 'text',
+      color: 'danger',
+      className:
+        'text-red-900 hover:bg-red-500 hover:text-white focus:bg-red-500 focus:text-white dark:text-red-50',
+    },
+    {
+      variant: 'text',
+      color: 'success',
+      className:
+        'text-green-900 hover:bg-green-400 hover:text-black focus:bg-green-400 focus:text-black dark:text-green-50 dark:hover:text-black dark:focus:text-black',
+    },
   ],
   defaultVariants: {
     size: 'md',
@@ -112,32 +138,42 @@ const button = tv({
   },
 })
 
-export default function Button({
-  size,
-  weight,
-  variant,
-  color,
-  rounded,
-  width,
-  className,
-  children,
-  ...props
-}: Props) {
-  return (
-    <button
-      {...props}
-      className={button({
-        size,
-        weight,
-        rounded,
-        width,
-        variant,
-        color,
-        disabled: props.disabled,
-        className,
-      })}
-    >
-      {children}
-    </button>
-  )
-}
+const Button = forwardRef<HTMLButtonElement, Props>(
+  (
+    {
+      size,
+      weight,
+      variant,
+      color,
+      rounded,
+      width,
+      className,
+      children,
+      ...props
+    },
+    ref,
+  ) => {
+    return (
+      <button
+        {...props}
+        className={button({
+          size,
+          weight,
+          rounded,
+          width,
+          variant,
+          color,
+          disabled: props.disabled,
+          className,
+        })}
+        ref={ref}
+      >
+        {children}
+      </button>
+    )
+  },
+)
+
+Button.displayName = 'Button'
+
+export default Button
