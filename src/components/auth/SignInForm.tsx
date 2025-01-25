@@ -63,7 +63,10 @@ const SignInForm = ({}: Props) => {
 
     toast.success('🦄 Logged in successfully!')
 
-    router.back()
+    // if there are previous history entries, we go back
+    if (window.history.length > 1) router.back()
+
+    router.push('/')
   }
 
   return (

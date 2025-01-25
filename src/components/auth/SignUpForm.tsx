@@ -66,7 +66,10 @@ const SignUpForm = ({}: Props) => {
 
     toast.success('🦄 Signed up successfully!')
 
-    router.back()
+    // if there are previous history entries, we go back
+    if (window.history.length > 1) router.back()
+
+    router.push('/')
   }
 
   return (

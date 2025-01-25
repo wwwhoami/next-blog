@@ -15,7 +15,7 @@ export default function withAuth<T>(Component: React.FC<T>) {
     useEffect(() => {
       // If we are not logged in, redirect to /signIn
       if (!isLoggedIn) {
-        router.replace('/signIn')
+        router.push('/signIn')
       }
     }, [isLoggedIn, router])
 
