@@ -6,14 +6,21 @@ import {
   Bars3BottomRightIcon,
   Bars3Icon,
   BoldIcon,
+  CodeBracketIcon,
   ItalicIcon,
+  LinkIcon,
   StrikethroughIcon,
   TrashIcon,
   UnderlineIcon,
 } from '@heroicons/react/20/solid'
+import { $isCodeNode, getDefaultCodeLanguage } from '@lexical/code'
+import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link'
+import { $isListNode, ListNode } from '@lexical/list'
 import { ClearEditorPlugin } from '@lexical/react/LexicalClearEditorPlugin'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
-import { mergeRegister } from '@lexical/utils'
+import { $isHeadingNode } from '@lexical/rich-text'
+import { $isAtNodeEnd } from '@lexical/selection'
+import { $getNearestNodeOfType, mergeRegister } from '@lexical/utils'
 import {
   $getRoot,
   $getSelection,
@@ -24,35 +31,114 @@ import {
   CLEAR_EDITOR_COMMAND,
   FORMAT_ELEMENT_COMMAND,
   FORMAT_TEXT_COMMAND,
+  RangeSelection,
   REDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
 } from 'lexical'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import ToolbarButton from './ToolbarButton'
+import { BlockOptionsDropdownList } from './ToolbarDropDown'
 
 const LowPriority = 1
 
+function getSelectedNode(selection: RangeSelection) {
+  const anchor = selection.anchor
+  const focus = selection.focus
+  const anchorNode = selection.anchor.getNode()
+  const focusNode = selection.focus.getNode()
+  if (anchorNode === focusNode) {
+    return anchorNode
+  }
+  const isBackward = selection.isBackward()
+  if (isBackward) {
+    return $isAtNodeEnd(focus) ? anchorNode : focusNode
+  } else {
+    return $isAtNodeEnd(anchor) ? focusNode : anchorNode
+  }
+}
+
+function ToolbarSeparator() {
+  return (
+    <span className="block h-full w-px bg-gray-300 dark:bg-gray-600"></span>
+  )
+}
+
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext()
-  const toolbarRef = useRef(null)
+
+  const toolbarRef = useRef<HTMLDivElement>(null)
+
+  const [blockType, setBlockType] = useState('paragraph')
+  const [selectedElementKey, setSelectedElementKey] = useState('')
+  const [codeLanguage, setCodeLanguage] = useState('')
+
   const [canUndo, setCanUndo] = useState(false)
   const [canRedo, setCanRedo] = useState(false)
   const [isBold, setIsBold] = useState(false)
   const [isItalic, setIsItalic] = useState(false)
   const [isUnderline, setIsUnderline] = useState(false)
   const [isStrikethrough, setIsStrikethrough] = useState(false)
+  const [isLink, setIsLink] = useState(false)
+  const [isCode, setIsCode] = useState(false)
+
   const [isEditorEmpty, setIsEditorEmpty] = useState(true)
 
   const $updateToolbar = useCallback(() => {
     const selection = $getSelection()
-    if ($isRangeSelection(selection)) {
+
+    if (!$isRangeSelection(selection)) {
+      return
+    }
+
+    const anchorNode = selection.anchor.getNode()
+    const element =
+      anchorNode.getKey() === 'root'
+        ? anchorNode
+        : anchorNode.getTopLevelElementOrThrow()
+    const elementKey = element.getKey()
+    const elementDOM = editor.getElementByKey(elementKey)
+
+    if (elementDOM !== null) {
+      setSelectedElementKey(elementKey)
+
+      if ($isListNode(element)) {
+        const parentList = $getNearestNodeOfType(anchorNode, ListNode)
+        const type = parentList ? parentList.getTag() : element.getTag()
+        setBlockType(type)
+      } else {
+        const type = $isHeadingNode(element)
+          ? element.getTag()
+          : element.getType()
+        setBlockType(type)
+        if ($isCodeNode(element)) {
+          setCodeLanguage(element.getLanguage() || getDefaultCodeLanguage())
+        }
+      }
+
       setIsBold(selection.hasFormat('bold'))
       setIsItalic(selection.hasFormat('italic'))
       setIsUnderline(selection.hasFormat('underline'))
       setIsStrikethrough(selection.hasFormat('strikethrough'))
+      setIsCode(selection.hasFormat('code'))
+
+      const node = getSelectedNode(selection)
+      const parent = node.getParent()
+      if ($isLinkNode(parent) || $isLinkNode(node)) {
+        setIsLink(true)
+      } else {
+        setIsLink(false)
+      }
     }
-  }, [])
+  }, [editor])
+
+  const insertLink = useCallback(() => {
+    if (!isLink) {
+      editor.dispatchCommand(TOGGLE_LINK_COMMAND, 'https://')
+    } else {
+      editor.dispatchCommand(TOGGLE_LINK_COMMAND, null)
+    }
+  }, [editor, isLink])
 
   useEffect(
     function checkEditorEmptyState() {
@@ -113,10 +199,6 @@ export default function ToolbarPlugin() {
 
   const MandatoryPlugins = () => <ClearEditorPlugin />
 
-  const ToolbarSeparator = () => (
-    <span className="block h-full w-px bg-gray-300 dark:bg-gray-600"></span>
-  )
-
   const textFormatButtons = [
     {
       active: isBold,
@@ -138,6 +220,16 @@ export default function ToolbarPlugin() {
       active: isUnderline,
       onClick: () => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline'),
       icon: UnderlineIcon,
+    },
+    {
+      active: isCode,
+      onClick: () => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'code'),
+      icon: CodeBracketIcon,
+    },
+    {
+      active: isLink,
+      onClick: insertLink,
+      icon: LinkIcon,
     },
   ]
 
@@ -210,50 +302,57 @@ export default function ToolbarPlugin() {
     <>
       <MandatoryPlugins />
 
-      <RovingTab
-        as="div"
-        className="fixed bottom-8 left-1/2 z-20 mb-4 flex h-10 min-w-52 -translate-x-1/2 items-center space-x-2 bg-gray-50 p-2 shadow dark:bg-gray-800"
-      >
-        {textFormatButtons.map((props, index) => (
-          <RovingTab.Item key={index}>
-            {({ tabIndex, ref }) => (
-              <ToolbarButton
-                tabIndex={tabIndex}
-                ref={ref as React.Ref<HTMLButtonElement>}
-                {...props}
-              />
-            )}
-          </RovingTab.Item>
-        ))}
+      <div className="fixed bottom-8 left-1/2 z-20 mb-4 flex h-10 min-w-52 -translate-x-1/2 items-center space-x-2 rounded-md bg-gray-50 p-2 shadow dark:bg-gray-800">
+        <BlockOptionsDropdownList
+          editor={editor}
+          blockType={blockType}
+          setShowBlockOptionsDropDown={() => {}}
+        />
 
         <ToolbarSeparator />
 
-        {elementFormatButtons.map((props, index) => (
-          <RovingTab.Item key={index}>
-            {({ tabIndex, ref }) => (
-              <ToolbarButton
-                tabIndex={tabIndex}
-                ref={ref as React.Ref<HTMLButtonElement>}
-                {...props}
-              />
-            )}
-          </RovingTab.Item>
-        ))}
+        <RovingTab as="div" className="flex h-6 items-center space-x-2">
+          {textFormatButtons.map((props, index) => (
+            <RovingTab.Item key={index}>
+              {({ tabIndex, ref }) => (
+                <ToolbarButton
+                  tabIndex={tabIndex}
+                  ref={ref as React.Ref<HTMLButtonElement>}
+                  {...props}
+                />
+              )}
+            </RovingTab.Item>
+          ))}
 
-        <ToolbarSeparator />
+          <ToolbarSeparator />
 
-        {editorCommandButtons.map((props, index) => (
-          <RovingTab.Item key={index} disabled={props.disabled}>
-            {({ tabIndex, ref }) => (
-              <ToolbarButton
-                {...props}
-                tabIndex={tabIndex}
-                ref={ref as React.Ref<HTMLButtonElement>}
-              />
-            )}
-          </RovingTab.Item>
-        ))}
-      </RovingTab>
+          {elementFormatButtons.map((props, index) => (
+            <RovingTab.Item key={index}>
+              {({ tabIndex, ref }) => (
+                <ToolbarButton
+                  tabIndex={tabIndex}
+                  ref={ref as React.Ref<HTMLButtonElement>}
+                  {...props}
+                />
+              )}
+            </RovingTab.Item>
+          ))}
+
+          <ToolbarSeparator />
+
+          {editorCommandButtons.map((props, index) => (
+            <RovingTab.Item key={index} disabled={props.disabled}>
+              {({ tabIndex, ref }) => (
+                <ToolbarButton
+                  {...props}
+                  tabIndex={tabIndex}
+                  ref={ref as React.Ref<HTMLButtonElement>}
+                />
+              )}
+            </RovingTab.Item>
+          ))}
+        </RovingTab>
+      </div>
     </>
   )
 }

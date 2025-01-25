@@ -2,7 +2,7 @@
 
 import editorTheme from '@/components/editor/EditorTheme'
 import useHasMounted from '@/hooks/useHasMounted'
-import { CodeNode } from '@lexical/code'
+import { CodeHighlightNode, CodeNode } from '@lexical/code'
 import { LinkNode } from '@lexical/link'
 import { ListItemNode, ListNode } from '@lexical/list'
 import { TRANSFORMERS } from '@lexical/markdown'
@@ -11,11 +11,14 @@ import { LexicalComposer } from '@lexical/react/LexicalComposer'
 import { ContentEditable } from '@lexical/react/LexicalContentEditable'
 import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary'
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin'
+import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin'
+import { ListPlugin } from '@lexical/react/LexicalListPlugin'
 import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin'
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
 import { HeadingNode, QuoteNode } from '@lexical/rich-text'
+import CodeHighlightPlugin from './plugins/CodeHighlightPlutin'
 import LocalStoragePlugin from './plugins/LocalStoragePlugin'
-import ToolbarPlugin from './plugins/ToolbarPlugin'
+import ToolbarPlugin from './plugins/toolbar/ToolbarPlugin'
 
 const placeholderText = 'Start writing...'
 
@@ -31,6 +34,7 @@ type Props = {}
 
 const EDITOR_NODES = [
   CodeNode,
+  CodeHighlightNode,
   HeadingNode,
   LinkNode,
   ListNode,
@@ -73,7 +77,9 @@ const Editor = ({}: Props) => {
           <AutoFocusPlugin />
           <LocalStoragePlugin namespace={editorConfig.namespace} />
           <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
-          {/* <TreeViewPlugin /> */}
+          <CodeHighlightPlugin />
+          <ListPlugin />
+          <LinkPlugin />
         </div>
       </div>
     </LexicalComposer>
