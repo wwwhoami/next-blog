@@ -36,7 +36,7 @@ const Search = ({ className }: Props) => {
   const termLoadedFromQuery = useRef(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const isMacOsNavigator = navigator.platform.indexOf('Mac') === 0
+  const isMacOsNavigator = navigator.userAgent.includes('Mac OS X')
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -108,28 +108,27 @@ const Search = ({ className }: Props) => {
    */
   useEffect(() => {
     const handleKeyDownMac = (e: KeyboardEvent) => {
-      if (e.key === 'k' && e.metaKey) {
+      if (e.code === 'KeyK' && e.metaKey) {
         e.preventDefault()
         inputRef.current?.focus()
       }
     }
     const handleKeyDownWindows = (e: KeyboardEvent) => {
-      if (e.key === 'k' && e.ctrlKey) {
+      if (e.code === 'KeyK' && e.ctrlKey) {
         e.preventDefault()
         inputRef.current?.focus()
       }
     }
-    const handleKeyDown =
-      navigator.platform.indexOf('Mac') === 0
-        ? handleKeyDownMac
-        : handleKeyDownWindows
+    const handleKeyDown = isMacOsNavigator
+      ? handleKeyDownMac
+      : handleKeyDownWindows
 
     window.addEventListener('keydown', handleKeyDown)
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [])
+  }, [isMacOsNavigator])
 
   return (
     <div
