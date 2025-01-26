@@ -1,5 +1,6 @@
 'use client'
 
+import Unauthorized from '@/components/Unauthorized'
 import { useUser } from '@/context/UserProvider'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
@@ -20,6 +21,6 @@ export default function withAuth<T>(Component: React.FC<T>) {
     }, [isLoggedIn, router])
 
     // ? Perhaps add some loading component later...
-    return isLoggedIn ? <Component {...props} /> : null
+    return isLoggedIn ? <Component {...props} /> : <Unauthorized />
   }
 }
