@@ -1,3 +1,4 @@
+import { Bars4CenterIcon, IndentIcon, OutdentIcon } from '@/components/icons'
 import RovingTab from '@/context/rovingTab/RovingTab'
 import {
   ArrowUturnLeftIcon,
@@ -36,6 +37,8 @@ import {
   CLEAR_EDITOR_COMMAND,
   FORMAT_ELEMENT_COMMAND,
   FORMAT_TEXT_COMMAND,
+  INDENT_CONTENT_COMMAND,
+  OUTDENT_CONTENT_COMMAND,
   RangeSelection,
   REDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
@@ -250,46 +253,81 @@ export default function ToolbarPlugin() {
     },
   ]
 
-  const elementFormatButtons = blockType !== 'code' && [
-    {
-      onClick: () => {
-        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left')
-      },
-      icon: Bars3BottomLeftIcon,
-    },
-    {
-      onClick: () => {
-        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center')
-      },
-      icon: Bars3Icon,
-    },
-    {
-      onClick: () => {
-        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right')
-      },
-      icon: Bars3BottomRightIcon,
-    },
-    {
-      onClick: () => {
-        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'justify')
-      },
-      children: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 448 512"
-          className="size-3.5 fill-current"
-          aria-hidden="true"
-          data-slot="icon"
-        >
-          <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M352 64c0-17.7-14.3-32-32-32L128 32c-17.7 0-32 14.3-32 32s14.3 32 32 32l192 0c17.7 0 32-14.3 32-32zm96 128c0-17.7-14.3-32-32-32L32 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l384 0c17.7 0 32-14.3 32-32zM0 448c0 17.7 14.3 32 32 32l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 416c-17.7 0-32 14.3-32 32zM352 320c0-17.7-14.3-32-32-32l-192 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l192 0c17.7 0 32-14.3 32-32z"
-          />
-        </svg>
-      ),
-    },
-  ]
+  const elementFormatButtons =
+    blockType !== 'code'
+      ? [
+          {
+            onClick: () => {
+              editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left')
+            },
+            icon: Bars3BottomLeftIcon,
+          },
+          {
+            onClick: () => {
+              editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center')
+            },
+            icon: Bars3Icon,
+          },
+          {
+            onClick: () => {
+              editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right')
+            },
+            icon: Bars3BottomRightIcon,
+          },
+          {
+            onClick: () => {
+              editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'justify')
+            },
+            icon: Bars4CenterIcon,
+          },
+          {
+            onClick: () => {
+              editor.dispatchCommand(INDENT_CONTENT_COMMAND, undefined)
+            },
+            icon: IndentIcon,
+          },
+          {
+            onClick: () => {
+              editor.dispatchCommand(OUTDENT_CONTENT_COMMAND, undefined)
+            },
+            icon: OutdentIcon,
+          },
+        ]
+      : [
+          {
+            onClick: () => {
+              editor.dispatchCommand(INDENT_CONTENT_COMMAND, undefined)
+            },
+            icon: IndentIcon,
+          },
+          {
+            onClick: () => {
+              editor.dispatchCommand(OUTDENT_CONTENT_COMMAND, undefined)
+            },
+            icon: OutdentIcon,
+          },
+        ]
+
+  const isMacOsNavigator = navigator.userAgent.includes('Mac OS X')
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const metaKey = isMacOsNavigator ? e.metaKey : e.ctrlKey
+
+      if (e.code === 'BracketLeft' && metaKey && e.altKey) {
+        e.preventDefault()
+        editor.dispatchCommand(OUTDENT_CONTENT_COMMAND, undefined)
+      } else if (e.code === 'BracketRight' && metaKey && e.altKey) {
+        e.preventDefault()
+        editor.dispatchCommand(INDENT_CONTENT_COMMAND, undefined)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [editor, isMacOsNavigator])
 
   const editorCommandButtons = [
     {
@@ -350,7 +388,7 @@ export default function ToolbarPlugin() {
               </RovingTab.Item>
             ))}
 
-          {textFormatButtons && <ToolbarSeparator />}
+          <ToolbarSeparator />
 
           {elementFormatButtons &&
             elementFormatButtons.map((props, index) => (
