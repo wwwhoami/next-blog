@@ -13,7 +13,11 @@ import {
   TrashIcon,
   UnderlineIcon,
 } from '@heroicons/react/20/solid'
-import { $isCodeNode, getDefaultCodeLanguage } from '@lexical/code'
+import {
+  $isCodeNode,
+  getCodeLanguages,
+  getDefaultCodeLanguage,
+} from '@lexical/code'
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link'
 import { $isListNode, ListNode } from '@lexical/list'
 import { ClearEditorPlugin } from '@lexical/react/LexicalClearEditorPlugin'
@@ -22,6 +26,7 @@ import { $isHeadingNode } from '@lexical/rich-text'
 import { $isAtNodeEnd } from '@lexical/selection'
 import { $getNearestNodeOfType, mergeRegister } from '@lexical/utils'
 import {
+  $getNodeByKey,
   $getRoot,
   $getSelection,
   $isParagraphNode,
@@ -36,9 +41,10 @@ import {
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
 } from 'lexical'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import ToolbarButton from './ToolbarButton'
 import { BlockOptionsDropdownList } from './ToolbarDropDown'
+import ToolbarSelect from './ToolbarSelect'
 
 const LowPriority = 1
 
@@ -66,8 +72,6 @@ function ToolbarSeparator() {
 
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext()
-
-  const toolbarRef = useRef<HTMLDivElement>(null)
 
   const [blockType, setBlockType] = useState('paragraph')
   const [selectedElementKey, setSelectedElementKey] = useState('')
@@ -197,9 +201,22 @@ export default function ToolbarPlugin() {
     )
   }, [editor, $updateToolbar])
 
+  const codeLanguages = useMemo(() => getCodeLanguages(), [])
+  const onCodeLanguageSelect = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      editor.update(() => {
+        const node = $getNodeByKey(selectedElementKey)
+        if ($isCodeNode(node)) {
+          node.setLanguage(e.target.value)
+        }
+      })
+    },
+    [editor, selectedElementKey],
+  )
+
   const MandatoryPlugins = () => <ClearEditorPlugin />
 
-  const textFormatButtons = [
+  const textFormatButtons = blockType !== 'code' && [
     {
       active: isBold,
       onClick: () => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold'),
@@ -233,7 +250,7 @@ export default function ToolbarPlugin() {
     },
   ]
 
-  const elementFormatButtons = [
+  const elementFormatButtons = blockType !== 'code' && [
     {
       onClick: () => {
         editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left')
@@ -308,35 +325,45 @@ export default function ToolbarPlugin() {
           blockType={blockType}
           setShowBlockOptionsDropDown={() => {}}
         />
-
         <ToolbarSeparator />
 
+        {blockType === 'code' && (
+          <ToolbarSelect
+            onChange={onCodeLanguageSelect}
+            aria-label="Code language"
+            options={codeLanguages}
+            value={codeLanguage}
+          />
+        )}
+
         <RovingTab as="div" className="flex h-6 items-center space-x-2">
-          {textFormatButtons.map((props, index) => (
-            <RovingTab.Item key={index}>
-              {({ tabIndex, ref }) => (
-                <ToolbarButton
-                  tabIndex={tabIndex}
-                  ref={ref as React.Ref<HTMLButtonElement>}
-                  {...props}
-                />
-              )}
-            </RovingTab.Item>
-          ))}
+          {textFormatButtons &&
+            textFormatButtons.map((props, index) => (
+              <RovingTab.Item key={index}>
+                {({ tabIndex, ref }) => (
+                  <ToolbarButton
+                    tabIndex={tabIndex}
+                    ref={ref as React.Ref<HTMLButtonElement>}
+                    {...props}
+                  />
+                )}
+              </RovingTab.Item>
+            ))}
 
-          <ToolbarSeparator />
+          {textFormatButtons && <ToolbarSeparator />}
 
-          {elementFormatButtons.map((props, index) => (
-            <RovingTab.Item key={index}>
-              {({ tabIndex, ref }) => (
-                <ToolbarButton
-                  tabIndex={tabIndex}
-                  ref={ref as React.Ref<HTMLButtonElement>}
-                  {...props}
-                />
-              )}
-            </RovingTab.Item>
-          ))}
+          {elementFormatButtons &&
+            elementFormatButtons.map((props, index) => (
+              <RovingTab.Item key={index}>
+                {({ tabIndex, ref }) => (
+                  <ToolbarButton
+                    tabIndex={tabIndex}
+                    ref={ref as React.Ref<HTMLButtonElement>}
+                    {...props}
+                  />
+                )}
+              </RovingTab.Item>
+            ))}
 
           <ToolbarSeparator />
 
