@@ -29,7 +29,7 @@ const ToolbarButton = forwardRef<HTMLButtonElement, Props>(
         tabIndex={tabIndex}
         ref={ref}
       >
-        {Icon && <Icon className="size-3.5" />}
+        {Icon && <Icon className="size-3.5 fill-current" />}
         {children}
       </Button>
     )
