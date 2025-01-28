@@ -134,15 +134,6 @@ export function BlockOptionsDropdownList({
     setShowBlockOptionsDropDown(false)
   }, [blockType, editor, setShowBlockOptionsDropDown])
 
-  // const formatCheckList = useCallback(() => {
-  //   if (blockType !== 'check') {
-  //     editor.dispatchCommand(INSERT_CHECK_LIST_COMMAND, undefined)
-  //   } else {
-  //     editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined)
-  //   }
-  //   setShowBlockOptionsDropDown(false)
-  // }, [blockType, editor, setShowBlockOptionsDropDown])
-
   const formatQuote = useCallback(() => {
     if (blockType !== 'quote') {
       editor.update(() => {
@@ -259,19 +250,6 @@ export function BlockOptionsDropdownList({
           }
         },
       },
-      // {
-      //   action: formatCheckList,
-      //   text: 'Check List',
-      //   icon: <CheckCircleIcon />,
-      //   key: isMacOsNavigator ? '⌘⌥0' : 'Ctrl+Alt+0',
-      //   handler: (e: KeyboardEvent) => {
-      //     const metaKey = isMacOsNavigator ? e.metaKey : e.ctrlKey
-      //     if (e.code === 'Digit0' && e.altKey && metaKey) {
-      //       e.preventDefault()
-      //       formatCheckList()
-      //     }
-      //   },
-      // },
       {
         action: formatQuote,
         text: 'Quote',
@@ -324,55 +302,6 @@ export function BlockOptionsDropdownList({
     }
   }, [textActions])
 
-  // useEffect(() => {
-  //   const handleKeyDown = (e: KeyboardEvent) => {
-  //     const metaKey = isMacOsNavigator ? e.metaKey : e.ctrlKey
-  //
-  //     if (e.code === 'KeyE' && metaKey) {
-  //       e.preventDefault()
-  //       formatParagraph()
-  //     }
-  //     if (e.code === 'Digit1' && e.altKey && metaKey) {
-  //       e.preventDefault()
-  //       formatLargeHeading()
-  //     }
-  //     if (e.code === 'Digit2' && e.altKey && metaKey) {
-  //       e.preventDefault()
-  //       formatSmallHeading()
-  //     }
-  //     if (e.code === 'Digit8' && e.altKey && metaKey) {
-  //       e.preventDefault()
-  //       formatBulletList()
-  //     }
-  //     if (e.code === 'Digit9' && e.altKey && metaKey) {
-  //       e.preventDefault()
-  //       formatNumberedList()
-  //     }
-  //     if (e.code === 'KeyQ' && e.altKey && metaKey) {
-  //       e.preventDefault()
-  //       formatQuote()
-  //     }
-  //     if (e.code === 'KeyC' && e.altKey && metaKey) {
-  //       e.preventDefault()
-  //       formatCode()
-  //     }
-  //   }
-  //   window.addEventListener('keydown', handleKeyDown)
-  //
-  //   return () => {
-  //     window.removeEventListener('keydown', handleKeyDown)
-  //   }
-  // }, [
-  //   formatBulletList,
-  //   formatCode,
-  //   formatLargeHeading,
-  //   formatNumberedList,
-  //   formatParagraph,
-  //   formatQuote,
-  //   formatSmallHeading,
-  //   isMacOsNavigator,
-  // ])
-
   return (
     <Menu>
       <MenuButton as={Fragment}>
@@ -384,7 +313,6 @@ export function BlockOptionsDropdownList({
         >
           {BlockTypeToIcon[blockType as keyof typeof BlockTypeToIcon]}
           {BlockTypeToText[blockType as keyof typeof BlockTypeToText]}
-          {/* {blockType.charAt(0).toUpperCase() + blockType.slice(1)} */}
           <ChevronDownIcon className="ml-1 size-4" />
         </Button>
       </MenuButton>
@@ -401,49 +329,6 @@ export function BlockOptionsDropdownList({
             key={text}
           />
         ))}
-
-        {/* <ToolbarDropDownItem */}
-        {/*   onClick={formatParagraph} */}
-        {/*   icon={<PencilIcon />} */}
-        {/*   text="Paragraph" */}
-        {/*   keybinding={isMacOsNavigator ? '⌘E' : 'Ctrl+E'} */}
-        {/* /> */}
-        {/* <ToolbarDropDownItem */}
-        {/*   onClick={formatLargeHeading} */}
-        {/*   icon={<PencilIcon />} */}
-        {/*   text="Heading 1" */}
-        {/*   keybinding={isMacOsNavigator ? '⌘⌥1' : 'Ctrl+Alt+1'} */}
-        {/* /> */}
-        {/* <ToolbarDropDownItem */}
-        {/*   onClick={formatSmallHeading} */}
-        {/*   icon={<PencilIcon />} */}
-        {/*   text="Heading 2" */}
-        {/*   keybinding={isMacOsNavigator ? '⌘⌥2' : 'Ctrl+Alt+2'} */}
-        {/* /> */}
-        {/* <ToolbarDropDownItem */}
-        {/*   onClick={formatBulletList} */}
-        {/*   icon={<ListBulletIcon />} */}
-        {/*   text="Bulleted List" */}
-        {/*   keybinding={isMacOsNavigator ? '⌘⌥8' : 'Ctrl+Alt+8'} */}
-        {/* /> */}
-        {/* <ToolbarDropDownItem */}
-        {/*   onClick={formatNumberedList} */}
-        {/*   icon={<NumberedListIcon />} */}
-        {/*   text="Numbered List" */}
-        {/*   keybinding={isMacOsNavigator ? '⌘⌥9' : 'Ctrl+Alt+9'} */}
-        {/* /> */}
-        {/* <ToolbarDropDownItem */}
-        {/*   onClick={formatQuote} */}
-        {/*   icon={<ChatBubbleLeftEllipsisIcon />} */}
-        {/*   text="Quote" */}
-        {/*   keybinding={isMacOsNavigator ? '⌘⌥Q' : 'Ctrl+Alt+Q'} */}
-        {/* /> */}
-        {/* <ToolbarDropDownItem */}
-        {/*   onClick={formatCode} */}
-        {/*   icon={<CodeBracketIcon />} */}
-        {/*   text="Code Block" */}
-        {/*   keybinding={isMacOsNavigator ? '⌘⌥C' : 'Ctrl+Alt+C'} */}
-        {/* /> */}
       </MenuItems>
     </Menu>
   )
