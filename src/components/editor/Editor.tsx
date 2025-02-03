@@ -18,6 +18,7 @@ import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
 import { HeadingNode, QuoteNode } from '@lexical/rich-text'
 import CodeHighlightPlugin from './plugins/CodeHighlightPlutin'
 import LocalStoragePlugin from './plugins/LocalStoragePlugin'
+import TabIndentationPlugin from './plugins/TabIndentPlugin'
 import ToolbarPlugin from './plugins/toolbar/ToolbarPlugin'
 
 const placeholderText = 'Start writing...'
@@ -33,6 +34,7 @@ const Placeholder = () => {
 type Props = {}
 
 const EDITOR_NODES = [
+  HeadingNode,
   CodeNode,
   CodeHighlightNode,
   HeadingNode,
@@ -80,6 +82,7 @@ const Editor = ({}: Props) => {
           <CodeHighlightPlugin />
           <ListPlugin />
           <LinkPlugin />
+          <TabIndentationPlugin maxIndent={8} />
         </div>
       </div>
     </LexicalComposer>
