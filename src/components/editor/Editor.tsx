@@ -3,7 +3,7 @@
 import editorTheme from '@/components/editor/EditorTheme'
 import useHasMounted from '@/hooks/useHasMounted'
 import { CodeHighlightNode, CodeNode } from '@lexical/code'
-import { LinkNode } from '@lexical/link'
+import { AutoLinkNode, LinkNode } from '@lexical/link'
 import { ListItemNode, ListNode } from '@lexical/list'
 import { TRANSFORMERS } from '@lexical/markdown'
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin'
@@ -16,10 +16,13 @@ import { ListPlugin } from '@lexical/react/LexicalListPlugin'
 import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin'
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
 import { HeadingNode, QuoteNode } from '@lexical/rich-text'
+import { useState } from 'react'
+import AutoLinkPlugin from './plugins/AutoLinkPlugin'
 import CodeHighlightPlugin from './plugins/CodeHighlightPlutin'
 import LocalStoragePlugin from './plugins/LocalStoragePlugin'
 import TabIndentationPlugin from './plugins/TabIndentPlugin'
 import ToolbarPlugin from './plugins/toolbar/ToolbarPlugin'
+import { validateUrl } from './utils'
 
 const placeholderText = 'Start writing...'
 
@@ -39,6 +42,7 @@ const EDITOR_NODES = [
   CodeHighlightNode,
   HeadingNode,
   LinkNode,
+  AutoLinkNode,
   ListNode,
   ListItemNode,
   QuoteNode,
@@ -81,8 +85,9 @@ const Editor = ({}: Props) => {
           <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
           <CodeHighlightPlugin />
           <ListPlugin />
-          <LinkPlugin />
           <TabIndentationPlugin maxIndent={8} />
+          <LinkPlugin validateUrl={validateUrl} />
+          <AutoLinkPlugin />
         </div>
       </div>
     </LexicalComposer>
