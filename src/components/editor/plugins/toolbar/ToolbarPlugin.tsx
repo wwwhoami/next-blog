@@ -24,7 +24,6 @@ import { $isListNode, ListNode } from '@lexical/list'
 import { ClearEditorPlugin } from '@lexical/react/LexicalClearEditorPlugin'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { $isHeadingNode } from '@lexical/rich-text'
-import { $isAtNodeEnd } from '@lexical/selection'
 import { $getNearestNodeOfType, mergeRegister } from '@lexical/utils'
 import {
   $getNodeByKey,
@@ -35,37 +34,20 @@ import {
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
   CLEAR_EDITOR_COMMAND,
+  COMMAND_PRIORITY_LOW,
   FORMAT_ELEMENT_COMMAND,
   FORMAT_TEXT_COMMAND,
   INDENT_CONTENT_COMMAND,
   OUTDENT_CONTENT_COMMAND,
-  RangeSelection,
   REDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
 } from 'lexical'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { getSelectedNode } from '../../utils'
 import ToolbarButton from './ToolbarButton'
 import { BlockOptionsDropdownList } from './ToolbarDropDown'
 import ToolbarSelect from './ToolbarSelect'
-
-const LowPriority = 1
-
-function getSelectedNode(selection: RangeSelection) {
-  const anchor = selection.anchor
-  const focus = selection.focus
-  const anchorNode = selection.anchor.getNode()
-  const focusNode = selection.focus.getNode()
-  if (anchorNode === focusNode) {
-    return anchorNode
-  }
-  const isBackward = selection.isBackward()
-  if (isBackward) {
-    return $isAtNodeEnd(focus) ? anchorNode : focusNode
-  } else {
-    return $isAtNodeEnd(anchor) ? focusNode : anchorNode
-  }
-}
 
 function ToolbarSeparator() {
   return (
@@ -183,7 +165,7 @@ export default function ToolbarPlugin() {
           $updateToolbar()
           return false
         },
-        LowPriority,
+        COMMAND_PRIORITY_LOW,
       ),
       editor.registerCommand(
         CAN_UNDO_COMMAND,
@@ -191,7 +173,7 @@ export default function ToolbarPlugin() {
           setCanUndo(payload)
           return false
         },
-        LowPriority,
+        COMMAND_PRIORITY_LOW,
       ),
       editor.registerCommand(
         CAN_REDO_COMMAND,
@@ -199,7 +181,7 @@ export default function ToolbarPlugin() {
           setCanRedo(payload)
           return false
         },
-        LowPriority,
+        COMMAND_PRIORITY_LOW,
       ),
     )
   }, [editor, $updateToolbar])
