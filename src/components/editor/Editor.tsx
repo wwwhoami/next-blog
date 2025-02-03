@@ -19,6 +19,7 @@ import { HeadingNode, QuoteNode } from '@lexical/rich-text'
 import { useState } from 'react'
 import AutoLinkPlugin from './plugins/AutoLinkPlugin'
 import CodeHighlightPlugin from './plugins/CodeHighlightPlutin'
+import FloatingLinkEditorPlugin from './plugins/FloatingLinkEditor'
 import LocalStoragePlugin from './plugins/LocalStoragePlugin'
 import TabIndentationPlugin from './plugins/TabIndentPlugin'
 import ToolbarPlugin from './plugins/toolbar/ToolbarPlugin'
@@ -58,6 +59,8 @@ const editorConfig = {
 }
 
 const Editor = ({}: Props) => {
+  const [isLinkEditMode, setIsLinkEditMode] = useState(false)
+
   const hasMounted = useHasMounted()
   if (!hasMounted) {
     return null
@@ -88,6 +91,11 @@ const Editor = ({}: Props) => {
           <TabIndentationPlugin maxIndent={8} />
           <LinkPlugin validateUrl={validateUrl} />
           <AutoLinkPlugin />
+
+          <FloatingLinkEditorPlugin
+            isLinkEditMode={isLinkEditMode}
+            setIsLinkEditMode={setIsLinkEditMode}
+          />
         </div>
       </div>
     </LexicalComposer>
