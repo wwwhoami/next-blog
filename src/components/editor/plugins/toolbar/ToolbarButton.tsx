@@ -23,7 +23,7 @@ const ToolbarButton = forwardRef<HTMLButtonElement, Props>(
         className={clsx(
           `p-2`,
           active
-            ? 'bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-200 dark:focus:bg-gray-200'
+            ? 'bg-gray-300/85 dark:bg-gray-600/85 dark:hover:bg-gray-200 dark:focus:bg-gray-200'
             : 'bg-transparent',
         )}
         tabIndex={tabIndex}
