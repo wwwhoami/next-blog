@@ -10,7 +10,6 @@ import {
   MULTILINE_ELEMENT_TRANSFORMERS,
   TEXT_FORMAT_TRANSFORMERS,
   TEXT_MATCH_TRANSFORMERS,
-  TRANSFORMERS,
 } from '@lexical/markdown'
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin'
 import { LexicalComposer } from '@lexical/react/LexicalComposer'
@@ -30,6 +29,7 @@ import CodeHighlightPlugin from './plugins/CodeHighlightPlutin'
 import FloatingLinkEditorPlugin from './plugins/FloatingLinkEditor'
 import LocalStoragePlugin from './plugins/LocalStoragePlugin'
 import TabIndentationPlugin from './plugins/TabIndentPlugin'
+import { TABLE_TRANSFORMER } from './plugins/TablePlugin'
 import ToolbarPlugin from './plugins/toolbar/ToolbarPlugin'
 import { validateUrl } from './utils'
 
@@ -65,6 +65,7 @@ export const EDITOR_TRANSFORMERS = [
   ...MULTILINE_ELEMENT_TRANSFORMERS,
   ...TEXT_FORMAT_TRANSFORMERS,
   ...TEXT_MATCH_TRANSFORMERS,
+  TABLE_TRANSFORMER,
 ]
 
 const editorConfig = {
@@ -103,7 +104,7 @@ const Editor = ({}: Props) => {
           <HistoryPlugin />
           <AutoFocusPlugin />
           <LocalStoragePlugin namespace={editorConfig.namespace} />
-          <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
+          <MarkdownShortcutPlugin transformers={EDITOR_TRANSFORMERS} />
           <CodeHighlightPlugin />
           <ListPlugin />
           <TabIndentationPlugin maxIndent={8} />
@@ -111,8 +112,8 @@ const Editor = ({}: Props) => {
           <AutoLinkPlugin />
           <TablePlugin
             hasCellMerge={true}
-            hasCellBackgroundColor={false}
-            hasHorizontalScroll={true}
+            hasCellBackgroundColor={true}
+            hasHorizontalScroll={false}
           />
 
           <FloatingLinkEditorPlugin

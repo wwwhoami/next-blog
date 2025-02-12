@@ -42,7 +42,7 @@ const mapToTableCells = (textContent: string): Array<TableCellNode> | null => {
 const TABLE_ROW_REG_EXP = /^(?:\|)(.+)(?:\|)\s?$/
 const TABLE_ROW_DIVIDER_REG_EXP = /^(\| ?:?-*:? ?)+\|\s?$/
 
-export const TABLE: ElementTransformer = {
+export const TABLE_TRANSFORMER: ElementTransformer = {
   dependencies: [TableNode, TableRowNode, TableCellNode],
   export: (node: LexicalNode) => {
     if (!$isTableNode(node)) {
