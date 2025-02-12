@@ -5,7 +5,12 @@ import useHasMounted from '@/hooks/useHasMounted'
 import { CodeHighlightNode, CodeNode } from '@lexical/code'
 import { AutoLinkNode, LinkNode } from '@lexical/link'
 import { ListItemNode, ListNode } from '@lexical/list'
-import { TRANSFORMERS } from '@lexical/markdown'
+import {
+  ELEMENT_TRANSFORMERS,
+  MULTILINE_ELEMENT_TRANSFORMERS,
+  TEXT_FORMAT_TRANSFORMERS,
+  TEXT_MATCH_TRANSFORMERS,
+} from '@lexical/markdown'
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin'
 import { LexicalComposer } from '@lexical/react/LexicalComposer'
 import { ContentEditable } from '@lexical/react/LexicalContentEditable'
@@ -49,6 +54,13 @@ const EDITOR_NODES = [
   QuoteNode,
 ]
 
+export const EDITOR_TRANSFORMERS = [
+  ...ELEMENT_TRANSFORMERS,
+  ...MULTILINE_ELEMENT_TRANSFORMERS,
+  ...TEXT_FORMAT_TRANSFORMERS,
+  ...TEXT_MATCH_TRANSFORMERS,
+]
+
 const editorConfig = {
   namespace: 'My Editor',
   nodes: EDITOR_NODES,
@@ -85,7 +97,7 @@ const Editor = ({}: Props) => {
           <HistoryPlugin />
           <AutoFocusPlugin />
           <LocalStoragePlugin namespace={editorConfig.namespace} />
-          <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
+          <MarkdownShortcutPlugin transformers={EDITOR_TRANSFORMERS} />
           <CodeHighlightPlugin />
           <ListPlugin />
           <TabIndentationPlugin maxIndent={8} />
