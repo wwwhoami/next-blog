@@ -1,4 +1,9 @@
-import { Bars4CenterIcon, IndentIcon, OutdentIcon } from '@/components/icons'
+import {
+  Bars4CenterIcon,
+  IndentIcon,
+  MarkdownIcon,
+  OutdentIcon,
+} from '@/components/icons'
 import RovingTab from '@/context/rovingTab/RovingTab'
 import {
   ArrowUturnLeftIcon,
@@ -44,6 +49,7 @@ import {
   UNDO_COMMAND,
 } from 'lexical'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import useMarkdownMode from '../../hooks/useMarkdownMode'
 import { getSelectedNode } from '../../utils'
 import ToolbarButton from './ToolbarButton'
 import { BlockOptionsDropdownList } from './ToolbarDropDown'
@@ -72,6 +78,7 @@ export default function ToolbarPlugin() {
   const [isCode, setIsCode] = useState(false)
 
   const [isEditorEmpty, setIsEditorEmpty] = useState(true)
+  const [isMarkdownMode, handleMarkdownToggle] = useMarkdownMode(editor)
 
   const $updateToolbar = useCallback(() => {
     const selection = $getSelection()
@@ -330,18 +337,10 @@ export default function ToolbarPlugin() {
 
   const editorCommandButtons = [
     {
-      onClick: () => {
-        editor.dispatchCommand(UNDO_COMMAND, undefined)
-      },
-      icon: ArrowUturnLeftIcon,
-      disabled: !canUndo,
-    },
-    {
-      onClick: () => {
-        editor.dispatchCommand(REDO_COMMAND, undefined)
-      },
-      icon: ArrowUturnRightIcon,
-      disabled: !canRedo,
+      onClick: handleMarkdownToggle,
+      icon: MarkdownIcon,
+      active: isMarkdownMode,
+      disabled: false,
     },
     {
       onClick: () => {
