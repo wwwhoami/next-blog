@@ -46,7 +46,6 @@ function positionFloatingElement(
   verticalGap: number = VERITCAL_GAP,
   horizontalGap: number = HORITZONTAL_GAP,
 ) {
-  console.log('positionEditorElement')
   if (targetRect === null) {
     floatingElem.style.opacity = '0'
     floatingElem.style.transform = 'translate(-10000px, -10000px)'
