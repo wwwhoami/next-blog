@@ -20,13 +20,16 @@ import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin'
 import { ListPlugin } from '@lexical/react/LexicalListPlugin'
 import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin'
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
+import { TablePlugin } from '@lexical/react/LexicalTablePlugin'
 import { HeadingNode, QuoteNode } from '@lexical/rich-text'
+import { TableCellNode, TableNode, TableRowNode } from '@lexical/table'
 import { useState } from 'react'
 import AutoLinkPlugin from './plugins/AutoLinkPlugin'
 import CodeHighlightPlugin from './plugins/CodeHighlightPlutin'
 import FloatingLinkEditorPlugin from './plugins/FloatingLinkEditor'
 import LocalStoragePlugin from './plugins/LocalStoragePlugin'
 import TabIndentationPlugin from './plugins/TabIndentPlugin'
+import { TABLE_TRANSFORMER } from './plugins/TablePlugin'
 import ToolbarPlugin from './plugins/toolbar/ToolbarPlugin'
 import { validateUrl } from './utils'
 
@@ -52,6 +55,9 @@ const EDITOR_NODES = [
   ListNode,
   ListItemNode,
   QuoteNode,
+  TableNode,
+  TableRowNode,
+  TableCellNode,
 ]
 
 export const EDITOR_TRANSFORMERS = [
@@ -59,6 +65,7 @@ export const EDITOR_TRANSFORMERS = [
   ...MULTILINE_ELEMENT_TRANSFORMERS,
   ...TEXT_FORMAT_TRANSFORMERS,
   ...TEXT_MATCH_TRANSFORMERS,
+  TABLE_TRANSFORMER,
 ]
 
 const editorConfig = {
@@ -103,6 +110,11 @@ const Editor = ({}: Props) => {
           <TabIndentationPlugin maxIndent={8} />
           <LinkPlugin validateUrl={validateUrl} />
           <AutoLinkPlugin />
+          <TablePlugin
+            hasCellMerge={true}
+            hasCellBackgroundColor={true}
+            hasHorizontalScroll={false}
+          />
 
           <FloatingLinkEditorPlugin
             isLinkEditMode={isLinkEditMode}

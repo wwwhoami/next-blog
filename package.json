@@ -14,6 +14,7 @@
     "@headlessui/react": "^2.1.8",
     "@heroicons/react": "^2.1.5",
     "@lexical/react": "^0.22.0",
+    "@lexical/table": "^0.22.0",
     "@lexical/utils": "^0.22.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
