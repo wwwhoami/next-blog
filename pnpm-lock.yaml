@@ -18,9 +18,15 @@ importers:
       '@heroicons/react':
         specifier: ^2.1.5
         version: 2.1.5(react@18.3.1)
+      '@lexical/file':
+        specifier: 0.22.0
+        version: 0.22.0
       '@lexical/react':
         specifier: ^0.22.0
         version: 0.22.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.19)
+      '@lexical/table':
+        specifier: ^0.22.0
+        version: 0.22.0
       '@lexical/utils':
         specifier: ^0.22.0
         version: 0.22.0
@@ -318,6 +324,9 @@ packages:
     resolution: {integrity: sha512-+IWEYT5Zxpk8y07uJwY6vPIWSepI3yrG2l6deYMbFTqWIFR6L0jKXrCwIZF8JLAOJxb/eTs5nrCNA7rCHPu7tA==}
     peerDependencies:
       eslint: '>=7.31.0 || ^8.0.0'
+
+  '@lexical/file@0.22.0':
+    resolution: {integrity: sha512-qME0Of96Px8b7gGhii56Gl+XvgCxJ4CSNaxZnfhp5J22YrAq1rBn5epYk6xT6xDAXKkzPwxfNSsJRRFipbSrJw==}
 
   '@lexical/hashtag@0.22.0':
     resolution: {integrity: sha512-W6Wrz0+ClezZQavjCjYso+LzRP/rWNUIM6cLwnf7oFXsmIXeaLHXecIbRwZ+SChnj4eUlSlnlknMVi3bJKaOjw==}
@@ -2738,6 +2747,10 @@ snapshots:
   '@lexical/eslint-plugin@0.22.0(eslint@9.11.1(jiti@2.0.0))':
     dependencies:
       eslint: 9.11.1(jiti@2.0.0)
+
+  '@lexical/file@0.22.0':
+    dependencies:
+      lexical: 0.22.0
 
   '@lexical/hashtag@0.22.0':
     dependencies:

@@ -5,7 +5,13 @@ import useHasMounted from '@/hooks/useHasMounted'
 import { CodeHighlightNode, CodeNode } from '@lexical/code'
 import { AutoLinkNode, LinkNode } from '@lexical/link'
 import { ListItemNode, ListNode } from '@lexical/list'
-import { TRANSFORMERS } from '@lexical/markdown'
+import {
+  ELEMENT_TRANSFORMERS,
+  MULTILINE_ELEMENT_TRANSFORMERS,
+  TEXT_FORMAT_TRANSFORMERS,
+  TEXT_MATCH_TRANSFORMERS,
+  TRANSFORMERS,
+} from '@lexical/markdown'
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin'
 import { LexicalComposer } from '@lexical/react/LexicalComposer'
 import { ContentEditable } from '@lexical/react/LexicalContentEditable'
@@ -15,7 +21,9 @@ import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin'
 import { ListPlugin } from '@lexical/react/LexicalListPlugin'
 import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin'
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
+import { TablePlugin } from '@lexical/react/LexicalTablePlugin'
 import { HeadingNode, QuoteNode } from '@lexical/rich-text'
+import { TableCellNode, TableNode, TableRowNode } from '@lexical/table'
 import { useState } from 'react'
 import AutoLinkPlugin from './plugins/AutoLinkPlugin'
 import CodeHighlightPlugin from './plugins/CodeHighlightPlutin'
@@ -47,6 +55,16 @@ const EDITOR_NODES = [
   ListNode,
   ListItemNode,
   QuoteNode,
+  TableNode,
+  TableRowNode,
+  TableCellNode,
+]
+
+export const EDITOR_TRANSFORMERS = [
+  ...ELEMENT_TRANSFORMERS,
+  ...MULTILINE_ELEMENT_TRANSFORMERS,
+  ...TEXT_FORMAT_TRANSFORMERS,
+  ...TEXT_MATCH_TRANSFORMERS,
 ]
 
 const editorConfig = {
@@ -91,6 +109,11 @@ const Editor = ({}: Props) => {
           <TabIndentationPlugin maxIndent={8} />
           <LinkPlugin validateUrl={validateUrl} />
           <AutoLinkPlugin />
+          <TablePlugin
+            hasCellMerge={true}
+            hasCellBackgroundColor={false}
+            hasHorizontalScroll={true}
+          />
 
           <FloatingLinkEditorPlugin
             isLinkEditMode={isLinkEditMode}
