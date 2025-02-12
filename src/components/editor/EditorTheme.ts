@@ -1,10 +1,12 @@
-const editorTheme = {
+import { EditorThemeClasses } from 'lexical'
+
+const editorTheme: EditorThemeClasses = {
   root: 'p-4 border-slate-500 w-full border-2 rounded h-full min-h-[200px] focus:outline-none focus-visible:border-black',
   ltr: 'ltr',
   rtl: 'rtl',
   placeholder: 'editor-placeholder',
   paragraph: 'mb-2 relative',
-  quote: 'editor-quote',
+  quote: 'border-l-4 border-indigo-400 pl-2 italic  dark:text-white',
   heading: {
     h1: 'text-3xl font-extrabold dark:text-white',
     h2: 'text-2xl font-bold dark:text-white',
@@ -14,14 +16,14 @@ const editorTheme = {
   },
   list: {
     nested: {
-      listitem: 'pl-5 mt-2 space-y-1 list-decimal list-inside dark:text-white',
+      listitem: 'pl-5 mt-2 space-y-1 list-none dark:text-white',
     },
-    ol: 'max-w-md space-y-1 text-gray-500 list-decimal list-inside dark:text-white',
-    ul: 'max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-white',
+    ol: 'max-w-md space-y-1 text-gray-500 list-decimal list-inside marker:text-indigo-600 dark:text-white dark:marker:text-indigo-400',
+    ul: 'max-w-md space-y-1 text-gray-500 list-disc list-inside marker:text-indigo-600 dark:text-white dark:marker:text-indigo-400',
     listitem: 'dark:text-white',
   },
   image: 'editor-image',
-  link: 'font-medium text-blue-600 dark:text-blue-500 hover:underline',
+  link: 'font-medium text-indigo-600 dark:text-indigo-400 hover:underline',
   text: {
     bold: 'font-bold',
     italic: 'italic',
