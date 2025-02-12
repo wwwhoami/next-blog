@@ -186,6 +186,23 @@ export default function ToolbarPlugin() {
     )
   }, [editor, $updateToolbar])
 
+  const undoRedoButtons = [
+    {
+      onClick: () => {
+        editor.dispatchCommand(UNDO_COMMAND, undefined)
+      },
+      icon: ArrowUturnLeftIcon,
+      disabled: !canUndo,
+    },
+    {
+      onClick: () => {
+        editor.dispatchCommand(REDO_COMMAND, undefined)
+      },
+      icon: ArrowUturnRightIcon,
+      disabled: !canRedo,
+    },
+  ]
+
   const codeLanguages = useMemo(() => getCodeLanguages(), [])
   const onCodeLanguageSelect = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -340,11 +357,28 @@ export default function ToolbarPlugin() {
       <MandatoryPlugins />
 
       <div className="fixed bottom-8 left-1/2 z-20 mb-4 flex h-10 min-w-52 -translate-x-1/2 items-center space-x-2 rounded-md bg-gray-50 p-2 shadow dark:bg-gray-800">
+        <RovingTab as="div" className="flex h-6 items-center space-x-2">
+          {undoRedoButtons.map((props, index) => (
+            <RovingTab.Item key={index} disabled={props.disabled}>
+              {({ tabIndex, ref }) => (
+                <ToolbarButton
+                  {...props}
+                  tabIndex={tabIndex}
+                  ref={ref as React.Ref<HTMLButtonElement>}
+                />
+              )}
+            </RovingTab.Item>
+          ))}
+        </RovingTab>
+
+        <ToolbarSeparator />
+
         <BlockOptionsDropdownList
           editor={editor}
           blockType={blockType}
           setShowBlockOptionsDropDown={() => {}}
         />
+
         <ToolbarSeparator />
 
         {blockType === 'code' && (
