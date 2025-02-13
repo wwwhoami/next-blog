@@ -2,12 +2,12 @@
 
 import { useState } from 'react'
 
-export const useModal = (shown = false) => {
-  const [isShown, setIsShown] = useState(shown)
+export const useModal = (initiallyOpen = false) => {
+  const [isOpen, setIsOpen] = useState(initiallyOpen)
 
-  const toggle = () => setIsShown(!isShown)
+  const toggle = () => setIsOpen(!isOpen)
 
-  return [isShown, toggle] as const
+  return [isOpen, toggle] as const
 }
 
 export default useModal
