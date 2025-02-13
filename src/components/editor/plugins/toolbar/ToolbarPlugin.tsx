@@ -5,6 +5,7 @@ import {
   OutdentIcon,
 } from '@/components/icons'
 import RovingTab from '@/context/rovingTab/RovingTab'
+import useModal from '@/hooks/useModal'
 import {
   ArrowUturnLeftIcon,
   ArrowUturnRightIcon,
@@ -38,7 +39,6 @@ import {
   $isRangeSelection,
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
-  CLEAR_EDITOR_COMMAND,
   COMMAND_PRIORITY_LOW,
   FORMAT_ELEMENT_COMMAND,
   FORMAT_TEXT_COMMAND,
@@ -51,6 +51,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import useMarkdownMode from '../../hooks/useMarkdownMode'
 import { getSelectedNode } from '../../utils'
+import ClearDialog from '../ClearDialog'
 import ToolbarButton from './ToolbarButton'
 import { BlockOptionsDropdownList } from './ToolbarDropDown'
 import ToolbarSelect from './ToolbarSelect'
@@ -78,7 +79,9 @@ export default function ToolbarPlugin() {
   const [isCode, setIsCode] = useState(false)
 
   const [isEditorEmpty, setIsEditorEmpty] = useState(true)
+
   const [isMarkdownMode, handleMarkdownToggle] = useMarkdownMode(editor)
+  const [isOpen, toggleDialog] = useModal(false)
 
   const $updateToolbar = useCallback(() => {
     const selection = $getSelection()
@@ -344,7 +347,7 @@ export default function ToolbarPlugin() {
     },
     {
       onClick: () => {
-        editor.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined)
+        toggleDialog()
       },
       icon: TrashIcon,
       disabled: isEditorEmpty,
@@ -439,6 +442,8 @@ export default function ToolbarPlugin() {
           ))}
         </RovingTab>
       </div>
+
+      <ClearDialog isOpen={isOpen} onClose={toggleDialog} editor={editor} />
     </>
   )
 }
