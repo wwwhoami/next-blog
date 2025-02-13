@@ -372,21 +372,28 @@ export default function ToolbarPlugin() {
 
         <ToolbarSeparator />
 
-        <BlockOptionsDropdownList
-          editor={editor}
-          blockType={blockType}
-          setShowBlockOptionsDropDown={() => {}}
-        />
+        {!isMarkdownMode && (
+          <>
+            <BlockOptionsDropdownList
+              editor={editor}
+              blockType={blockType}
+              setShowBlockOptionsDropDown={() => {}}
+            />
 
-        <ToolbarSeparator />
+            <ToolbarSeparator />
+          </>
+        )}
 
-        {blockType === 'code' && (
-          <ToolbarSelect
-            onChange={onCodeLanguageSelect}
-            aria-label="Code language"
-            options={codeLanguages}
-            value={codeLanguage}
-          />
+        {blockType === 'code' && !isMarkdownMode && (
+          <>
+            <ToolbarSelect
+              onChange={onCodeLanguageSelect}
+              aria-label="Code language"
+              options={codeLanguages}
+              value={codeLanguage}
+            />
+            <ToolbarSeparator />
+          </>
         )}
 
         <RovingTab as="div" className="flex h-6 items-center space-x-2">
@@ -403,20 +410,19 @@ export default function ToolbarPlugin() {
               </RovingTab.Item>
             ))}
 
-          <ToolbarSeparator />
+          {textFormatButtons && <ToolbarSeparator />}
 
-          {elementFormatButtons &&
-            elementFormatButtons.map((props, index) => (
-              <RovingTab.Item key={index}>
-                {({ tabIndex, ref }) => (
-                  <ToolbarButton
-                    tabIndex={tabIndex}
-                    ref={ref as React.Ref<HTMLButtonElement>}
-                    {...props}
-                  />
-                )}
-              </RovingTab.Item>
-            ))}
+          {elementFormatButtons.map((props, index) => (
+            <RovingTab.Item key={index}>
+              {({ tabIndex, ref }) => (
+                <ToolbarButton
+                  tabIndex={tabIndex}
+                  ref={ref as React.Ref<HTMLButtonElement>}
+                  {...props}
+                />
+              )}
+            </RovingTab.Item>
+          ))}
 
           <ToolbarSeparator />
 
