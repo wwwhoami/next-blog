@@ -91,10 +91,9 @@ const Editor = ({}: Props) => {
     <LexicalComposer initialConfig={{ ...editorConfig, editorState: content }}>
       <div
         className={
-          'prose prose-slate relative w-full max-w-none text-black prose-headings:mb-4 prose-headings:mt-2 prose-p:my-0 dark:text-white'
+          'ctp-latte prose prose-slate relative w-full max-w-none overflow-x-scroll text-black dark:ctp-frappe prose-headings:mb-4 prose-headings:mt-2 prose-p:my-0 dark:text-white'
         }
       >
-        <ToolbarPlugin />
         <div className="relative size-full min-h-52 dark:bg-gray-700">
           <RichTextPlugin
             contentEditable={<ContentEditable />}
@@ -122,6 +121,7 @@ const Editor = ({}: Props) => {
           />
         </div>
       </div>
+      <ToolbarPlugin />
     </LexicalComposer>
   )
 }

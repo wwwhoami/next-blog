@@ -57,7 +57,7 @@ import ToolbarSelect from './ToolbarSelect'
 
 function ToolbarSeparator() {
   return (
-    <span className="block h-full w-px bg-gray-300 dark:bg-gray-600"></span>
+    <span className="block h-6 w-px min-w-px bg-gray-300 dark:bg-gray-600"></span>
   )
 }
 
@@ -355,7 +355,7 @@ export default function ToolbarPlugin() {
     <>
       <MandatoryPlugins />
 
-      <div className="fixed bottom-8 left-1/2 z-20 mb-4 flex h-10 min-w-52 -translate-x-1/2 items-center space-x-2 rounded-md bg-gray-50 p-2 shadow dark:bg-gray-800">
+      <div className="fixed bottom-0 z-20 flex w-full items-center space-x-2 overflow-x-auto rounded-md bg-gray-50 p-1 shadow dark:bg-gray-800 md:p-2 lg:bottom-4 lg:left-1/2 lg:w-auto lg:-translate-x-1/2 lg:overflow-x-clip">
         <RovingTab as="div" className="flex h-6 items-center space-x-2">
           {undoRedoButtons.map((props, index) => (
             <RovingTab.Item key={index} disabled={props.disabled}>

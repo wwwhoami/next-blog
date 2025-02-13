@@ -309,7 +309,7 @@ export function BlockOptionsDropdownList({
           size="sm"
           variant="text"
           color="secondary"
-          className="inline-flex w-max p-2"
+          className="inline-flex w-max whitespace-nowrap p-2"
         >
           {BlockTypeToIcon[blockType as keyof typeof BlockTypeToIcon]}
           {BlockTypeToText[blockType as keyof typeof BlockTypeToText]}
@@ -318,7 +318,7 @@ export function BlockOptionsDropdownList({
       </MenuButton>
       <MenuItems
         anchor="bottom"
-        className="w-52 origin-top-right rounded-xl bg-gray-50 p-1 text-sm/6 shadow transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0 dark:bg-gray-800"
+        className="z-30 w-52 origin-top-right rounded-xl bg-gray-50 p-1 text-sm/6 shadow-lg transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0 dark:bg-gray-800 dark:shadow-xl"
       >
         {textActions.map(({ action, text, icon, key }) => (
           <ToolbarDropDownItem

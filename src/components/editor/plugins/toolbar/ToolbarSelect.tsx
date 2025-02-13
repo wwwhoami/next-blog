@@ -16,7 +16,7 @@ function ToolbarSelect({ options, value, onChange, ariaLabel }: Props) {
         onChange={onChange}
         value={value}
         className={
-          'focus-ring-secondary w-full appearance-none rounded-lg bg-transparent p-2 pr-6 text-sm font-normal focus-within:ring hover:bg-gray-300 focus:bg-gray-300 focus:outline-none'
+          'focus-ring-secondary w-auto appearance-none rounded-lg bg-transparent p-2 pr-6 text-sm font-normal focus-within:ring hover:bg-gray-300 focus:bg-gray-300 focus:outline-none'
         }
         aria-label={ariaLabel}
       >

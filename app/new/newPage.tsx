@@ -10,7 +10,7 @@ type Props = {}
 
 function NewPage({}: Props) {
   return (
-    <div className="px-5">
+    <div className="lg:px-5">
       <PageHeading title="Create new post" />
 
       <TextareaAutoExpand
