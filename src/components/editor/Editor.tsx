@@ -2,6 +2,7 @@
 
 import editorTheme from '@/components/editor/EditorTheme'
 import useHasMounted from '@/hooks/useHasMounted'
+import { Category } from '@/types/Category'
 import { CodeHighlightNode, CodeNode } from '@lexical/code'
 import { AutoLinkNode, LinkNode } from '@lexical/link'
 import { ListItemNode, ListNode } from '@lexical/list'
@@ -28,6 +29,7 @@ import AutoLinkPlugin from './plugins/AutoLinkPlugin'
 import CodeHighlightPlugin from './plugins/CodeHighlightPlutin'
 import FloatingLinkEditorPlugin from './plugins/FloatingLinkEditor'
 import LocalStoragePlugin from './plugins/LocalStoragePlugin'
+import MarkdownImportExportPlugin from './plugins/MarkdownImportExportPlugin'
 import TabIndentationPlugin from './plugins/TabIndentPlugin'
 import { TABLE_TRANSFORMER } from './plugins/TablePlugin'
 import ToolbarPlugin from './plugins/toolbar/ToolbarPlugin'
@@ -43,7 +45,14 @@ const Placeholder = () => {
   )
 }
 
-type Props = {}
+type Props = {
+  title: string
+  setTitle: React.Dispatch<React.SetStateAction<string>>
+  excerpt: string
+  setExcerpt: React.Dispatch<React.SetStateAction<string>>
+  category: Array<Category>
+  setCategory: React.Dispatch<React.SetStateAction<Array<Category>>>
+}
 
 const EDITOR_NODES = [
   HeadingNode,
@@ -68,8 +77,10 @@ export const EDITOR_TRANSFORMERS = [
   TABLE_TRANSFORMER,
 ]
 
+export const editorNamespace = 'postEditor'
+
 const editorConfig = {
-  namespace: 'My Editor',
+  namespace: editorNamespace,
   nodes: EDITOR_NODES,
   onError(error: Error) {
     throw error
@@ -77,7 +88,14 @@ const editorConfig = {
   theme: editorTheme,
 }
 
-const Editor = ({}: Props) => {
+const Editor = ({
+  title,
+  setTitle,
+  excerpt,
+  setExcerpt,
+  category,
+  setCategory,
+}: Props) => {
   const [isLinkEditMode, setIsLinkEditMode] = useState(false)
 
   const hasMounted = useHasMounted()
@@ -91,7 +109,7 @@ const Editor = ({}: Props) => {
     <LexicalComposer initialConfig={{ ...editorConfig, editorState: content }}>
       <div
         className={
-          'ctp-latte prose prose-slate relative w-full max-w-none overflow-x-scroll text-black dark:ctp-frappe prose-headings:mb-4 prose-headings:mt-2 prose-p:my-0 dark:text-white'
+          'ctp-latte prose prose-slate w-full max-w-none overflow-x-scroll text-black dark:ctp-frappe prose-headings:mb-4 prose-headings:mt-2 prose-p:my-0 dark:text-white'
         }
       >
         <div className="relative size-full min-h-52 dark:bg-gray-700">
@@ -104,6 +122,14 @@ const Editor = ({}: Props) => {
           <AutoFocusPlugin />
           <LocalStoragePlugin namespace={editorConfig.namespace} />
           <MarkdownShortcutPlugin transformers={EDITOR_TRANSFORMERS} />
+          <MarkdownImportExportPlugin
+            title={title}
+            setTitle={setTitle}
+            excerpt={excerpt}
+            setExcerpt={setExcerpt}
+            category={category}
+            setCategory={setCategory}
+          />
           <CodeHighlightPlugin />
           <ListPlugin />
           <TabIndentationPlugin maxIndent={8} />

@@ -1,18 +1,21 @@
-'use client'
-
 import fetcher from '@/lib/fetcher'
 import { Category } from '@/types/Category'
-import { useState } from 'react'
 import useSWR from 'swr'
 import MyCombobox from '../form/ComboBox'
 import CategoryList from './CategoryList'
 
-type Props = {}
+type Props = {
+  selectedCategories: Array<Category>
+  setSelectedCategories: React.Dispatch<React.SetStateAction<Array<Category>>>
+}
 
 const categoryFetcher = async (url: string) =>
   fetcher<Array<Category>>(url, { cache: 'no-store' })
 
-export default function CategoryInput({}: Props) {
+export default function CategoryInput({
+  selectedCategories,
+  setSelectedCategories,
+}: Props) {
   const { data: categories } = useSWR<Array<Category>>(
     `${process.env.NEXT_PUBLIC_API_URL}/category`,
     categoryFetcher,
@@ -22,10 +25,6 @@ export default function CategoryInput({}: Props) {
       revalidateIfStale: true,
       revalidateOnMount: true,
     },
-  )
-
-  const [selectedCategories, setSelectedCategories] = useState<Array<Category>>(
-    [],
   )
 
   return (

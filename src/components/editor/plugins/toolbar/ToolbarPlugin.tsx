@@ -7,6 +7,8 @@ import {
 import RovingTab from '@/context/rovingTab/RovingTab'
 import useModal from '@/hooks/useModal'
 import {
+  ArrowDownTrayIcon,
+  ArrowUpTrayIcon,
   ArrowUturnLeftIcon,
   ArrowUturnRightIcon,
   Bars3BottomLeftIcon,
@@ -52,6 +54,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import useMarkdownMode from '../../hooks/useMarkdownMode'
 import { getSelectedNode } from '../../utils'
 import ClearDialog from '../ClearDialog'
+import {
+  EXPORT_MARKDOWN_COMMAND,
+  IMPORT_MARKDOWN_COMMAND,
+} from '../MarkdownImportExportPlugin'
 import ToolbarButton from './ToolbarButton'
 import { BlockOptionsDropdownList } from './ToolbarDropDown'
 import ToolbarSelect from './ToolbarSelect'
@@ -344,6 +350,19 @@ export default function ToolbarPlugin() {
       icon: MarkdownIcon,
       active: isMarkdownMode,
       disabled: false,
+    },
+    {
+      icon: ArrowUpTrayIcon,
+      onClick: () => {
+        editor.dispatchCommand(IMPORT_MARKDOWN_COMMAND, undefined)
+      },
+    },
+    {
+      icon: ArrowDownTrayIcon,
+      onClick: () => {
+        editor.dispatchCommand(EXPORT_MARKDOWN_COMMAND, undefined)
+      },
+      disabled: isEditorEmpty,
     },
     {
       onClick: () => {
