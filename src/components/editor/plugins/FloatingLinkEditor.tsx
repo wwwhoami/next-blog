@@ -265,13 +265,13 @@ function FloatingLinkEditor({
   return (
     <div
       ref={editorRef}
-      className="absolute left-0 top-0 z-10 max-w-96 transform-gpu opacity-0 transition-transform will-change-transform"
+      className="absolute top-0 left-0 z-10 max-w-96 transform-gpu opacity-0 transition-transform will-change-transform"
     >
       {!isLink ? null : isEditMode ? (
         <div className="inline-flex items-center gap-2 rounded-xl border-2 border-gray-200/70 bg-gray-100 p-2 shadow-lg dark:border-slate-800 dark:bg-slate-900 dark:text-gray-200 dark:placeholder:text-gray-400 dark:autofill:bg-slate-800 dark:autofill:text-gray-200 dark:focus-within:ring-indigo-600/80">
           <input
             ref={inputRef}
-            className="focus-ring-primary h-6 rounded-xl border-2 border-gray-200/70 bg-gray-100 p-2 shadow-lg dark:border-slate-800 dark:bg-slate-900 dark:text-gray-200 dark:placeholder:text-gray-400 dark:autofill:bg-slate-800 dark:autofill:text-gray-200 dark:focus-within:ring-indigo-600/80"
+            className="h-6 rounded-xl border-2 border-gray-200/70 bg-gray-100 p-2 shadow-lg focus-ring-primary dark:border-slate-800 dark:bg-slate-900 dark:text-gray-200 dark:placeholder:text-gray-400 dark:autofill:bg-slate-800 dark:autofill:text-gray-200 dark:focus-within:ring-indigo-600/80"
             value={editedLinkUrl}
             onChange={(e) => {
               setEditedLinkUrl(e.target.value)
@@ -306,7 +306,7 @@ function FloatingLinkEditor({
           <div className="inline-flex items-center gap-2 rounded-xl border-2 border-gray-200/70 bg-gray-100 p-2 shadow-lg dark:border-slate-800 dark:bg-slate-900 dark:text-gray-200 dark:placeholder:text-gray-400 dark:autofill:bg-slate-800 dark:autofill:text-gray-200 dark:focus-within:ring-indigo-600/80">
             <a
               href={sanitizeUrl(linkUrl)}
-              className="focus-ring-primary inline-block max-w-60 overflow-hidden rounded-xl font-medium text-indigo-600 hover:underline dark:text-indigo-400"
+              className="inline-block max-w-60 overflow-hidden rounded-xl font-medium text-indigo-600 focus-ring-primary hover:underline dark:text-indigo-400"
               target="_blank"
               rel="noopener noreferrer"
             >

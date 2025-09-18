@@ -21,7 +21,7 @@ function ClearDialog({ isOpen, editor, onClose }: Props) {
     <ModalDialog title="Clear Editor" isOpen={isOpen} onClose={onClose}>
       <div className="flex-col space-y-6">
         <p className="block">Are you sure you want to clear the editor?</p>
-        <div className="flex flex-col space-y-4 sm:flex-row sm:space-x-5 sm:space-y-0">
+        <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-5">
           <Button color="secondary" width="full" onClick={() => onClose()}>
             Cancel
           </Button>

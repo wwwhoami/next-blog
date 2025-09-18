@@ -44,7 +44,7 @@ function ModalDialog({ title, children, isOpen, onClose }: Props) {
               <DialogPanel className="overflow-hidden rounded-2xl bg-slate-50 p-6 text-left align-middle shadow-xl transition-all dark:bg-slate-800">
                 <DialogTitle
                   as="h1"
-                  className="mb-6 text-3xl font-semibold leading-6 dark:text-white"
+                  className="mb-6 text-3xl leading-6 font-semibold dark:text-white"
                 >
                   {title}
                 </DialogTitle>

@@ -309,7 +309,7 @@ export function BlockOptionsDropdownList({
           size="sm"
           variant="text"
           color="secondary"
-          className="inline-flex w-max whitespace-nowrap p-2"
+          className="inline-flex w-max p-2 whitespace-nowrap"
         >
           {BlockTypeToIcon[blockType as keyof typeof BlockTypeToIcon]}
           {BlockTypeToText[blockType as keyof typeof BlockTypeToText]}

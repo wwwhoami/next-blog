@@ -40,7 +40,7 @@ const PasswordInput = ({
           className,
           'dark:focus-within:ring-indigo-600/80',
           hasError
-            ? 'focus-ring-danger border border-red-500 bg-red-50 dark:border-solid dark:bg-red-950/10 dark:text-gray-200'
+            ? 'border border-red-500 bg-red-50 focus-ring-danger dark:border-solid dark:bg-red-950/10 dark:text-gray-200'
             : 'focus-ring-primary dark:border-none dark:bg-slate-700 dark:text-gray-200 dark:placeholder:text-gray-400 dark:autofill:bg-slate-700 dark:autofill:text-gray-200',
         )}
       >
@@ -69,7 +69,7 @@ const PasswordInput = ({
           onClick={() => {
             setPasswordVisible((prev) => !prev)
           }}
-          className="focus-ring-primary m-1 flex size-8 items-center justify-center rounded-xl p-0 text-indigo-500 transition-colors duration-300 hover:opacity-80 focus:outline-none focus:ring-2 dark:text-indigo-400"
+          className="m-1 flex size-8 items-center justify-center rounded-xl p-0 text-indigo-500 focus-ring-primary transition-colors duration-300 hover:opacity-80 focus:ring-2 focus:outline-none dark:text-indigo-400"
         >
           {passwordVisible ? <EyeSlashIcon /> : <EyeIcon />}
         </button>

@@ -47,7 +47,7 @@ const CategorySwitch = forwardRef<HTMLInputElement, Props>(
     return (
       <label
         className={clsx(
-          'hover-ring-primary focus-ring-primary relative size-auto cursor-pointer rounded-full px-6 py-3 transition focus-within:ring',
+          'relative size-auto cursor-pointer rounded-full px-6 py-3 focus-ring-primary hover-ring-primary transition focus-within:ring',
           {
             'bg-black text-white dark:bg-slate-100 dark:text-black': isChecked,
             'bg-slate-100 text-black dark:bg-gray-700 dark:text-white':
