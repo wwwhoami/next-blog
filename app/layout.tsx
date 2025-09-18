@@ -5,7 +5,6 @@ import '@/styles/globals.css'
 import { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { FC, ReactNode } from 'react'
-import 'react-toastify/dist/ReactToastify.min.css'
 import ToastProvider from 'src/context/ToastProvider'
 
 interface RootLayoutProps {

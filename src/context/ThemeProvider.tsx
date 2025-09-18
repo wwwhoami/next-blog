@@ -35,8 +35,10 @@ export default function ThemeProvider({ children }: Props) {
     // Add or remove the "dark" class based on if the media query matches
     if (isDark) {
       d.classList.add('dark')
+      d.setAttribute('data-theme', 'dark')
     } else {
       d.classList.remove('dark')
+      d.setAttribute('data-theme', 'light')
     }
 
     // Update the color scheme meta tag

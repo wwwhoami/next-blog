@@ -39,7 +39,7 @@ const placeholderText = 'Start writing...'
 
 const Placeholder = () => {
   return (
-    <div className="absolute left-[1.125rem] top-[1.125rem] opacity-50">
+    <div className="absolute top-[1.125rem] left-[1.125rem] opacity-50">
       {placeholderText}
     </div>
   )
@@ -109,7 +109,7 @@ const Editor = ({
     <LexicalComposer initialConfig={{ ...editorConfig, editorState: content }}>
       <div
         className={
-          'ctp-latte prose prose-slate w-full max-w-none overflow-x-scroll text-black dark:ctp-frappe prose-headings:mb-4 prose-headings:mt-2 prose-p:my-0 dark:text-white'
+          'prose w-full max-w-none overflow-x-scroll text-black prose-slate dark:text-white prose-headings:mt-2 prose-headings:mb-4 prose-p:my-0'
         }
       >
         <div className="relative size-full min-h-52 dark:bg-gray-700">
