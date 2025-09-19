@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 }
 
 type Props = {
-  params: { slug: string }[]
+  params: Promise<{ slug: string }[]>
 }
 
 const components = {
@@ -50,7 +50,8 @@ const components = {
   pre: (props: any) => <PostPre {...props} />,
 }
 
-export default async function PostPage({ params }: Props) {
+export default async function PostPage(props: Props) {
+  const params = await props.params
   const post = await getPost(params as any)
   const {
     title,

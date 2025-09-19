@@ -6,6 +6,7 @@ import { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { FC, ReactNode } from 'react'
 import ToastProvider from 'src/context/ToastProvider'
+import { SWRConfig } from 'swr'
 
 interface RootLayoutProps {
   children: ReactNode
@@ -31,9 +32,11 @@ const RootLayout: FC<RootLayoutProps> = ({ children, modal }) => {
         <UserProvider>
           <ThemeProvider>
             <ToastProvider>
-              <Header />
-              <main className="mx-auto max-w-screen-2xl">{children}</main>
-              {modal}
+              <SWRConfig>
+                <Header />
+                <main className="mx-auto max-w-screen-2xl">{children}</main>
+                {modal}
+              </SWRConfig>
             </ToastProvider>
           </ThemeProvider>
         </UserProvider>

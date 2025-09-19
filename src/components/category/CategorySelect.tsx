@@ -24,7 +24,9 @@ const getCategoryCombinationsKey = (
 }
 
 const categoryCombinationsFetcher = async (url: string) => {
-  const categoryCombinations = await fetcher<Array<string>>(`${url}`)
+  const categoryCombinations = await fetcher<Array<string>>(`${url}`, {
+    cache: 'no-store',
+  })
 
   const categoryCombinationsSet = new Set<string>(categoryCombinations)
 

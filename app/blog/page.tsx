@@ -14,7 +14,7 @@ type SearchParams = {
 }
 
 type Props = {
-  searchParams: SearchParams
+  searchParams: Promise<SearchParams>
 }
 
 async function getPosts(query: SearchParams) {
@@ -27,7 +27,8 @@ async function getPosts(query: SearchParams) {
   return [posts]
 }
 
-export default async function Page({ searchParams }: Props) {
+export default async function Page(props: Props) {
+  const searchParams = await props.searchParams
   const fallbackData = await getPosts(searchParams)
 
   return <BlogPage fallbackData={fallbackData} />
