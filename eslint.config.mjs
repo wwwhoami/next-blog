@@ -26,6 +26,14 @@ const patchedConfig = fixupConfigRules([
 const config = [
   ...patchedConfig,
   {
+    settings: {
+      tailwindcss: {
+        // The absolute path pointing to you main Tailwind CSS v4 config file.
+        // It must be a `.css` file (v4), not a `.js` file (v3)
+        // REQUIRED, default value will not help
+        config: `${__dirname}/styles/globals.css`,
+      },
+    },
     plugins: {
       'unused-imports': unusedImports,
     },

@@ -17,7 +17,7 @@ export default function ThemeSwitch() {
       checked={isDarkTheme}
       onChange={onSwitch}
       className={clsx(
-        'focus-ring-primary relative inline-flex h-6 w-10 items-center rounded-full',
+        'relative inline-flex h-6 w-10 items-center rounded-full focus-ring-primary',
         isDarkTheme ? 'bg-gray-700/80' : 'bg-indigo-600',
       )}
     >

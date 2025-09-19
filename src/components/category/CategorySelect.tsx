@@ -24,7 +24,9 @@ const getCategoryCombinationsKey = (
 }
 
 const categoryCombinationsFetcher = async (url: string) => {
-  const categoryCombinations = await fetcher<Array<string>>(`${url}`)
+  const categoryCombinations = await fetcher<Array<string>>(`${url}`, {
+    cache: 'no-store',
+  })
 
   const categoryCombinationsSet = new Set<string>(categoryCombinations)
 
@@ -146,7 +148,7 @@ const CategorySelect = ({}: Props) => {
 
   return (
     <>
-      <h2 className="col-span-full mb-6 mt-3 text-2xl font-medium dark:text-slate-200">
+      <h2 className="col-span-full mt-3 mb-6 text-2xl font-medium dark:text-slate-200">
         Search posts by topics
       </h2>
       <RovingTab className="flex flex-wrap gap-x-4 gap-y-2" as="ul">

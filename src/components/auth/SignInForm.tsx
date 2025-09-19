@@ -104,7 +104,7 @@ const SignInForm = ({}: Props) => {
             href="/signUp"
             replace
             scroll={false}
-            className="focus-ring-primary mx-2 rounded-xl text-indigo-600 hover:underline dark:text-indigo-400"
+            className="mx-2 rounded-xl text-indigo-600 focus-ring-primary hover:underline dark:text-indigo-400"
           >
             Sign up
           </Link>

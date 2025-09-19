@@ -19,6 +19,9 @@ export default async function fetcher<T>(
   url: string,
   options: Options & RequestInit = {
     cache: 'force-cache',
+    next: {
+      revalidate: 3600, // revalidate every hour
+    },
   },
 ) {
   const res = await fetch(url, options)

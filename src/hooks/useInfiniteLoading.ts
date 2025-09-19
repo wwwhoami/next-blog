@@ -9,7 +9,7 @@ export const useInfiniteLoading = <T extends any[]>(
   fetcher: (...args: any) => Promise<T>,
   fallbackData?: T[],
 ) => {
-  const ref = useRef() as React.MutableRefObject<HTMLDivElement>
+  const ref = useRef(null)
   const isVisible = useOnScreen(ref)
   const { data, error, size, setSize, isValidating } = useSWRInfinite<T>(
     (...args) => getKey(...args),

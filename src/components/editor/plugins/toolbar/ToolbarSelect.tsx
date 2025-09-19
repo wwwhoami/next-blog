@@ -16,7 +16,7 @@ function ToolbarSelect({ options, value, onChange, ariaLabel }: Props) {
         onChange={onChange}
         value={value}
         className={
-          'focus-ring-secondary w-auto appearance-none rounded-lg bg-transparent p-2 pr-6 text-sm font-normal focus-within:ring hover:bg-gray-300 focus:bg-gray-300 focus:outline-none'
+          'w-auto appearance-none rounded-lg bg-transparent p-2 pr-6 text-sm font-normal focus-ring-secondary focus-within:ring hover:bg-gray-300 focus:bg-gray-300 focus:outline-none'
         }
         aria-label={ariaLabel}
       >
@@ -26,7 +26,7 @@ function ToolbarSelect({ options, value, onChange, ariaLabel }: Props) {
           </option>
         ))}
       </Select>
-      <ChevronDownIcon className="pointer-events-none absolute right-1.5 top-2.5 size-4" />
+      <ChevronDownIcon className="pointer-events-none absolute top-2.5 right-1.5 size-4" />
     </div>
   )
 }

@@ -1,70 +1,74 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@plugin "@tailwindcss/typography";
+@config "../tailwind.config.js";
 
-@layer utilities {
-  .hover-ring {
-    @apply transition-all duration-300 ease-in-out hover:ring-2 hover:ring-offset-4 dark:ring-offset-slate-900;
-  }
+/* BUG: Somehow @catppuccin/tailwindcss@v1 doesn't apply the colorsheme for a dark mode
+ * Issue #37 on github */
+@import '@catppuccin/tailwindcss/frappe.css';
 
-  .focus-ring {
-    @apply ring-offset-2 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 dark:ring-offset-slate-900;
-  }
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
-  .ring-primary {
-    @apply ring-indigo-600 dark:ring-indigo-400;
-  }
+@utility hover-ring {
+  @apply transition-all duration-300 ease-in-out hover:ring-2 hover:ring-offset-4 dark:ring-offset-slate-900;
+}
 
-  .ring-secondary {
-    @apply ring-gray-300 dark:ring-gray-200;
-  }
+@utility focus-ring {
+  @apply ring-offset-2 transition-all duration-300 ease-in-out focus:ring-2 focus:ring-offset-2 focus:outline-none dark:ring-offset-slate-900;
+}
 
-  .ring-danger {
-    @apply ring-red-600 dark:ring-red-400;
-  }
+@utility ring-primary {
+  @apply ring-indigo-600 dark:ring-indigo-400;
+}
 
-  .ring-success {
-    @apply ring-green-600 dark:ring-green-400;
-  }
+@utility ring-secondary {
+  @apply ring-gray-300 dark:ring-gray-200;
+}
 
-  .hover-ring-primary {
-    @apply hover-ring ring-primary;
-  }
+@utility ring-danger {
+  @apply ring-red-600 dark:ring-red-400;
+}
 
-  .hover-ring-secondary {
-    @apply hover-ring ring-secondary;
-  }
+@utility ring-success {
+  @apply ring-green-600 dark:ring-green-400;
+}
 
-  .hover-ring-danger {
-    @apply hover-ring ring-danger;
-  }
+@utility hover-ring-primary {
+  @apply hover-ring ring-primary;
+}
 
-  .hover-ring-success {
-    @apply hover-ring ring-success;
-  }
+@utility hover-ring-secondary {
+  @apply hover-ring ring-secondary;
+}
 
-  .focus-ring-primary {
-    @apply focus-ring ring-primary;
-  }
+@utility hover-ring-danger {
+  @apply hover-ring ring-danger;
+}
 
-  .focus-ring-secondary {
-    @apply focus-ring ring-secondary;
-  }
+@utility hover-ring-success {
+  @apply hover-ring ring-success;
+}
 
-  .focus-ring-danger {
-    @apply focus-ring ring-danger;
-  }
+@utility focus-ring-primary {
+  @apply focus-ring ring-primary;
+}
 
-  .focus-ring-success {
-    @apply focus-ring ring-success;
-  }
+@utility focus-ring-secondary {
+  @apply focus-ring ring-secondary;
+}
+
+@utility focus-ring-danger {
+  @apply focus-ring ring-danger;
+}
+
+@utility focus-ring-success {
+  @apply focus-ring ring-success;
 }
 
 @layer components {
   .article {
     display: grid;
     grid-template-columns: 1fr min(65ch, calc(100% - 2rem)) 1fr;
-    @apply prose prose-base mt-2 w-full max-w-full gap-x-4 dark:prose-invert md:prose-lg prose-a:text-indigo-600 prose-a:no-underline hover:prose-a:underline dark:prose-a:text-indigo-400 md:px-0;
+    @apply prose prose-base dark:prose-invert md:prose-lg prose-a:text-indigo-600 prose-a:no-underline hover:prose-a:underline dark:prose-a:text-indigo-400 mt-2 w-full max-w-full gap-x-4 md:px-0;
   }
 
   .article > * {
@@ -99,7 +103,379 @@
   }
 }
 
-:root {
-  --toastify-color-dark: #18181b;
-  --toastify-text-color-dark: #d1d5db;
+@layer base {
+  :root {
+    --toastify-color-dark: #18181b;
+    --toastify-text-color-dark: #d1d5db;
+
+    /* FIXME: Once @catppuccin/tailwindcss is updated and theme is correctly applied for colorschemes
+     * remove the colorscheme variables here */
+    --catppuccin-color-rosewater: #dc8a78;
+    --catppuccin-color-rosewater-500: #dc8a78;
+    --catppuccin-color-rosewater-400: #de998c;
+    --catppuccin-color-rosewater-300: #e0a69c;
+    --catppuccin-color-rosewater-200: #e2b1ab;
+    --catppuccin-color-rosewater-100: #e4bcb8;
+    --catppuccin-color-rosewater-50: #e6c6c4;
+    --catppuccin-color-rosewater-600: #d28372;
+    --catppuccin-color-rosewater-700: #c27969;
+    --catppuccin-color-rosewater-800: #af6d5e;
+    --catppuccin-color-rosewater-900: #9a5f52;
+    --catppuccin-color-rosewater-950: #804e43;
+    --catppuccin-color-flamingo: #dd7878;
+    --catppuccin-color-flamingo-500: #dd7878;
+    --catppuccin-color-flamingo-400: #df8b8c;
+    --catppuccin-color-flamingo-300: #e19b9c;
+    --catppuccin-color-flamingo-200: #e3a9ab;
+    --catppuccin-color-flamingo-100: #e4b5b8;
+    --catppuccin-color-flamingo-50: #e6c1c4;
+    --catppuccin-color-flamingo-600: #d37272;
+    --catppuccin-color-flamingo-700: #c26969;
+    --catppuccin-color-flamingo-800: #b05e5e;
+    --catppuccin-color-flamingo-900: #9a5252;
+    --catppuccin-color-flamingo-950: #804343;
+    --catppuccin-color-pink: #ea76cb;
+    --catppuccin-color-pink-500: #ea76cb;
+    --catppuccin-color-pink-400: #eb89d0;
+    --catppuccin-color-pink-300: #eb9ad4;
+    --catppuccin-color-pink-200: #eca8d9;
+    --catppuccin-color-pink-100: #ecb5dd;
+    --catppuccin-color-pink-50: #edc1e1;
+    --catppuccin-color-pink-600: #df70c2;
+    --catppuccin-color-pink-700: #ce67b2;
+    --catppuccin-color-pink-800: #ba5da1;
+    --catppuccin-color-pink-900: #a4518e;
+    --catppuccin-color-pink-950: #884275;
+    --catppuccin-color-mauve: #8839ef;
+    --catppuccin-color-mauve-500: #8839ef;
+    --catppuccin-color-mauve-400: #9763f0;
+    --catppuccin-color-mauve-300: #a47ef0;
+    --catppuccin-color-mauve-200: #af93f1;
+    --catppuccin-color-mauve-100: #baa5f1;
+    --catppuccin-color-mauve-50: #c4b5f2;
+    --catppuccin-color-mauve-600: #8236e4;
+    --catppuccin-color-mauve-700: #7731d2;
+    --catppuccin-color-mauve-800: #6b2bbe;
+    --catppuccin-color-mauve-900: #5e25a7;
+    --catppuccin-color-mauve-950: #4d1d8b;
+    --catppuccin-color-red: #d20f39;
+    --catppuccin-color-red-500: #d20f39;
+    --catppuccin-color-red-400: #d55664;
+    --catppuccin-color-red-300: #d87680;
+    --catppuccin-color-red-200: #db8d95;
+    --catppuccin-color-red-100: #dea1a8;
+    --catppuccin-color-red-50: #e1b1b8;
+    --catppuccin-color-red-600: #c80e36;
+    --catppuccin-color-red-700: #b90c31;
+    --catppuccin-color-red-800: #a7092b;
+    --catppuccin-color-red-900: #930725;
+    --catppuccin-color-red-950: #7a051d;
+    --catppuccin-color-maroon: #e64553;
+    --catppuccin-color-maroon-500: #e64553;
+    --catppuccin-color-maroon-400: #e76972;
+    --catppuccin-color-maroon-300: #e88289;
+    --catppuccin-color-maroon-200: #e9969c;
+    --catppuccin-color-maroon-100: #eaa7ad;
+    --catppuccin-color-maroon-50: #ebb6bb;
+    --catppuccin-color-maroon-600: #dc414f;
+    --catppuccin-color-maroon-700: #ca3c48;
+    --catppuccin-color-maroon-800: #b73540;
+    --catppuccin-color-maroon-900: #a12e38;
+    --catppuccin-color-maroon-950: #86242d;
+    --catppuccin-color-peach: #fe640b;
+    --catppuccin-color-peach-500: #fe640b;
+    --catppuccin-color-peach-400: #fd7c57;
+    --catppuccin-color-peach-300: #fb9077;
+    --catppuccin-color-peach-200: #faa08f;
+    --catppuccin-color-peach-100: #f8afa3;
+    --catppuccin-color-peach-50: #f7bcb4;
+    --catppuccin-color-peach-600: #f25f0a;
+    --catppuccin-color-peach-700: #e05708;
+    --catppuccin-color-peach-800: #cb4e07;
+    --catppuccin-color-peach-900: #b24405;
+    --catppuccin-color-peach-950: #943703;
+    --catppuccin-color-yellow: #df8e1d;
+    --catppuccin-color-yellow-500: #df8e1d;
+    --catppuccin-color-yellow-400: #e19c5a;
+    --catppuccin-color-yellow-300: #e2a879;
+    --catppuccin-color-yellow-200: #e4b391;
+    --catppuccin-color-yellow-100: #e6bea4;
+    --catppuccin-color-yellow-50: #e7c8b5;
+    --catppuccin-color-yellow-600: #d5871b;
+    --catppuccin-color-yellow-700: #c47c18;
+    --catppuccin-color-yellow-800: #b27015;
+    --catppuccin-color-yellow-900: #9c6211;
+    --catppuccin-color-yellow-950: #82500c;
+    --catppuccin-color-green: #40a02b;
+    --catppuccin-color-green-500: #40a02b;
+    --catppuccin-color-green-400: #66aa5e;
+    --catppuccin-color-green-300: #7fb47c;
+    --catppuccin-color-green-200: #94bd93;
+    --catppuccin-color-green-100: #a5c6a6;
+    --catppuccin-color-green-50: #b4ceb6;
+    --catppuccin-color-green-600: #3d9929;
+    --catppuccin-color-green-700: #378c25;
+    --catppuccin-color-green-800: #317f20;
+    --catppuccin-color-green-900: #2a6f1b;
+    --catppuccin-color-green-950: #215b15;
+    --catppuccin-color-teal: #179299;
+    --catppuccin-color-teal-500: #179299;
+    --catppuccin-color-teal-400: #569fa5;
+    --catppuccin-color-teal-300: #75abb1;
+    --catppuccin-color-teal-200: #8db6bb;
+    --catppuccin-color-teal-100: #a0c0c5;
+    --catppuccin-color-teal-50: #b0c9ce;
+    --catppuccin-color-teal-600: #158b92;
+    --catppuccin-color-teal-700: #138086;
+    --catppuccin-color-teal-800: #107379;
+    --catppuccin-color-teal-900: #0d656a;
+    --catppuccin-color-teal-950: #085357;
+    --catppuccin-color-sky: #04a5e5;
+    --catppuccin-color-sky-500: #04a5e5;
+    --catppuccin-color-sky-400: #53afe7;
+    --catppuccin-color-sky-300: #74b8e8;
+    --catppuccin-color-sky-200: #8bc0ea;
+    --catppuccin-color-sky-100: #9fc8ec;
+    --catppuccin-color-sky-50: #b0d0ed;
+    --catppuccin-color-sky-600: #049ddb;
+    --catppuccin-color-sky-700: #0391ca;
+    --catppuccin-color-sky-800: #0283b6;
+    --catppuccin-color-sky-900: #0272a0;
+    --catppuccin-color-sky-950: #015e85;
+    --catppuccin-color-sapphire: #209fb5;
+    --catppuccin-color-sapphire-500: #209fb5;
+    --catppuccin-color-sapphire-400: #59aabd;
+    --catppuccin-color-sapphire-300: #77b3c4;
+    --catppuccin-color-sapphire-200: #8ebdcb;
+    --catppuccin-color-sapphire-100: #a0c5d2;
+    --catppuccin-color-sapphire-50: #b1cdd8;
+    --catppuccin-color-sapphire-600: #1e98ad;
+    --catppuccin-color-sapphire-700: #1b8b9f;
+    --catppuccin-color-sapphire-800: #177e90;
+    --catppuccin-color-sapphire-900: #136e7e;
+    --catppuccin-color-sapphire-950: #0e5b68;
+    --catppuccin-color-blue: #1e66f5;
+    --catppuccin-color-blue-500: #1e66f5;
+    --catppuccin-color-blue-400: #587ef5;
+    --catppuccin-color-blue-300: #7791f5;
+    --catppuccin-color-blue-200: #8da1f5;
+    --catppuccin-color-blue-100: #a0b0f5;
+    --catppuccin-color-blue-50: #b1bdf5;
+    --catppuccin-color-blue-600: #1c61ea;
+    --catppuccin-color-blue-700: #1959d8;
+    --catppuccin-color-blue-800: #1650c3;
+    --catppuccin-color-blue-900: #1245ac;
+    --catppuccin-color-blue-950: #0d388f;
+    --catppuccin-color-lavender: #7287fd;
+    --catppuccin-color-lavender-500: #7287fd;
+    --catppuccin-color-lavender-400: #8696fc;
+    --catppuccin-color-lavender-300: #97a4fb;
+    --catppuccin-color-lavender-200: #a5b0fb;
+    --catppuccin-color-lavender-100: #b2bbfa;
+    --catppuccin-color-lavender-50: #bec5f9;
+    --catppuccin-color-lavender-600: #6d81f2;
+    --catppuccin-color-lavender-700: #6476df;
+    --catppuccin-color-lavender-800: #596aca;
+    --catppuccin-color-lavender-900: #4e5db1;
+    --catppuccin-color-lavender-950: #3f4c94;
+    --catppuccin-color-text: #4c4f69;
+    --catppuccin-color-subtext1: #5c5f77;
+    --catppuccin-color-subtext0: #6c6f85;
+    --catppuccin-color-overlay2: #7c7f93;
+    --catppuccin-color-overlay1: #8c8fa1;
+    --catppuccin-color-overlay0: #9ca0b0;
+    --catppuccin-color-surface2: #acb0be;
+    --catppuccin-color-surface1: #bcc0cc;
+    --catppuccin-color-surface0: #ccd0da;
+    --catppuccin-color-base: #eff1f5;
+    --catppuccin-color-mantle: #e6e9ef;
+    --catppuccin-color-crust: #dce0e8;
+  }
+
+  @variant dark {
+    &:root {
+      /* FIXME: Once @catppuccin/tailwindcss is updated and theme is correctly applied for colorschemes
+     * remove the colorscheme variables here */
+      --catppuccin-color-rosewater: #f2d5cf;
+      --catppuccin-color-rosewater-500: #f2d5cf;
+      --catppuccin-color-rosewater-400: #f3dad4;
+      --catppuccin-color-rosewater-300: #f5deda;
+      --catppuccin-color-rosewater-200: #f6e3df;
+      --catppuccin-color-rosewater-100: #f7e7e4;
+      --catppuccin-color-rosewater-50: #f9ebe9;
+      --catppuccin-color-rosewater-600: #e7ccc6;
+      --catppuccin-color-rosewater-700: #d6bdb9;
+      --catppuccin-color-rosewater-800: #c3aca9;
+      --catppuccin-color-rosewater-900: #ad9998;
+      --catppuccin-color-rosewater-950: #928284;
+      --catppuccin-color-flamingo: #eebebe;
+      --catppuccin-color-flamingo-500: #eebebe;
+      --catppuccin-color-flamingo-400: #f0c6c6;
+      --catppuccin-color-flamingo-300: #f2cdcd;
+      --catppuccin-color-flamingo-200: #f3d4d4;
+      --catppuccin-color-flamingo-100: #f5dbdb;
+      --catppuccin-color-flamingo-50: #f7e2e2;
+      --catppuccin-color-flamingo-600: #e4b6b6;
+      --catppuccin-color-flamingo-700: #d3a9aa;
+      --catppuccin-color-flamingo-800: #c09a9c;
+      --catppuccin-color-flamingo-900: #aa898d;
+      --catppuccin-color-flamingo-950: #90757b;
+      --catppuccin-color-pink: #f4b8e4;
+      --catppuccin-color-pink-500: #f4b8e4;
+      --catppuccin-color-pink-400: #f5c1e7;
+      --catppuccin-color-pink-300: #f6c9ea;
+      --catppuccin-color-pink-200: #f7d1ed;
+      --catppuccin-color-pink-100: #f8d8ef;
+      --catppuccin-color-pink-50: #fadff2;
+      --catppuccin-color-pink-600: #e9b0da;
+      --catppuccin-color-pink-700: #d8a3cb;
+      --catppuccin-color-pink-800: #c495ba;
+      --catppuccin-color-pink-900: #ae85a6;
+      --catppuccin-color-pink-950: #93728f;
+      --catppuccin-color-mauve: #ca9ee6;
+      --catppuccin-color-mauve-500: #ca9ee6;
+      --catppuccin-color-mauve-400: #d0abe9;
+      --catppuccin-color-mauve-300: #d6b7eb;
+      --catppuccin-color-mauve-200: #dcc2ee;
+      --catppuccin-color-mauve-100: #e1ccf0;
+      --catppuccin-color-mauve-50: #e7d6f3;
+      --catppuccin-color-mauve-600: #c197dc;
+      --catppuccin-color-mauve-700: #b38dcd;
+      --catppuccin-color-mauve-800: #a381bb;
+      --catppuccin-color-mauve-900: #9173a8;
+      --catppuccin-color-mauve-950: #7b6490;
+      --catppuccin-color-red: #e78284;
+      --catppuccin-color-red-500: #e78284;
+      --catppuccin-color-red-400: #ea9597;
+      --catppuccin-color-red-300: #eca5a7;
+      --catppuccin-color-red-200: #efb4b5;
+      --catppuccin-color-red-100: #f1c1c2;
+      --catppuccin-color-red-50: #f3cdce;
+      --catppuccin-color-red-600: #dd7d7f;
+      --catppuccin-color-red-700: #cc7478;
+      --catppuccin-color-red-800: #ba6b70;
+      --catppuccin-color-red-900: #a56168;
+      --catppuccin-color-red-950: #8c555e;
+      --catppuccin-color-maroon: #ea999c;
+      --catppuccin-color-maroon-500: #ea999c;
+      --catppuccin-color-maroon-400: #eca7a9;
+      --catppuccin-color-maroon-300: #eeb4b6;
+      --catppuccin-color-maroon-200: #f1bfc1;
+      --catppuccin-color-maroon-100: #f3cacb;
+      --catppuccin-color-maroon-50: #f5d4d5;
+      --catppuccin-color-maroon-600: #e09396;
+      --catppuccin-color-maroon-700: #cf888d;
+      --catppuccin-color-maroon-800: #bc7d82;
+      --catppuccin-color-maroon-900: #a77077;
+      --catppuccin-color-maroon-950: #8d6169;
+      --catppuccin-color-peach: #ef9f76;
+      --catppuccin-color-peach-500: #ef9f76;
+      --catppuccin-color-peach-400: #f1ac8c;
+      --catppuccin-color-peach-300: #f2b89f;
+      --catppuccin-color-peach-200: #f4c3af;
+      --catppuccin-color-peach-100: #f6cdbd;
+      --catppuccin-color-peach-50: #f7d6ca;
+      --catppuccin-color-peach-600: #e59872;
+      --catppuccin-color-peach-700: #d38e6c;
+      --catppuccin-color-peach-800: #c08266;
+      --catppuccin-color-peach-900: #ab745f;
+      --catppuccin-color-peach-950: #906458;
+      --catppuccin-color-yellow: #e5c890;
+      --catppuccin-color-yellow-500: #e5c890;
+      --catppuccin-color-yellow-400: #e8cea0;
+      --catppuccin-color-yellow-300: #ebd5ae;
+      --catppuccin-color-yellow-200: #eddabb;
+      --catppuccin-color-yellow-100: #f0e0c6;
+      --catppuccin-color-yellow-50: #f2e6d1;
+      --catppuccin-color-yellow-600: #dbbf8b;
+      --catppuccin-color-yellow-700: #cbb182;
+      --catppuccin-color-yellow-800: #b8a279;
+      --catppuccin-color-yellow-900: #a4906f;
+      --catppuccin-color-yellow-950: #8a7b64;
+      --catppuccin-color-green: #a6d189;
+      --catppuccin-color-green-500: #a6d189;
+      --catppuccin-color-green-400: #b2d69a;
+      --catppuccin-color-green-300: #bcdbaa;
+      --catppuccin-color-green-200: #c6e0b7;
+      --catppuccin-color-green-100: #d0e5c4;
+      --catppuccin-color-green-50: #d9e9cf;
+      --catppuccin-color-green-600: #9fc884;
+      --catppuccin-color-green-700: #93b97c;
+      --catppuccin-color-green-800: #87a974;
+      --catppuccin-color-green-900: #78966b;
+      --catppuccin-color-green-950: #678060;
+      --catppuccin-color-teal: #81c8be;
+      --catppuccin-color-teal-500: #81c8be;
+      --catppuccin-color-teal-400: #94cec6;
+      --catppuccin-color-teal-300: #a5d5cd;
+      --catppuccin-color-teal-200: #b4dad4;
+      --catppuccin-color-teal-100: #c1e0db;
+      --catppuccin-color-teal-50: #cde6e2;
+      --catppuccin-color-teal-600: #7cbfb6;
+      --catppuccin-color-teal-700: #73b1aa;
+      --catppuccin-color-teal-800: #6aa29c;
+      --catppuccin-color-teal-900: #5f908d;
+      --catppuccin-color-teal-950: #537b7b;
+      --catppuccin-color-sky: #99d1db;
+      --catppuccin-color-sky-500: #99d1db;
+      --catppuccin-color-sky-400: #a7d6df;
+      --catppuccin-color-sky-300: #b4dbe3;
+      --catppuccin-color-sky-200: #bfe0e7;
+      --catppuccin-color-sky-100: #cae5ea;
+      --catppuccin-color-sky-50: #d4e9ee;
+      --catppuccin-color-sky-600: #93c8d2;
+      --catppuccin-color-sky-700: #88b9c3;
+      --catppuccin-color-sky-800: #7ca9b3;
+      --catppuccin-color-sky-900: #6f96a0;
+      --catppuccin-color-sky-950: #60808a;
+      --catppuccin-color-sapphire: #85c1dc;
+      --catppuccin-color-sapphire-500: #85c1dc;
+      --catppuccin-color-sapphire-400: #97c8e0;
+      --catppuccin-color-sapphire-300: #a7cfe4;
+      --catppuccin-color-sapphire-200: #b5d6e7;
+      --catppuccin-color-sapphire-100: #c2ddeb;
+      --catppuccin-color-sapphire-50: #cee3ee;
+      --catppuccin-color-sapphire-600: #80b9d3;
+      --catppuccin-color-sapphire-700: #77abc4;
+      --catppuccin-color-sapphire-800: #6d9cb4;
+      --catppuccin-color-sapphire-900: #628ba1;
+      --catppuccin-color-sapphire-950: #55778b;
+      --catppuccin-color-blue: #8caaee;
+      --catppuccin-color-blue-500: #8caaee;
+      --catppuccin-color-blue-400: #9db5f0;
+      --catppuccin-color-blue-300: #abbff2;
+      --catppuccin-color-blue-200: #b9c9f3;
+      --catppuccin-color-blue-100: #c5d2f5;
+      --catppuccin-color-blue-50: #d0daf7;
+      --catppuccin-color-blue-600: #86a3e4;
+      --catppuccin-color-blue-700: #7d97d4;
+      --catppuccin-color-blue-800: #728ac2;
+      --catppuccin-color-blue-900: #677bad;
+      --catppuccin-color-blue-950: #596a95;
+      --catppuccin-color-lavender: #babbf1;
+      --catppuccin-color-lavender-500: #babbf1;
+      --catppuccin-color-lavender-400: #c2c3f2;
+      --catppuccin-color-lavender-300: #cacbf4;
+      --catppuccin-color-lavender-200: #d2d2f5;
+      --catppuccin-color-lavender-100: #d9daf7;
+      --catppuccin-color-lavender-50: #e0e0f8;
+      --catppuccin-color-lavender-600: #b2b3e7;
+      --catppuccin-color-lavender-700: #a5a6d6;
+      --catppuccin-color-lavender-800: #9698c4;
+      --catppuccin-color-lavender-900: #8687af;
+      --catppuccin-color-lavender-950: #727496;
+      --catppuccin-color-text: #c6d0f5;
+      --catppuccin-color-subtext1: #b5bfe2;
+      --catppuccin-color-subtext0: #a5adce;
+      --catppuccin-color-overlay2: #949cbb;
+      --catppuccin-color-overlay1: #838ba7;
+      --catppuccin-color-overlay0: #737994;
+      --catppuccin-color-surface2: #626880;
+      --catppuccin-color-surface1: #51576d;
+      --catppuccin-color-surface0: #414559;
+      --catppuccin-color-base: #303446;
+      --catppuccin-color-mantle: #292c3c;
+      --catppuccin-color-crust: #232634;
+    }
+  }
 }

@@ -10,7 +10,7 @@ const CategoryLink = ({ name, hexColor }: Props) => {
     <Link
       href={`/blog?category=${name}`}
       passHref
-      className={`hover-ring-primary focus-ring-primary rounded-lg px-2 py-1 font-bold`}
+      className={`rounded-lg px-2 py-1 font-bold focus-ring-primary hover-ring-primary`}
       style={{
         ['--tw-ring-color' as any]: hexColor,
         ['color' as any]: hexColor,

@@ -377,7 +377,7 @@ export default function ToolbarPlugin() {
     <>
       <MandatoryPlugins />
 
-      <div className="fixed bottom-0 z-20 flex w-full items-center space-x-2 overflow-x-auto rounded-md bg-gray-50 p-1 shadow dark:bg-gray-800 md:p-2 lg:bottom-4 lg:left-1/2 lg:w-auto lg:-translate-x-1/2 lg:overflow-x-clip">
+      <div className="fixed bottom-0 z-20 flex w-full items-center space-x-2 overflow-x-auto rounded-md bg-gray-50 p-1 shadow md:p-2 lg:bottom-4 lg:left-1/2 lg:w-auto lg:-translate-x-1/2 lg:overflow-x-clip dark:bg-gray-800">
         <RovingTab as="div" className="flex h-6 items-center space-x-2">
           {undoRedoButtons.map((props, index) => (
             <RovingTab.Item key={index} disabled={props.disabled}>

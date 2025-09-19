@@ -4,11 +4,11 @@ const loadingSpinner = tv({
   base: 'inline-block animate-spin',
   variants: {
     size: {
-      xs: '-ml-1 mr-2 size-3',
-      sm: '-ml-1 mr-2 size-4',
-      md: '-ml-1 mr-3 size-5',
-      lg: '-ml-1 mr-3 size-6',
-      xl: '-ml-1 mr-4 size-7',
+      xs: 'mr-2 -ml-1 size-3',
+      sm: 'mr-2 -ml-1 size-4',
+      md: 'mr-3 -ml-1 size-5',
+      lg: 'mr-3 -ml-1 size-6',
+      xl: 'mr-4 -ml-1 size-7',
     },
     color: {
       primary: 'text-indigo-600',
@@ -41,7 +41,7 @@ export default function LoadingSpinner({ size, color }: Props) {
         cy="12"
         r="10"
         stroke="currentColor"
-        stroke-width="4"
+        strokeWidth="4"
       ></circle>
       <path
         className="opacity-75"
