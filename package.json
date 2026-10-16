@@ -8,7 +8,8 @@
     "start": "next start -p 8080",
     "lint": "eslint ./src ./app ./lib",
     "lint:fix": "eslint ./src ./app ./lib --fix",
-    "format": "prettier --write \"app/**/*.{js,ts,jsx,tsx}\" \"src/**/*.{js,ts,jsx,tsx}\" \"lib/**/*.{js,ts,jsx,tsx}\""
+    "format": "prettier --write \"app/**/*.{js,ts,jsx,tsx}\" \"src/**/*.{js,ts,jsx,tsx}\" \"lib/**/*.{js,ts,jsx,tsx}\"",
+    "precommit": "pnpm lint:fix && pnpm format"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.10",
