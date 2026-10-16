@@ -27,7 +27,7 @@ export default function UserMenu(props: Props) {
   return (
     <div className="ml-3 rounded-full text-right text-gray-700 dark:text-gray-100">
       <Menu as="div" className="relative inline-block text-left">
-        <Menu.Button className="size-10 rounded-full align-bottom focus-ring-primary hover-ring-primary">
+        <Menu.Button className="focus-ring-primary hover-ring-primary size-10 rounded-full align-bottom">
           {user?.image ? (
             <Image
               className="rounded-full object-center"
@@ -50,7 +50,7 @@ export default function UserMenu(props: Props) {
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none dark:divide-gray-600 dark:bg-gray-800">
-            <div className="p-1 ">
+            <div className="p-1">
               <MenuItemLink
                 Icon={PlusCircleIcon}
                 text="Create post"
@@ -64,7 +64,7 @@ export default function UserMenu(props: Props) {
                 scroll={false}
               />
             </div>
-            <div className="p-1 ">
+            <div className="p-1">
               <SignOut />
             </div>
           </Menu.Items>

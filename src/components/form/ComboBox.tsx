@@ -63,7 +63,7 @@ export default function MyCombobox({ categories, selected, handleAdd }: Props) {
                 <Combobox.Option
                   key={query}
                   className={({ active }) =>
-                    `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                    `relative cursor-default py-2 pr-4 pl-10 select-none ${
                       active ? 'bg-teal-600 text-white' : 'text-gray-900'
                     }`
                   }
@@ -80,7 +80,7 @@ export default function MyCombobox({ categories, selected, handleAdd }: Props) {
                 <Combobox.Option
                   key={category.name}
                   className={({ active }) =>
-                    `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                    `relative cursor-default py-2 pr-4 pl-10 select-none ${
                       active ? 'bg-teal-600 text-white' : 'text-gray-900'
                     }`
                   }

@@ -58,7 +58,9 @@ export default function BlogPage({ fallbackData }: Props) {
         </div>
       )}
       <div className="container mx-auto my-3 grid gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {posts?.map((post) => <PostCard key={post.id} post={post} />)}
+        {posts?.map((post) => (
+          <PostCard key={post.id} post={post} />
+        ))}
       </div>
       <div ref={ref}></div>
     </section>

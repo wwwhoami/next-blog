@@ -39,7 +39,7 @@ const placeholderText = 'Start writing...'
 
 const Placeholder = () => {
   return (
-    <div className="absolute top-[1.125rem] left-[1.125rem] opacity-50">
+    <div className="absolute top-4.5 left-4.5 opacity-50">
       {placeholderText}
     </div>
   )
@@ -109,10 +109,10 @@ const Editor = ({
     <LexicalComposer initialConfig={{ ...editorConfig, editorState: content }}>
       <div
         className={
-          'prose w-full max-w-none overflow-x-scroll text-black prose-slate dark:text-white prose-headings:mt-2 prose-headings:mb-4 prose-p:my-0'
+          'prose prose-slate prose-headings:mt-2 prose-headings:mb-4 prose-p:my-0 w-full max-w-none overflow-x-scroll text-black dark:text-white'
         }
       >
-        <div className="relative size-full min-h-52 dark:bg-gray-700">
+        <div className="relative mb-12 size-full min-h-52 lg:mb-18 dark:bg-gray-700">
           <RichTextPlugin
             contentEditable={<ContentEditable />}
             placeholder={Placeholder}
