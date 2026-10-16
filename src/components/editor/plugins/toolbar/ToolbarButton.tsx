@@ -9,12 +9,17 @@ type Props = {
   icon?: React.ElementType
   children?: React.ReactNode
   tabIndex?: number
+  title: string
 }
 
 const ToolbarButton = forwardRef<HTMLButtonElement, Props>(
-  ({ active, disabled, onClick, icon: Icon, tabIndex, children }, ref) => {
+  (
+    { title, active, disabled, onClick, icon: Icon, tabIndex, children },
+    ref,
+  ) => {
     return (
       <Button
+        title={title}
         disabled={disabled}
         onClick={onClick}
         size="sm"

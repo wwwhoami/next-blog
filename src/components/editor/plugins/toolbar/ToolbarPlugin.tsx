@@ -202,6 +202,16 @@ export default function ToolbarPlugin() {
     )
   }, [editor, $updateToolbar])
 
+  const isMacOsNavigator = navigator.userAgent.includes('Mac OS X')
+
+  const formatShortcut = (key: string, alt = false, shift = false) => {
+    if (isMacOsNavigator) {
+      return `${alt ? '⌥' : ''}${shift ? '⇧' : ''}⌘${key}`
+    }
+
+    return `Ctrl+${alt ? 'Alt+' : ''}${shift ? 'Shift+' : ''}${key}`
+  }
+
   const undoRedoButtons = [
     {
       onClick: () => {
@@ -209,6 +219,7 @@ export default function ToolbarPlugin() {
       },
       icon: ArrowUturnLeftIcon,
       disabled: !canUndo,
+      title: `Undo (${formatShortcut('Z')})`,
     },
     {
       onClick: () => {
@@ -216,6 +227,7 @@ export default function ToolbarPlugin() {
       },
       icon: ArrowUturnRightIcon,
       disabled: !canRedo,
+      title: `Redo (${formatShortcut('Z', false, true)})`,
     },
   ]
 
@@ -239,32 +251,38 @@ export default function ToolbarPlugin() {
       active: isBold,
       onClick: () => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold'),
       icon: BoldIcon,
+      title: `Bold (${formatShortcut('B')})`,
     },
     {
       active: isStrikethrough,
       onClick: () =>
         editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough'),
       icon: StrikethroughIcon,
+      title: 'Strikethrough',
     },
     {
       active: isItalic,
       onClick: () => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic'),
       icon: ItalicIcon,
+      title: `Italic (${formatShortcut('I')})`,
     },
     {
       active: isUnderline,
       onClick: () => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline'),
       icon: UnderlineIcon,
+      title: `Underline (${formatShortcut('U')})`,
     },
     {
       active: isCode,
       onClick: () => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'code'),
       icon: CodeBracketIcon,
+      title: 'Inline code',
     },
     {
       active: isLink,
       onClick: insertLink,
       icon: LinkIcon,
+      title: 'Link',
     },
   ]
 
@@ -276,36 +294,42 @@ export default function ToolbarPlugin() {
               editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left')
             },
             icon: Bars3BottomLeftIcon,
+            title: 'Align left',
           },
           {
             onClick: () => {
               editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center')
             },
             icon: Bars3Icon,
+            title: 'Align center',
           },
           {
             onClick: () => {
               editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right')
             },
             icon: Bars3BottomRightIcon,
+            title: 'Align right',
           },
           {
             onClick: () => {
               editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'justify')
             },
             icon: Bars4CenterIcon,
+            title: 'Justify',
           },
           {
             onClick: () => {
               editor.dispatchCommand(INDENT_CONTENT_COMMAND, undefined)
             },
             icon: IndentIcon,
+            title: `Increase indent (${formatShortcut(']', true)})`,
           },
           {
             onClick: () => {
               editor.dispatchCommand(OUTDENT_CONTENT_COMMAND, undefined)
             },
             icon: OutdentIcon,
+            title: `Decrease indent (${formatShortcut('[', true)})`,
           },
         ]
       : [
@@ -314,16 +338,16 @@ export default function ToolbarPlugin() {
               editor.dispatchCommand(INDENT_CONTENT_COMMAND, undefined)
             },
             icon: IndentIcon,
+            title: `Increase indent (${formatShortcut(']', true)})`,
           },
           {
             onClick: () => {
               editor.dispatchCommand(OUTDENT_CONTENT_COMMAND, undefined)
             },
             icon: OutdentIcon,
+            title: `Decrease indent (${formatShortcut('[', true)})`,
           },
         ]
-
-  const isMacOsNavigator = navigator.userAgent.includes('Mac OS X')
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -350,12 +374,14 @@ export default function ToolbarPlugin() {
       icon: MarkdownIcon,
       active: isMarkdownMode,
       disabled: false,
+      title: 'Toggle Markdown mode',
     },
     {
       icon: ArrowUpTrayIcon,
       onClick: () => {
         editor.dispatchCommand(IMPORT_MARKDOWN_COMMAND, undefined)
       },
+      title: 'Import Markdown',
     },
     {
       icon: ArrowDownTrayIcon,
@@ -363,6 +389,7 @@ export default function ToolbarPlugin() {
         editor.dispatchCommand(EXPORT_MARKDOWN_COMMAND, undefined)
       },
       disabled: isEditorEmpty,
+      title: 'Export Markdown',
     },
     {
       onClick: () => {
@@ -370,6 +397,7 @@ export default function ToolbarPlugin() {
       },
       icon: TrashIcon,
       disabled: isEditorEmpty,
+      title: 'Clear editor',
     },
   ]
 
