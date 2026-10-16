@@ -31,7 +31,7 @@ const config = [
         // The absolute path pointing to you main Tailwind CSS v4 config file.
         // It must be a `.css` file (v4), not a `.js` file (v3)
         // REQUIRED, default value will not help
-        config: `${path.resolve(__dirname, './tailwind.config.js')}`,
+        config: `${__dirname}/styles/globals.css`,
       },
     },
     plugins: {
@@ -40,7 +40,8 @@ const config = [
 
     rules: {
       'unused-imports/no-unused-imports': 'error',
-
+      // Let prettier handle the ordering of classnames
+      'tailwindcss/classnames-order': 'off',
       'tailwindcss/no-custom-classname': [
         'warn',
         {
