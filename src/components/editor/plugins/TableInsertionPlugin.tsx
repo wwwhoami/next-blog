@@ -1,5 +1,13 @@
 import Button from '@/components/Button'
 import {
+  flip,
+  offset,
+  shift,
+  useDismiss,
+  useFloating,
+  useInteractions,
+} from '@floating-ui/react'
+import {
   CheckCircleIcon,
   NoSymbolIcon,
   TableCellsIcon,
@@ -20,10 +28,10 @@ import {
   KEY_ESCAPE_COMMAND,
   LexicalEditor,
 } from 'lexical'
-import { JSX, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { JSX, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { INSERT_TABLE_COMMAND } from '../EditorCommands'
-import { getSelectionRect, positionFloatingElement } from './FloatingEditor'
+import { getSelectionRect } from '../utils'
 
 const DEFAULT_ROWS = 3
 const DEFAULT_COLUMNS = 3
@@ -55,30 +63,53 @@ function FloatingTableEditor({
   anchorRect,
   lastSelection,
   onClose,
-  floatingRef,
   anchorElem,
 }: {
   editor: LexicalEditor
   anchorRect: DOMRect | null
   lastSelection: BaseSelection | null
   onClose: () => void
-  floatingRef: React.RefObject<HTMLDivElement | null>
   anchorElem: HTMLElement
 }): JSX.Element {
   const rowsInputRef = useRef<HTMLInputElement>(null)
   const [rows, setRows] = useState(String(DEFAULT_ROWS))
   const [columns, setColumns] = useState(String(DEFAULT_COLUMNS))
   const [error, setError] = useState('')
+  const { context, refs, floatingStyles, x, y } = useFloating({
+    open: true,
+    placement: 'top',
+    strategy: 'absolute',
+    middleware: [
+      offset(10),
+      flip({ fallbackPlacements: ['bottom'], padding: 62 }),
+      shift({ padding: 10 }),
+    ],
+    onOpenChange: (open) => {
+      if (!open) {
+        onClose()
+      }
+    },
+  })
+  const dismiss = useDismiss(context, { escapeKey: true })
+  const { getFloatingProps } = useInteractions([dismiss])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (rowsInputRef.current) {
       rowsInputRef.current.focus({ preventScroll: true })
       rowsInputRef.current.select()
     }
-    if (floatingRef.current) {
-      positionFloatingElement(anchorRect, floatingRef.current, anchorElem)
+  }, [])
+
+  useEffect(() => {
+    if (anchorRect) {
+      refs.setReference({
+        getBoundingClientRect: () => anchorRect,
+        contextElement: anchorElem,
+      })
+    } else {
+      refs.setReference(null)
     }
-  }, [anchorRect, anchorElem, floatingRef])
+  }, [anchorElem, anchorRect, refs])
 
   const insertTable = () => {
     const rowCount = Number(rows)
@@ -124,8 +155,13 @@ function FloatingTableEditor({
 
   return (
     <div
-      ref={floatingRef}
-      className="absolute top-0 left-0 z-10 opacity-0 transition-transform will-change-transform"
+      ref={refs.setFloating}
+      {...getFloatingProps()}
+      className="z-10 transform-gpu transition-[opacity,transform] duration-150 ease-out will-change-transform"
+      style={{
+        ...floatingStyles,
+        opacity: x === null || y === null ? 0 : 1,
+      }}
     >
       <div className="inline-flex flex-col gap-2 rounded-xl border-2 border-gray-200/70 bg-gray-100 p-3 shadow-lg dark:border-slate-800 dark:bg-slate-900 dark:text-gray-200">
         <div className="flex items-center gap-2">
@@ -200,7 +236,6 @@ export default function TableInsertionPlugin(): JSX.Element | null {
   const [isOpen, setIsOpen] = useState(false)
   const [anchorRect, setAnchorRect] = useState<DOMRect | null>(null)
   const [lastSelection, setLastSelection] = useState<BaseSelection | null>(null)
-  const floatingEditorRef = useRef<HTMLDivElement>(null)
   const [anchorElem, setAnchorElem] = useState<HTMLElement | null>(null)
 
   useEffect(() => {
@@ -224,30 +259,6 @@ export default function TableInsertionPlugin(): JSX.Element | null {
       COMMAND_PRIORITY_EDITOR,
     )
   }, [editor])
-
-  useEffect(() => {
-    if (!isOpen || !anchorElem) {
-      return
-    }
-
-    const handleOutsideInteraction = (event: PointerEvent | FocusEvent) => {
-      const target = event.target
-      if (
-        target instanceof Node &&
-        !floatingEditorRef.current?.contains(target)
-      ) {
-        setIsOpen(false)
-      }
-    }
-
-    document.addEventListener('pointerdown', handleOutsideInteraction)
-    document.addEventListener('focusin', handleOutsideInteraction)
-
-    return () => {
-      document.removeEventListener('pointerdown', handleOutsideInteraction)
-      document.removeEventListener('focusin', handleOutsideInteraction)
-    }
-  }, [anchorElem, isOpen])
 
   useEffect(() => {
     return editor.registerCommand(
@@ -276,7 +287,6 @@ export default function TableInsertionPlugin(): JSX.Element | null {
       anchorRect={anchorRect}
       lastSelection={lastSelection}
       onClose={() => setIsOpen(false)}
-      floatingRef={floatingEditorRef}
       anchorElem={tableAnchorElem}
     />,
     tableAnchorElem,

@@ -1,4 +1,5 @@
 import Button from '@/components/Button'
+import { flip, offset, shift, useFloating } from '@floating-ui/react'
 import {
   CheckCircleIcon,
   LinkSlashIcon,
@@ -30,12 +31,10 @@ import {
 import { Dispatch, JSX, useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { EDIT_LINK_COMMAND } from '../EditorCommands'
-import { getSelectedNode, sanitizeUrl } from '../utils'
-import { getSelectionRect, positionFloatingElement } from './FloatingEditor'
+import { getSelectedNode, getSelectionRect, sanitizeUrl } from '../utils'
 
 type Props = {
   editor: LexicalEditor
-  anchorElem: HTMLElement
   isLink: boolean
   setIsLink: Dispatch<boolean>
   isEditMode: boolean
@@ -54,18 +53,27 @@ type Props = {
  */
 function FloatingLinkEditor({
   editor,
-  anchorElem,
   isLink,
   setIsLink,
   isEditMode,
   setIsEditMode,
 }: Props): JSX.Element {
-  const editorRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   const [linkUrl, setLinkUrl] = useState('')
   const [editedLinkUrl, setEditedLinkUrl] = useState('https://')
   const [lastSelection, setLastSelection] = useState<BaseSelection | null>(null)
+  const [selectionRect, setSelectionRect] = useState<DOMRect | null>(null)
+  const { refs, floatingStyles, x, y } = useFloating({
+    open: isLink && selectionRect !== null,
+    placement: 'top',
+    strategy: 'absolute',
+    middleware: [
+      offset(10),
+      flip({ fallbackPlacements: ['bottom'], padding: 62 }),
+      shift({ padding: 10 }),
+    ],
+  })
 
   const $updateLinkEditor = useCallback(() => {
     const selection = $getSelection()
@@ -87,42 +95,30 @@ function FloatingLinkEditor({
       }
     }
 
-    const editorElem = editorRef.current
     const nativeSelection = window.getSelection()
     const activeElement = document.activeElement
-
-    if (editorElem === null) {
-      return
-    }
 
     const rootElement = editor.getRootElement()
 
     if (
       selection !== null &&
       nativeSelection !== null &&
-      // !nativeSelection.isCollapsed &&
       rootElement !== null &&
       rootElement.contains(nativeSelection.anchorNode) &&
       editor.isEditable()
     ) {
       const domRect = getSelectionRect(rootElement)
-
-      if (domRect) {
-        positionFloatingElement(domRect, editorElem, anchorElem)
-      }
+      setSelectionRect(domRect)
       setLastSelection(selection)
     } else if (!activeElement) {
-      if (rootElement !== null) {
-        positionFloatingElement(null, editorElem, anchorElem)
-      }
-
+      setSelectionRect(null)
       setLastSelection(null)
       setIsEditMode(false)
       setLinkUrl('')
     }
 
     return true
-  }, [anchorElem, editor, isEditMode, linkUrl, setIsEditMode])
+  }, [editor, isEditMode, linkUrl, setIsEditMode])
 
   const handleLinkSubmission = (
     e: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>,
@@ -236,6 +232,17 @@ function FloatingLinkEditor({
   }, [editor, $updateLinkEditor])
 
   useEffect(() => {
+    if (selectionRect) {
+      refs.setReference({
+        getBoundingClientRect: () => selectionRect,
+        contextElement: editor.getRootElement() ?? undefined,
+      })
+    } else {
+      refs.setReference(null)
+    }
+  }, [editor, refs, selectionRect])
+
+  useEffect(() => {
     if (isEditMode && inputRef.current) {
       inputRef.current.focus()
     }
@@ -243,8 +250,13 @@ function FloatingLinkEditor({
 
   return (
     <div
-      ref={editorRef}
-      className="absolute top-0 left-0 z-10 max-w-96 transform-gpu opacity-0 transition-transform will-change-transform"
+      ref={refs.setFloating}
+      className="z-10 max-w-96 transform-gpu transition-[opacity,transform] duration-150 ease-out will-change-transform"
+      style={{
+        ...floatingStyles,
+        opacity:
+          isLink && selectionRect !== null && x !== null && y !== null ? 1 : 0,
+      }}
     >
       {!isLink ? null : isEditMode ? (
         <div className="inline-flex items-center gap-2 rounded-xl border-2 border-gray-200/70 bg-gray-100 p-2 shadow-lg dark:border-slate-800 dark:bg-slate-900 dark:text-gray-200 dark:placeholder:text-gray-400 dark:autofill:bg-slate-800 dark:autofill:text-gray-200 dark:focus-within:ring-indigo-600/80">
@@ -412,7 +424,6 @@ function useFloatingLinkEditorToolbar(
   return createPortal(
     <FloatingLinkEditor
       editor={activeEditor}
-      anchorElem={anchorElem}
       isLink={isLink}
       setIsLink={setIsLink}
       isEditMode={isLinkEditMode}
