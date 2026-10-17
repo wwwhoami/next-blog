@@ -50,7 +50,7 @@ import {
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
 } from 'lexical'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Dispatch, useCallback, useEffect, useMemo, useState } from 'react'
 import useMarkdownMode from '../../hooks/useMarkdownMode'
 import { getSelectedNode } from '../../utils'
 import ClearDialog from '../ClearDialog'
@@ -68,7 +68,11 @@ function ToolbarSeparator() {
   )
 }
 
-export default function ToolbarPlugin() {
+type Props = {
+  setIsLinkEditMode: Dispatch<React.SetStateAction<boolean>>
+}
+
+export default function ToolbarPlugin({ setIsLinkEditMode }: Props) {
   const [editor] = useLexicalComposerContext()
 
   const [blockType, setBlockType] = useState('paragraph')
@@ -144,6 +148,11 @@ export default function ToolbarPlugin() {
       editor.dispatchCommand(TOGGLE_LINK_COMMAND, null)
     }
   }, [editor, isLink])
+
+  const editLink = useCallback(() => {
+    insertLink()
+    setIsLinkEditMode(true)
+  }, [insertLink, setIsLinkEditMode])
 
   useEffect(
     function checkEditorEmptyState() {
@@ -258,7 +267,7 @@ export default function ToolbarPlugin() {
       onClick: () =>
         editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough'),
       icon: StrikethroughIcon,
-      title: 'Strikethrough',
+      title: `Strikethrough (${formatShortcut('X', false, true)})`,
     },
     {
       active: isItalic,
@@ -276,13 +285,13 @@ export default function ToolbarPlugin() {
       active: isCode,
       onClick: () => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'code'),
       icon: CodeBracketIcon,
-      title: 'Inline code',
+      title: `Inline code (${formatShortcut('C', false, true)})`,
     },
     {
       active: isLink,
       onClick: insertLink,
       icon: LinkIcon,
-      title: 'Link',
+      title: `Link (${formatShortcut('K')})`,
     },
   ]
 
@@ -351,6 +360,15 @@ export default function ToolbarPlugin() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      const rootElement = editor.getRootElement()
+      if (
+        rootElement === null ||
+        !(e.target instanceof Node) ||
+        !rootElement.contains(e.target)
+      ) {
+        return
+      }
+
       const metaKey = isMacOsNavigator ? e.metaKey : e.ctrlKey
 
       if (e.code === 'BracketLeft' && metaKey && e.altKey) {
@@ -359,6 +377,16 @@ export default function ToolbarPlugin() {
       } else if (e.code === 'BracketRight' && metaKey && e.altKey) {
         e.preventDefault()
         editor.dispatchCommand(INDENT_CONTENT_COMMAND, undefined)
+      } else if (e.code === 'KeyX' && metaKey && e.shiftKey && !e.altKey) {
+        e.preventDefault()
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough')
+      } else if (e.code === 'KeyC' && metaKey && e.shiftKey && !e.altKey) {
+        e.preventDefault()
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'code')
+        console.log('Inline code shortcut triggered')
+      } else if (e.code === 'KeyK' && metaKey && !e.altKey) {
+        e.preventDefault()
+        editLink()
       }
     }
     window.addEventListener('keydown', handleKeyDown)
@@ -366,7 +394,7 @@ export default function ToolbarPlugin() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [editor, isMacOsNavigator])
+  }, [editor, editLink, isMacOsNavigator, isLink, insertLink])
 
   const editorCommandButtons = [
     {

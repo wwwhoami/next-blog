@@ -147,7 +147,7 @@ const Editor = ({
           />
         </div>
       </div>
-      <ToolbarPlugin />
+      <ToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />
     </LexicalComposer>
   )
 }
