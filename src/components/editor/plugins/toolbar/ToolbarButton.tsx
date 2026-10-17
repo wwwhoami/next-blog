@@ -20,6 +20,7 @@ const ToolbarButton = forwardRef<HTMLButtonElement, Props>(
     return (
       <Button
         title={title}
+        aria-label={title}
         disabled={disabled}
         onClick={onClick}
         size="sm"
