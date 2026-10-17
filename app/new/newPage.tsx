@@ -13,9 +13,10 @@ type Props = {}
 function NewPage({}: Props) {
   const [title, setTitle, isReady] = useLocalStorage('postTitle', '')
   const [excerpt, setExcerpt] = useLocalStorage('postExcerpt', '')
-  const [category, setCategory] = useLocalStorage('postCategory', [
-    { name: '', description: '', hexColor: '' },
-  ] as Array<Category>)
+  const [category, setCategory] = useLocalStorage<Array<Category>>(
+    'postCategory',
+    [{ name: '', description: '', hexColor: '' }],
+  )
 
   // TODO: add a skeleton loader
   if (!isReady) return null
