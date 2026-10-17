@@ -27,7 +27,7 @@ import {
   getCodeLanguages,
   getDefaultCodeLanguage,
 } from '@lexical/code'
-import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link'
+import { $isLinkNode } from '@lexical/link'
 import { $isListNode, ListNode } from '@lexical/list'
 import { ClearEditorPlugin } from '@lexical/react/LexicalClearEditorPlugin'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
@@ -50,7 +50,8 @@ import {
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
 } from 'lexical'
-import { Dispatch, useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { EDIT_LINK_COMMAND } from '../../EditorCommands'
 import useMarkdownMode from '../../hooks/useMarkdownMode'
 import { getSelectedNode } from '../../utils'
 import ClearDialog from '../ClearDialog'
@@ -68,11 +69,7 @@ function ToolbarSeparator() {
   )
 }
 
-type Props = {
-  setIsLinkEditMode: Dispatch<React.SetStateAction<boolean>>
-}
-
-export default function ToolbarPlugin({ setIsLinkEditMode }: Props) {
+export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext()
 
   const [blockType, setBlockType] = useState('paragraph')
@@ -140,19 +137,6 @@ export default function ToolbarPlugin({ setIsLinkEditMode }: Props) {
       }
     }
   }, [editor])
-
-  const insertLink = useCallback(() => {
-    if (!isLink) {
-      editor.dispatchCommand(TOGGLE_LINK_COMMAND, 'https://')
-    } else {
-      editor.dispatchCommand(TOGGLE_LINK_COMMAND, null)
-    }
-  }, [editor, isLink])
-
-  const editLink = useCallback(() => {
-    insertLink()
-    setIsLinkEditMode(true)
-  }, [insertLink, setIsLinkEditMode])
 
   useEffect(
     function checkEditorEmptyState() {
@@ -289,7 +273,7 @@ export default function ToolbarPlugin({ setIsLinkEditMode }: Props) {
     },
     {
       active: isLink,
-      onClick: insertLink,
+      onClick: () => editor.dispatchCommand(EDIT_LINK_COMMAND, undefined),
       icon: LinkIcon,
       title: `Link (${formatShortcut('K')})`,
     },
@@ -357,44 +341,6 @@ export default function ToolbarPlugin({ setIsLinkEditMode }: Props) {
             title: `Decrease indent (${formatShortcut('[', true)})`,
           },
         ]
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const rootElement = editor.getRootElement()
-      if (
-        rootElement === null ||
-        !(e.target instanceof Node) ||
-        !rootElement.contains(e.target)
-      ) {
-        return
-      }
-
-      const metaKey = isMacOsNavigator ? e.metaKey : e.ctrlKey
-
-      if (e.code === 'BracketLeft' && metaKey && e.altKey) {
-        e.preventDefault()
-        editor.dispatchCommand(OUTDENT_CONTENT_COMMAND, undefined)
-      } else if (e.code === 'BracketRight' && metaKey && e.altKey) {
-        e.preventDefault()
-        editor.dispatchCommand(INDENT_CONTENT_COMMAND, undefined)
-      } else if (e.code === 'KeyX' && metaKey && e.shiftKey && !e.altKey) {
-        e.preventDefault()
-        editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough')
-      } else if (e.code === 'KeyC' && metaKey && e.shiftKey && !e.altKey) {
-        e.preventDefault()
-        editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'code')
-        console.log('Inline code shortcut triggered')
-      } else if (e.code === 'KeyK' && metaKey && !e.altKey) {
-        e.preventDefault()
-        editLink()
-      }
-    }
-    window.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [editor, editLink, isMacOsNavigator, isLink, insertLink])
 
   const editorCommandButtons = [
     {

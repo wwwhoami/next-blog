@@ -28,6 +28,7 @@ import { useState } from 'react'
 import AutoLinkPlugin from './plugins/AutoLinkPlugin'
 import CodeHighlightPlugin from './plugins/CodeHighlightPlutin'
 import FloatingLinkEditorPlugin from './plugins/FloatingLinkEditor'
+import KeyboardShortcutsPlugin from './plugins/KeyboardShortcutsPlugin'
 import LocalStoragePlugin from './plugins/LocalStoragePlugin'
 import MarkdownImportExportPlugin from './plugins/MarkdownImportExportPlugin'
 import TabIndentationPlugin from './plugins/TabIndentPlugin'
@@ -135,6 +136,7 @@ const Editor = ({
           <TabIndentationPlugin maxIndent={8} />
           <LinkPlugin validateUrl={validateUrl} />
           <AutoLinkPlugin />
+          <KeyboardShortcutsPlugin />
           <TablePlugin
             hasCellMerge={true}
             hasCellBackgroundColor={true}
@@ -147,7 +149,7 @@ const Editor = ({
           />
         </div>
       </div>
-      <ToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />
+      <ToolbarPlugin />
     </LexicalComposer>
   )
 }

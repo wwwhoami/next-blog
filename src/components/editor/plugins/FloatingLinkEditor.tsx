@@ -20,14 +20,16 @@ import {
   BaseSelection,
   CLICK_COMMAND,
   COMMAND_PRIORITY_CRITICAL,
+  COMMAND_PRIORITY_EDITOR,
   COMMAND_PRIORITY_HIGH,
   COMMAND_PRIORITY_LOW,
   KEY_ESCAPE_COMMAND,
   LexicalEditor,
   SELECTION_CHANGE_COMMAND,
 } from 'lexical'
-import { Dispatch, useCallback, useEffect, useRef, useState } from 'react'
+import { Dispatch, JSX, useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { EDIT_LINK_COMMAND } from '../EditorCommands'
 import { getSelectedNode, sanitizeUrl } from '../utils'
 
 const VERITCAL_GAP = 10
@@ -247,8 +249,22 @@ function FloatingLinkEditor({
         },
         COMMAND_PRIORITY_HIGH,
       ),
+      editor.registerCommand(
+        EDIT_LINK_COMMAND,
+        () => {
+          if (!isLink) {
+            editor.dispatchCommand(TOGGLE_LINK_COMMAND, 'https://')
+            setEditedLinkUrl(isLink ? linkUrl : 'https://')
+            setIsEditMode(true)
+          } else {
+            editor.dispatchCommand(TOGGLE_LINK_COMMAND, null)
+          }
+          return true
+        },
+        COMMAND_PRIORITY_EDITOR,
+      ),
     )
-  }, [editor, $updateLinkEditor, isLink, setIsLink])
+  }, [editor, $updateLinkEditor, isLink, linkUrl, setIsLink, setIsEditMode])
 
   useEffect(() => {
     editor.getEditorState().read(() => {
