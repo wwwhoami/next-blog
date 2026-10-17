@@ -84,6 +84,7 @@ export default function ToolbarPlugin() {
   const [isStrikethrough, setIsStrikethrough] = useState(false)
   const [isLink, setIsLink] = useState(false)
   const [isCode, setIsCode] = useState(false)
+  const [hasNonEmptySelection, setHasNonEmptySelection] = useState(false)
 
   const [isEditorEmpty, setIsEditorEmpty] = useState(true)
 
@@ -94,8 +95,13 @@ export default function ToolbarPlugin() {
     const selection = $getSelection()
 
     if (!$isRangeSelection(selection)) {
+      setHasNonEmptySelection(false)
       return
     }
+
+    setHasNonEmptySelection(
+      !selection.isCollapsed() && selection.getTextContent().trim() !== '',
+    )
 
     const anchorNode = selection.anchor.getNode()
     const element =
@@ -273,6 +279,7 @@ export default function ToolbarPlugin() {
     },
     {
       active: isLink,
+      disabled: !isLink && !hasNonEmptySelection,
       onClick: () => editor.dispatchCommand(EDIT_LINK_COMMAND, undefined),
       icon: LinkIcon,
       title: `Link (${formatShortcut('K')})`,

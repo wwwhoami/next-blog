@@ -32,6 +32,7 @@ import KeyboardShortcutsPlugin from './plugins/KeyboardShortcutsPlugin'
 import LocalStoragePlugin from './plugins/LocalStoragePlugin'
 import MarkdownImportExportPlugin from './plugins/MarkdownImportExportPlugin'
 import TabIndentationPlugin from './plugins/TabIndentPlugin'
+import TableInsertionPlugin from './plugins/TableInsertionPlugin'
 import { TABLE_TRANSFORMER } from './plugins/TablePlugin'
 import ToolbarPlugin from './plugins/toolbar/ToolbarPlugin'
 import { validateUrl } from './utils'
@@ -142,6 +143,7 @@ const Editor = ({
             hasCellBackgroundColor={true}
             hasHorizontalScroll={false}
           />
+          <TableInsertionPlugin />
 
           <FloatingLinkEditorPlugin
             isLinkEditMode={isLinkEditMode}

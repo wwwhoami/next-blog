@@ -1,7 +1,7 @@
 import { EditorThemeClasses } from 'lexical'
 
 const editorTheme: EditorThemeClasses = {
-  root: 'p-4 border-slate-500 w-full border-2 rounded h-full min-h-[200px] focus:outline-none focus-visible:border-black',
+  root: 'p-4 border-slate-500 w-full border-2 rounded h-full min-h-50 focus:outline-none focus-visible:border-black',
   ltr: 'ltr',
   rtl: 'rtl',
   placeholder: 'editor-placeholder',
@@ -34,7 +34,7 @@ const editorTheme: EditorThemeClasses = {
     underlineStrikethrough: 'underline line-through',
     code: 'font-mono text-[94%] bg-gray-100 dark:bg-gray-600 dark:text-white p-1 rounded',
   },
-  code: 'bg-[#EEF1F6] text-ctp-text dark:bg-[#23273B] font-mono block py-2 px-10  m-0 mt-2 mb-2 tab-2 overflow-x-auto relative before:absolute before:content-[attr(data-gutter)] beforewbg-gray-200 dark:before:bg-gray-700 before:left-0 before:top-0 before:p-2 before:min-w-[25px] before:whitespace-pre-wrap before:text-right after:content-[attr(data-highlight-langrage)] after:right-3 after:absolute',
+  code: 'bg-[#EEF1F6] text-ctp-text dark:bg-[#23273B] font-mono block py-2 px-10  m-0 mt-2 mb-2 tab-2 overflow-x-auto relative before:absolute before:content-[attr(data-gutter)] beforewbg-gray-200 dark:before:bg-gray-700 before:left-0 before:top-0 before:p-2 before:min-w-6.25 before:whitespace-pre-wrap before:text-right after:content-[attr(data-highlight-langrage)] after:right-3 after:absolute',
   codeHighlight: {
     atrule: 'text-ctp-green',
     attr: 'text-ctp-green',

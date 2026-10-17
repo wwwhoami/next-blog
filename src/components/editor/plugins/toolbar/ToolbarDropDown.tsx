@@ -11,6 +11,7 @@ import {
   ListBulletIcon,
   NumberedListIcon,
   PencilIcon,
+  TableCellsIcon,
 } from '@heroicons/react/20/solid'
 import { $createCodeNode } from '@lexical/code'
 import {
@@ -27,6 +28,7 @@ import {
   LexicalEditor,
 } from 'lexical'
 import { Fragment, useCallback, useEffect, useMemo } from 'react'
+import { INSERT_TABLE_COMMAND } from '../../EditorCommands'
 import ToolbarDropDownItem from './ToolbarDropDownItem'
 
 const BlockTypeToIcon = {
@@ -276,6 +278,14 @@ export function BlockOptionsDropdownList({
           }
         },
       },
+      {
+        action: () => {
+          editor.dispatchCommand(INSERT_TABLE_COMMAND, undefined)
+          setShowBlockOptionsDropDown(false)
+        },
+        text: 'Insert Table',
+        icon: <TableCellsIcon />,
+      },
     ],
     [
       formatParagraph,
@@ -287,6 +297,8 @@ export function BlockOptionsDropdownList({
       formatNumberedList,
       formatQuote,
       formatCode,
+      editor,
+      setShowBlockOptionsDropDown,
     ],
   )
 

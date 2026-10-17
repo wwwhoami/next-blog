@@ -31,58 +31,11 @@ import { Dispatch, JSX, useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { EDIT_LINK_COMMAND } from '../EditorCommands'
 import { getSelectedNode, sanitizeUrl } from '../utils'
-
-const VERITCAL_GAP = 10
-const HORITZONTAL_GAP = 10
-
-/**
- * Positions the floating editor element relative to the target element.
- * @param {DOMRect | null} targetRect - The bounding rectangle of the target element.
- * @param {HTMLElement} floatingElem - The floating editor element.
- * @param {number} [verticalGap=VERITCAL_GAP] - The vertical gap between the target and floating elements.
- * @param {number} [horizontalGap=HORITZONTAL_GAP] - The horizontal gap between the target and floating elements.
- */
-function positionFloatingElement(
-  targetRect: DOMRect | null,
-  floatingElem: HTMLElement,
-  verticalGap: number = VERITCAL_GAP,
-  horizontalGap: number = HORITZONTAL_GAP,
-) {
-  if (targetRect === null) {
-    floatingElem.style.opacity = '0'
-    floatingElem.style.transform = 'translate(-10000px, -10000px)'
-  } else {
-    floatingElem.style.opacity = '1'
-    let top = targetRect.top + targetRect.height + window.scrollY + verticalGap
-    let left =
-      targetRect.left +
-      window.scrollX -
-      floatingElem.offsetWidth / 2 +
-      targetRect.width / 2
-
-    // Adjust if the editor overflows the viewport
-    const floatingElemRect = floatingElem.getBoundingClientRect()
-    const viewportWidth = window.innerWidth
-    const viewportHeight = window.innerHeight
-
-    if (left < 0) {
-      left = horizontalGap
-    } else if (left + floatingElemRect.width > viewportWidth) {
-      left = viewportWidth - floatingElemRect.width - horizontalGap
-    }
-
-    if (top < 0) {
-      top = verticalGap
-    } else if (top + floatingElemRect.height > viewportHeight) {
-      top = viewportHeight - floatingElemRect.height - verticalGap
-    }
-
-    floatingElem.style.transform = `translate(${left}px, ${top}px)`
-  }
-}
+import { getSelectionRect, positionFloatingElement } from './FloatingEditor'
 
 type Props = {
   editor: LexicalEditor
+  anchorElem: HTMLElement
   isLink: boolean
   setIsLink: Dispatch<boolean>
   isEditMode: boolean
@@ -101,6 +54,7 @@ type Props = {
  */
 function FloatingLinkEditor({
   editor,
+  anchorElem,
   isLink,
   setIsLink,
   isEditMode,
@@ -151,16 +105,15 @@ function FloatingLinkEditor({
       rootElement.contains(nativeSelection.anchorNode) &&
       editor.isEditable()
     ) {
-      const domRect: DOMRect | undefined =
-        nativeSelection.focusNode?.parentElement?.getBoundingClientRect()
+      const domRect = getSelectionRect(rootElement)
 
       if (domRect) {
-        positionFloatingElement(domRect, editorElem)
+        positionFloatingElement(domRect, editorElem, anchorElem)
       }
       setLastSelection(selection)
     } else if (!activeElement) {
       if (rootElement !== null) {
-        positionFloatingElement(null, editorElem)
+        positionFloatingElement(null, editorElem, anchorElem)
       }
 
       setLastSelection(null)
@@ -169,7 +122,7 @@ function FloatingLinkEditor({
     }
 
     return true
-  }, [editor, isEditMode, linkUrl, setIsEditMode])
+  }, [anchorElem, editor, isEditMode, linkUrl, setIsEditMode])
 
   const handleLinkSubmission = (
     e: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>,
@@ -252,9 +205,19 @@ function FloatingLinkEditor({
       editor.registerCommand(
         EDIT_LINK_COMMAND,
         () => {
+          const selection = $getSelection()
+
           if (!isLink) {
+            if (
+              !$isRangeSelection(selection) ||
+              selection.isCollapsed() ||
+              selection.getTextContent().trim() === ''
+            ) {
+              return true
+            }
+
             editor.dispatchCommand(TOGGLE_LINK_COMMAND, 'https://')
-            setEditedLinkUrl(isLink ? linkUrl : 'https://')
+            setEditedLinkUrl('https://')
             setIsEditMode(true)
           } else {
             editor.dispatchCommand(TOGGLE_LINK_COMMAND, null)
@@ -449,6 +412,7 @@ function useFloatingLinkEditorToolbar(
   return createPortal(
     <FloatingLinkEditor
       editor={activeEditor}
+      anchorElem={anchorElem}
       isLink={isLink}
       setIsLink={setIsLink}
       isEditMode={isLinkEditMode}
@@ -459,7 +423,7 @@ function useFloatingLinkEditorToolbar(
 }
 
 function FloatingLinkEditorPlugin({
-  anchorElem = document.body,
+  anchorElem,
   isLinkEditMode,
   setIsLinkEditMode,
 }: {
@@ -468,7 +432,37 @@ function FloatingLinkEditorPlugin({
   setIsLinkEditMode: Dispatch<boolean>
 }): JSX.Element | null {
   const [editor] = useLexicalComposerContext()
+  const [editorAnchorElem, setEditorAnchorElem] = useState<HTMLElement | null>(
+    anchorElem ?? null,
+  )
 
+  useEffect(() => {
+    setEditorAnchorElem(
+      anchorElem ?? editor.getRootElement()?.parentElement ?? null,
+    )
+  }, [anchorElem, editor])
+
+  return editorAnchorElem ? (
+    <FloatingLinkEditorToolbar
+      editor={editor}
+      anchorElem={editorAnchorElem}
+      isLinkEditMode={isLinkEditMode}
+      setIsLinkEditMode={setIsLinkEditMode}
+    />
+  ) : null
+}
+
+function FloatingLinkEditorToolbar({
+  editor,
+  anchorElem,
+  isLinkEditMode,
+  setIsLinkEditMode,
+}: {
+  editor: LexicalEditor
+  anchorElem: HTMLElement
+  isLinkEditMode: boolean
+  setIsLinkEditMode: Dispatch<boolean>
+}): JSX.Element | null {
   return useFloatingLinkEditorToolbar(
     editor,
     anchorElem,
