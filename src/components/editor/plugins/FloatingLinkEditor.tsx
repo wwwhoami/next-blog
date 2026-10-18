@@ -18,6 +18,7 @@ import {
   $getSelection,
   $isLineBreakNode,
   $isRangeSelection,
+  $setSelection,
   BaseSelection,
   CLICK_COMMAND,
   COMMAND_PRIORITY_CRITICAL,
@@ -64,6 +65,7 @@ function FloatingLinkEditor({
   setIsEditMode,
 }: Props): JSX.Element {
   const inputRef = useRef<HTMLInputElement>(null)
+  const provisionalSelection = useRef<BaseSelection | null>(null)
 
   const [linkUrl, setLinkUrl] = useState('')
   const [editedLinkUrl, setEditedLinkUrl] = useState('https://')
@@ -152,16 +154,31 @@ function FloatingLinkEditor({
           }
         })
       }
+      provisionalSelection.current = null
       setEditedLinkUrl('https://')
       setIsEditMode(false)
     }
   }
 
+  const cancelLinkCreation = useCallback(() => {
+    const selection = provisionalSelection.current
+
+    if (selection !== null) {
+      editor.update(() => {
+        $setSelection(selection.clone())
+        editor.dispatchCommand(TOGGLE_LINK_COMMAND, null)
+      })
+      provisionalSelection.current = null
+    }
+    setEditedLinkUrl('https://')
+    setIsEditMode(false)
+  }, [editor, setIsEditMode])
+
   const handleLinkSubmissionDiscard = (
     e: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>,
   ) => {
     e.preventDefault()
-    setIsEditMode(false)
+    cancelLinkCreation()
   }
 
   const monitorKeyboardInteraction = (
@@ -195,6 +212,9 @@ function FloatingLinkEditor({
       editor.registerCommand(
         KEY_ESCAPE_COMMAND,
         () => {
+          if (isEditMode) {
+            cancelLinkCreation()
+          }
           if (isLink) {
             setIsLink(false)
             return true
@@ -219,6 +239,7 @@ function FloatingLinkEditor({
             }
 
             editor.dispatchCommand(TOGGLE_LINK_COMMAND, 'https://')
+            provisionalSelection.current = $getSelection()?.clone() ?? null
             setEditedLinkUrl('https://')
             setIsEditMode(true)
           } else {
@@ -229,7 +250,16 @@ function FloatingLinkEditor({
         COMMAND_PRIORITY_EDITOR,
       ),
     )
-  }, [editor, $updateLinkEditor, isLink, linkUrl, setIsLink, setIsEditMode])
+  }, [
+    editor,
+    $updateLinkEditor,
+    isEditMode,
+    isLink,
+    linkUrl,
+    setIsLink,
+    setIsEditMode,
+    cancelLinkCreation,
+  ])
 
   useEffect(() => {
     editor.getEditorState().read(() => {
@@ -265,16 +295,23 @@ function FloatingLinkEditor({
       }}
     >
       {!isLink ? null : isEditMode ? (
-        <div className="inline-flex items-center gap-2 rounded-xl border-2 border-gray-200/70 bg-gray-100 p-2 shadow-lg dark:border-slate-800 dark:bg-slate-900 dark:text-gray-200 dark:placeholder:text-gray-400 dark:autofill:bg-slate-800 dark:autofill:text-gray-200 dark:focus-within:ring-indigo-600/80">
+        <div
+          className="inline-flex items-center gap-2 rounded-xl border-2 border-gray-200/70 bg-gray-100 p-2 shadow-lg dark:border-slate-800 dark:bg-slate-900 dark:text-gray-200 dark:placeholder:text-gray-400 dark:autofill:bg-slate-800 dark:autofill:text-gray-200 dark:focus-within:ring-indigo-600/80"
+          onBlur={(e) => {
+            if (
+              !e.relatedTarget ||
+              !e.currentTarget.contains(e.relatedTarget)
+            ) {
+              cancelLinkCreation()
+            }
+          }}
+        >
           <input
             ref={inputRef}
             className="focus-ring-primary h-6 rounded-xl border-2 border-gray-200/70 bg-gray-100 p-2 shadow-lg dark:border-slate-800 dark:bg-slate-900 dark:text-gray-200 dark:placeholder:text-gray-400 dark:autofill:bg-slate-800 dark:autofill:text-gray-200 dark:focus-within:ring-indigo-600/80"
             value={editedLinkUrl}
             onChange={(e) => {
               setEditedLinkUrl(e.target.value)
-            }}
-            onBlur={() => {
-              setIsEditMode(false)
             }}
             onKeyDown={monitorKeyboardInteraction}
           />
