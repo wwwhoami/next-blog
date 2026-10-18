@@ -6,6 +6,7 @@ type Props = {
   active?: boolean
   disabled?: boolean
   onClick?: () => void
+  onMouseDown?: React.MouseEventHandler<HTMLButtonElement>
   icon?: React.ElementType
   children?: React.ReactNode
   tabIndex?: number
@@ -14,7 +15,16 @@ type Props = {
 
 const ToolbarButton = forwardRef<HTMLButtonElement, Props>(
   (
-    { title, active, disabled, onClick, icon: Icon, tabIndex, children },
+    {
+      title,
+      active,
+      disabled,
+      onClick,
+      onMouseDown,
+      icon: Icon,
+      tabIndex,
+      children,
+    },
     ref,
   ) => {
     return (
@@ -23,6 +33,7 @@ const ToolbarButton = forwardRef<HTMLButtonElement, Props>(
         aria-label={title}
         disabled={disabled}
         onClick={onClick}
+        onMouseDown={onMouseDown}
         size="sm"
         variant="text"
         color="secondary"

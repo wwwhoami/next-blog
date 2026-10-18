@@ -84,7 +84,7 @@ export default function ToolbarPlugin() {
   const [isStrikethrough, setIsStrikethrough] = useState(false)
   const [isLink, setIsLink] = useState(false)
   const [isCode, setIsCode] = useState(false)
-  const [hasNonEmptySelection, setHasNonEmptySelection] = useState(false)
+  const [hasLinkableSelection, setHasLinkableSelection] = useState(false)
 
   const [isEditorEmpty, setIsEditorEmpty] = useState(true)
 
@@ -95,11 +95,11 @@ export default function ToolbarPlugin() {
     const selection = $getSelection()
 
     if (!$isRangeSelection(selection)) {
-      setHasNonEmptySelection(false)
+      setHasLinkableSelection(false)
       return
     }
 
-    setHasNonEmptySelection(
+    setHasLinkableSelection(
       (!selection.isCollapsed() && selection.getTextContent().trim() !== '') ||
         (selection.isCollapsed() && $selectWordAtCursor(selection.clone())),
     )
@@ -280,7 +280,12 @@ export default function ToolbarPlugin() {
     },
     {
       active: isLink,
-      disabled: !isLink && !hasNonEmptySelection,
+      disabled: !isLink && !hasLinkableSelection,
+      // Prevent blur from cancelling the current creation before the toolbar
+      // command runs, so clicking Link again cancels instead of reopening it.
+      onMouseDown: (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+      },
       onClick: () => editor.dispatchCommand(EDIT_LINK_COMMAND, undefined),
       icon: LinkIcon,
       title: `Link (${formatShortcut('K')})`,

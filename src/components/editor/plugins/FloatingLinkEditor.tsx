@@ -228,6 +228,11 @@ function FloatingLinkEditor({
         () => {
           const selection = $getSelection()
 
+          if (isEditMode && provisionalSelection.current !== null) {
+            cancelLinkCreation()
+            return true
+          }
+
           if (!isLink) {
             if (
               !$isRangeSelection(selection) ||
