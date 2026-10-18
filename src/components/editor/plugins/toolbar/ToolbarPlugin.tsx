@@ -53,7 +53,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { EDIT_LINK_COMMAND } from '../../EditorCommands'
 import useMarkdownMode from '../../hooks/useMarkdownMode'
-import { getSelectedNode } from '../../utils'
+import { $selectWordAtCursor, getSelectedNode } from '../../utils'
 import ClearDialog from '../ClearDialog'
 import {
   EXPORT_MARKDOWN_COMMAND,
@@ -100,7 +100,8 @@ export default function ToolbarPlugin() {
     }
 
     setHasNonEmptySelection(
-      !selection.isCollapsed() && selection.getTextContent().trim() !== '',
+      (!selection.isCollapsed() && selection.getTextContent().trim() !== '') ||
+        (selection.isCollapsed() && $selectWordAtCursor(selection.clone())),
     )
 
     const anchorNode = selection.anchor.getNode()

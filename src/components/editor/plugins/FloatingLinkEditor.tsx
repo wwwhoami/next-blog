@@ -31,7 +31,12 @@ import {
 import { Dispatch, JSX, useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { EDIT_LINK_COMMAND } from '../EditorCommands'
-import { getSelectedNode, getSelectionRect, sanitizeUrl } from '../utils'
+import {
+  $selectWordAtCursor,
+  getSelectedNode,
+  getSelectionRect,
+  sanitizeUrl,
+} from '../utils'
 
 type Props = {
   editor: LexicalEditor
@@ -206,8 +211,9 @@ function FloatingLinkEditor({
           if (!isLink) {
             if (
               !$isRangeSelection(selection) ||
-              selection.isCollapsed() ||
-              selection.getTextContent().trim() === ''
+              (!selection.isCollapsed() &&
+                selection.getTextContent().trim() === '') ||
+              !$selectWordAtCursor(selection)
             ) {
               return true
             }

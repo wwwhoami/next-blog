@@ -1,5 +1,12 @@
 import { $isAtNodeEnd } from '@lexical/selection'
-import { RangeSelection } from 'lexical'
+import {
+  $isRangeSelection,
+  $isTextNode,
+  BaseSelection,
+  RangeSelection,
+} from 'lexical'
+
+const PUNCTUATION_PATTERN = /\p{P}/u
 
 /**
  * Returns a viewport-relative rectangle for the current native selection.
@@ -60,6 +67,63 @@ export function getSelectionRect(
   }
 
   return null
+}
+
+/**
+ * Expands a collapsed text selection to the word containing the cursor.
+ * Existing non-collapsed selections are left unchanged, while punctuation at
+ * the inferred word boundaries is excluded.
+ *
+ * @param selection The Lexical selection to inspect and update.
+ * @returns Whether the selection can be used for link creation.
+ */
+export function $selectWordAtCursor(selection: BaseSelection): boolean {
+  if (!$isRangeSelection(selection) || !selection.isCollapsed()) {
+    return true
+  }
+
+  const anchor = selection.anchor
+  const node = anchor.getNode()
+
+  if (!$isTextNode(node)) {
+    return false
+  }
+
+  const text = node.getTextContent()
+  const offset = anchor.offset
+
+  if (
+    offset === 0 ||
+    offset === text.length ||
+    /\s/.test(text[offset - 1]) ||
+    /\s/.test(text[offset])
+  ) {
+    return false
+  }
+
+  let start = offset
+  while (start > 0 && !/\s/.test(text[start - 1])) {
+    start--
+  }
+
+  let end = offset
+  while (end < text.length && !/\s/.test(text[end])) {
+    end++
+  }
+
+  while (start < end && PUNCTUATION_PATTERN.test(text[start])) {
+    start++
+  }
+  while (end > start && PUNCTUATION_PATTERN.test(text[end - 1])) {
+    end--
+  }
+
+  if (start === end) {
+    return false
+  }
+
+  selection.setTextNodeRange(node, start, node, end)
+  return true
 }
 
 export function getSelectedNode(selection: RangeSelection) {
