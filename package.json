@@ -9,9 +9,11 @@
     "lint": "eslint ./src ./app ./lib",
     "lint:fix": "eslint ./src ./app ./lib --fix",
     "format": "prettier --write \"app/**/*.{js,ts,jsx,tsx}\" \"src/**/*.{js,ts,jsx,tsx}\" \"lib/**/*.{js,ts,jsx,tsx}\"",
-    "precommit": "pnpm lint:fix && pnpm format"
+    "precommit": "pnpm lint:fix && pnpm format",
+    "test": "vitest run"
   },
   "dependencies": {
+    "@braintree/sanitize-url": "^7.1.2",
     "@floating-ui/react": "^0.27.20",
     "@headlessui/react": "^2.2.10",
     "@heroicons/react": "^2.2.0",
@@ -21,6 +23,7 @@
     "clsx": "^2.1.1",
     "dayjs": "^1.11.23",
     "gray-matter": "^4.0.3",
+    "ipaddr.js": "^2.5.0",
     "lexical": "^0.35.0",
     "lodash.debounce": "^4.0.8",
     "next": "^15.5.28",
@@ -75,6 +78,7 @@
     "prettier-plugin-tailwindcss": "^0.6.14",
     "tailwind-merge": "^3.7.0",
     "tailwindcss": "^4.3.3",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "vitest": "^5.0.5"
   }
 }

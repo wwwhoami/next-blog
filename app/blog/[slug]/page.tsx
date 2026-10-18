@@ -11,7 +11,7 @@ import readingTime from 'reading-time'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeImgSize from 'rehype-img-size'
 import rehypePrettyCode from 'rehype-pretty-code'
-import rehypeSanitize from 'rehype-sanitize'
+import rehypeSanitize, { defaultSchema } from 'rehype-sanitize'
 import rehypeSlug from 'rehype-slug'
 import { visit } from 'unist-util-visit'
 
@@ -48,6 +48,14 @@ const components = {
       <div {...props} />
     ),
   pre: (props: any) => <PostPre {...props} />,
+}
+
+const postSanitizeSchema = {
+  ...defaultSchema,
+  protocols: {
+    ...defaultSchema.protocols,
+    href: ['http', 'https', 'mailto'],
+  },
 }
 
 export default async function PostPage(props: Props) {
@@ -90,7 +98,7 @@ export default async function PostPage(props: Props) {
               {
                 mdxOptions: {
                   rehypePlugins: [
-                    rehypeSanitize,
+                    [rehypeSanitize, postSanitizeSchema],
                     rehypeSlug,
                     [
                       rehypeAutolinkHeadings,

@@ -36,6 +36,7 @@ import {
   $selectWordAtCursor,
   getSelectedNode,
   getSelectionRect,
+  normalizeAndValidateUrl,
   sanitizeUrl,
 } from '../utils'
 
@@ -69,6 +70,7 @@ function FloatingLinkEditor({
 
   const [linkUrl, setLinkUrl] = useState('')
   const [editedLinkUrl, setEditedLinkUrl] = useState('https://')
+  const [linkUrlError, setLinkUrlError] = useState('')
   const [lastSelection, setLastSelection] = useState<BaseSelection | null>(null)
   const [selectionRect, setSelectionRect] = useState<DOMRect | null>(null)
   const { refs, floatingStyles, x, y } = useFloating({
@@ -132,13 +134,17 @@ function FloatingLinkEditor({
   ) => {
     e.preventDefault()
 
+    const validation = normalizeAndValidateUrl(editedLinkUrl)
+    if (!validation.valid) {
+      setLinkUrlError(validation.reason)
+      inputRef.current?.focus()
+      return
+    }
+
     if (lastSelection !== null) {
       if (linkUrl !== '') {
         editor.update(() => {
-          editor.dispatchCommand(
-            TOGGLE_LINK_COMMAND,
-            sanitizeUrl(editedLinkUrl),
-          )
+          editor.dispatchCommand(TOGGLE_LINK_COMMAND, validation.url)
           const selection = $getSelection()
 
           if ($isRangeSelection(selection)) {
@@ -156,6 +162,7 @@ function FloatingLinkEditor({
       }
       provisionalSelection.current = null
       setEditedLinkUrl('https://')
+      setLinkUrlError('')
       setIsEditMode(false)
     }
   }
@@ -171,6 +178,7 @@ function FloatingLinkEditor({
       provisionalSelection.current = null
     }
     setEditedLinkUrl('https://')
+    setLinkUrlError('')
     setIsEditMode(false)
   }, [editor, setIsEditMode])
 
@@ -246,6 +254,7 @@ function FloatingLinkEditor({
             editor.dispatchCommand(TOGGLE_LINK_COMMAND, 'https://')
             provisionalSelection.current = $getSelection()?.clone() ?? null
             setEditedLinkUrl('https://')
+            setLinkUrlError('')
             setIsEditMode(true)
           } else {
             editor.dispatchCommand(TOGGLE_LINK_COMMAND, null)
@@ -311,15 +320,33 @@ function FloatingLinkEditor({
             }
           }}
         >
-          <input
-            ref={inputRef}
-            className="focus-ring-primary h-6 rounded-xl border-2 border-gray-200/70 bg-gray-100 p-2 shadow-lg dark:border-slate-800 dark:bg-slate-900 dark:text-gray-200 dark:placeholder:text-gray-400 dark:autofill:bg-slate-800 dark:autofill:text-gray-200 dark:focus-within:ring-indigo-600/80"
-            value={editedLinkUrl}
-            onChange={(e) => {
-              setEditedLinkUrl(e.target.value)
-            }}
-            onKeyDown={monitorKeyboardInteraction}
-          />
+          <div>
+            <input
+              ref={inputRef}
+              className={`focus-ring-primary m-2 h-6 rounded-xl border-2 bg-gray-100 p-2 shadow-lg dark:bg-slate-900 dark:text-gray-200 dark:placeholder:text-gray-400 dark:autofill:bg-slate-800 dark:autofill:text-gray-200 dark:focus-within:ring-indigo-600/80 ${
+                linkUrlError
+                  ? 'border-red-500 dark:border-red-400'
+                  : 'border-gray-200/70 dark:border-slate-800'
+              }`}
+              value={editedLinkUrl}
+              onChange={(e) => {
+                setEditedLinkUrl(e.target.value)
+                setLinkUrlError('')
+              }}
+              aria-describedby={linkUrlError ? 'link-url-error' : undefined}
+              aria-invalid={linkUrlError !== ''}
+              onKeyDown={monitorKeyboardInteraction}
+            />
+            {linkUrlError ? (
+              <p
+                id="link-url-error"
+                className="text-sm text-red-600 dark:text-red-400"
+                role="alert"
+              >
+                {linkUrlError}
+              </p>
+            ) : null}
+          </div>
 
           <Button
             onClick={handleLinkSubmissionDiscard}
@@ -355,6 +382,7 @@ function FloatingLinkEditor({
               onClick={(e) => {
                 e.preventDefault()
                 setEditedLinkUrl(linkUrl)
+                setLinkUrlError('')
                 setIsEditMode(true)
               }}
               size="sm"

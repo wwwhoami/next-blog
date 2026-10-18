@@ -10,6 +10,7 @@ import matter from 'gray-matter'
 import { COMMAND_PRIORITY_EDITOR, createCommand } from 'lexical'
 import { useEffect } from 'react'
 import { EDITOR_TRANSFORMERS } from '../Editor'
+import { $sanitizeImportedLinks } from '../utils'
 
 type Props = {
   title: string
@@ -64,6 +65,7 @@ const MarkdownImportExportPlugin = ({
 
             editor.update(() => {
               $convertFromMarkdownString(parsed.content, EDITOR_TRANSFORMERS)
+              $sanitizeImportedLinks()
             })
           })
 

@@ -1,10 +1,17 @@
+import { sanitizeUrl as sanitizeUnsafeUrl } from '@braintree/sanitize-url'
+import { $isLinkNode } from '@lexical/link'
 import { $isAtNodeEnd } from '@lexical/selection'
+import ipaddr from 'ipaddr.js'
 import {
+  $getRoot,
+  $isElementNode,
   $isRangeSelection,
   $isTextNode,
   BaseSelection,
+  ElementNode,
   RangeSelection,
 } from 'lexical'
+import isURL from 'validator/lib/isURL'
 
 const PUNCTUATION_PATTERN = /\p{P}/u
 
@@ -142,25 +149,165 @@ export function getSelectedNode(selection: RangeSelection) {
   }
 }
 
-const SUPPORTED_URL_PROTOCOLS = new Set(['http:', 'https:'])
+const SUPPORTED_URL_PROTOCOLS = ['http', 'https'] as const
+const SUPPORTED_URL_PROTOCOL_SET = new Set(
+  SUPPORTED_URL_PROTOCOLS.map((protocol) => `${protocol}:`),
+)
+const SAFE_NON_WEB_PROTOCOLS = new Set(['mailto:'])
+const LINK_URL_PLACEHOLDER = 'https://'
 
-export function sanitizeUrl(url: string): string {
-  try {
-    const parsedUrl = new URL(url)
+type UrlValidationResult =
+  | { valid: true; url: string }
+  | { valid: false; reason: string }
 
-    if (!SUPPORTED_URL_PROTOCOLS.has(parsedUrl.protocol)) {
-      return 'about:blank'
-    }
-  } catch {
-    return url
+/**
+ * Checks whether a hostname identifies a local name or a non-public IP range.
+ *
+ * DNS names are classified only by their literal hostname; resolving public
+ * hostnames to private addresses requires a server-side network check.
+ */
+function isPrivateHostname(hostname: string): boolean {
+  const normalizedHostname = hostname.toLowerCase().replace(/^\[|\]$/g, '')
+
+  if (
+    normalizedHostname === 'localhost' ||
+    normalizedHostname.endsWith('.localhost') ||
+    normalizedHostname.endsWith('.local')
+  ) {
+    return true
   }
-  return url
+
+  if (!ipaddr.isValid(normalizedHostname)) {
+    return false
+  }
+
+  return ipaddr.process(normalizedHostname).range() !== 'unicast'
 }
 
-const urlRegExp = new RegExp(
-  /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[\w]*))?)/,
-)
+/**
+ * Normalizes and validates a user-provided web URL for post content.
+ *
+ * The check trims surrounding whitespace, requires HTTP or HTTPS, rejects
+ * unsafe URL structures and private destinations, and returns either a
+ * canonical URL or a user-facing validation reason.
+ */
+export function normalizeAndValidateUrl(url: string): UrlValidationResult {
+  const normalizedInput = url.trim()
+
+  if (normalizedInput === '') {
+    return { valid: false, reason: 'A URL is required.' }
+  }
+
+  // Reject parser-affecting control characters.
+  if (/[\u0000-\u001f\u007f]/.test(normalizedInput)) {
+    return { valid: false, reason: 'The URL contains control characters.' }
+  }
+  if (/\s/.test(normalizedInput)) {
+    return { valid: false, reason: 'The URL cannot contain whitespace.' }
+  }
+
+  try {
+    // Native URL parsing provides the canonical stored value.
+    const parsedUrl = new URL(normalizedInput)
+
+    if (!SUPPORTED_URL_PROTOCOL_SET.has(parsedUrl.protocol)) {
+      return { valid: false, reason: 'Only HTTP and HTTPS URLs are allowed.' }
+    }
+    if (!parsedUrl.hostname) {
+      return { valid: false, reason: 'A hostname is required.' }
+    }
+    if (parsedUrl.username || parsedUrl.password) {
+      return {
+        valid: false,
+        reason: 'URLs with embedded credentials are not allowed.',
+      }
+    }
+    if (isPrivateHostname(parsedUrl.hostname)) {
+      return {
+        valid: false,
+        reason: 'Links to private or local destinations are not allowed.',
+      }
+    }
+
+    // Apply remaining URL-shape checks after reporting parser-level errors.
+    if (
+      !isURL(normalizedInput, {
+        protocols: [...SUPPORTED_URL_PROTOCOLS],
+        require_protocol: true,
+        require_valid_protocol: true,
+        allow_fragments: true,
+        allow_query_components: true,
+        disallow_auth: true,
+      })
+    ) {
+      return { valid: false, reason: 'Enter a valid HTTP or HTTPS URL.' }
+    }
+
+    return { valid: true, url: parsedUrl.toString() }
+  } catch {
+    return { valid: false, reason: 'Enter a valid HTTP or HTTPS URL.' }
+  }
+}
+
+/**
+ * Sanitizes a URL before it is rendered or opened by the editor.
+ *
+ * Valid web URLs are normalized and passed through the URL sanitizer.
+ * Invalid URLs are replaced with `about:blank`, except for supported
+ * non-web protocols such as `mailto:`.
+ */
+export function sanitizeUrl(url: string): string {
+  const result = normalizeAndValidateUrl(url)
+  if (result.valid) {
+    return sanitizeUnsafeUrl(result.url)
+  }
+
+  const sanitizedUrl = sanitizeUnsafeUrl(url.trim())
+  try {
+    const parsedUrl = new URL(sanitizedUrl)
+    return SAFE_NON_WEB_PROTOCOLS.has(parsedUrl.protocol)
+      ? sanitizedUrl
+      : 'about:blank'
+  } catch {
+    return 'about:blank'
+  }
+}
+
+export function isValidUrl(url: string): boolean {
+  return normalizeAndValidateUrl(url).valid
+}
 
 export function validateUrl(url: string): boolean {
-  return url === 'https://' || urlRegExp.test(url)
+  return url === LINK_URL_PLACEHOLDER || isValidUrl(url)
+}
+
+/**
+ * Sanitizes link nodes created while importing Markdown into the editor.
+ *
+ * Valid links are normalized in place. Invalid links are removed while their
+ * child content is preserved as plain editor content.
+ */
+export function $sanitizeImportedLinks() {
+  const $visit = (node: ElementNode) => {
+    for (const child of node.getChildren()) {
+      if ($isLinkNode(child)) {
+        const validation = normalizeAndValidateUrl(child.getURL())
+        if (validation.valid) {
+          child.setURL(validation.url)
+        } else {
+          for (const linkChild of child.getChildren()) {
+            child.insertBefore(linkChild)
+          }
+          child.remove()
+          continue
+        }
+      }
+
+      if ($isElementNode(child)) {
+        $visit(child)
+      }
+    }
+  }
+
+  $visit($getRoot())
 }
