@@ -27,6 +27,7 @@ import { TableCellNode, TableNode, TableRowNode } from '@lexical/table'
 import { useState } from 'react'
 import AutoLinkPlugin from './plugins/AutoLinkPlugin'
 import CodeHighlightPlugin from './plugins/CodeHighlightPlutin'
+import ComponentPickerPlugin from './plugins/ComponentPickerPlugin'
 import FloatingLinkEditorPlugin from './plugins/FloatingLinkEditor'
 import KeyboardShortcutsPlugin from './plugins/KeyboardShortcutsPlugin'
 import LocalStoragePlugin from './plugins/LocalStoragePlugin'
@@ -144,6 +145,7 @@ const Editor = ({
             hasHorizontalScroll={false}
           />
           <TableInsertionPlugin />
+          <ComponentPickerPlugin />
 
           <FloatingLinkEditorPlugin
             isLinkEditMode={isLinkEditMode}

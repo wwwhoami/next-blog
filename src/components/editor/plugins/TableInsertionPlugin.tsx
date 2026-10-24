@@ -28,14 +28,14 @@ import {
   KEY_ESCAPE_COMMAND,
   LexicalEditor,
 } from 'lexical'
-import { JSX, useEffect, useRef, useState } from 'react'
+import { JSX, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { INSERT_TABLE_COMMAND } from '../EditorCommands'
+import { INSERT_TABLE_COMMAND, TableDimensions } from '../EditorCommands'
 import { getSelectionRect } from '../utils'
+import { MAX_TABLE_SIZE } from './ComponentPickerPluginUtils'
 
 const DEFAULT_ROWS = 3
 const DEFAULT_COLUMNS = 3
-const MAX_TABLE_SIZE = 20
 
 function $createTable(rows: number, columns: number) {
   const table = $createTableNode()
@@ -62,18 +62,24 @@ function FloatingTableEditor({
   editor,
   anchorRect,
   lastSelection,
+  initialDimensions,
   onClose,
   anchorElem,
 }: {
   editor: LexicalEditor
   anchorRect: DOMRect | null
   lastSelection: BaseSelection | null
+  initialDimensions: TableDimensions | null
   onClose: () => void
   anchorElem: HTMLElement
 }): JSX.Element {
   const rowsInputRef = useRef<HTMLInputElement>(null)
-  const [rows, setRows] = useState(String(DEFAULT_ROWS))
-  const [columns, setColumns] = useState(String(DEFAULT_COLUMNS))
+  const [rows, setRows] = useState(
+    String(initialDimensions?.rows ?? DEFAULT_ROWS),
+  )
+  const [columns, setColumns] = useState(
+    String(initialDimensions?.columns ?? DEFAULT_COLUMNS),
+  )
   const [error, setError] = useState('')
   const { context, refs, floatingStyles, x, y } = useFloating({
     open: true,
@@ -93,11 +99,18 @@ function FloatingTableEditor({
   const dismiss = useDismiss(context, { escapeKey: true })
   const { getFloatingProps } = useInteractions([dismiss])
 
-  useEffect(() => {
-    if (rowsInputRef.current) {
-      rowsInputRef.current.focus({ preventScroll: true })
-      rowsInputRef.current.select()
+  // Lexical may restore focus to the editor after the picker handles Enter.
+  // Retry on the next frame so the table input owns focus after that cleanup.
+  useLayoutEffect(() => {
+    const focusRowsInput = () => {
+      rowsInputRef.current?.focus({ preventScroll: true })
+      rowsInputRef.current?.select()
     }
+
+    focusRowsInput()
+    const frame = requestAnimationFrame(focusRowsInput)
+
+    return () => cancelAnimationFrame(frame)
   }, [])
 
   useEffect(() => {
@@ -237,6 +250,8 @@ export default function TableInsertionPlugin(): JSX.Element | null {
   const [anchorRect, setAnchorRect] = useState<DOMRect | null>(null)
   const [lastSelection, setLastSelection] = useState<BaseSelection | null>(null)
   const [anchorElem, setAnchorElem] = useState<HTMLElement | null>(null)
+  const [initialDimensions, setInitialDimensions] =
+    useState<TableDimensions | null>(null)
 
   useEffect(() => {
     setAnchorElem(editor.getRootElement()?.parentElement ?? null)
@@ -245,13 +260,14 @@ export default function TableInsertionPlugin(): JSX.Element | null {
   useEffect(() => {
     return editor.registerCommand(
       INSERT_TABLE_COMMAND,
-      () => {
+      (dimensions) => {
         const selection = $getSelection()
         if (!selection) {
           return true
         }
 
         setLastSelection(selection.clone())
+        setInitialDimensions(dimensions ?? null)
         setAnchorRect(getSelectionRect(editor.getRootElement()))
         setIsOpen(true)
         return true
@@ -280,12 +296,17 @@ export default function TableInsertionPlugin(): JSX.Element | null {
   }
 
   const tableAnchorElem = anchorElem
+  const tableDimensionsKey = initialDimensions
+    ? `${initialDimensions.rows}x${initialDimensions.columns}`
+    : 'default'
 
   return createPortal(
     <FloatingTableEditor
+      key={tableDimensionsKey}
       editor={editor}
       anchorRect={anchorRect}
       lastSelection={lastSelection}
+      initialDimensions={initialDimensions}
       onClose={() => setIsOpen(false)}
       anchorElem={tableAnchorElem}
     />,
