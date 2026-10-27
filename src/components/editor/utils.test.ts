@@ -48,6 +48,32 @@ describe('normalizeAndValidateUrl', () => {
 })
 
 describe('$sanitizeImportedLinks', () => {
+  it('preserves sanitized mailto links', async () => {
+    const editor = createEditor({ nodes: [LinkNode] })
+
+    editor.update(() => {
+      const paragraph = $createParagraphNode()
+      const link = $createLinkNode(' mailto:user@example.com ')
+      link.append($createTextNode('Email us'))
+      paragraph.append(link)
+      $getRoot().append(paragraph)
+      $sanitizeImportedLinks()
+    })
+
+    await new Promise((resolve) => setTimeout(resolve, 0))
+
+    editor.getEditorState().read(() => {
+      const paragraph = $getRoot().getFirstChild()
+      if ($isElementNode(paragraph)) {
+        const link = paragraph.getFirstChild()
+        expect($isLinkNode(link)).toBe(true)
+        if ($isLinkNode(link)) {
+          expect(link.getURL()).toBe('mailto:user@example.com')
+        }
+      }
+    })
+  })
+
   it('unwraps invalid links while preserving their text', async () => {
     const editor = createEditor({ nodes: [LinkNode] })
 

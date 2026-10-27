@@ -262,14 +262,18 @@ export function sanitizeUrl(url: string): string {
     return sanitizeUnsafeUrl(result.url)
   }
 
+  return sanitizeSafeNonWebUrl(url) ?? 'about:blank'
+}
+
+function sanitizeSafeNonWebUrl(url: string): string | null {
   const sanitizedUrl = sanitizeUnsafeUrl(url.trim())
   try {
     const parsedUrl = new URL(sanitizedUrl)
     return SAFE_NON_WEB_PROTOCOLS.has(parsedUrl.protocol)
       ? sanitizedUrl
-      : 'about:blank'
+      : null
   } catch {
-    return 'about:blank'
+    return null
   }
 }
 
@@ -284,8 +288,9 @@ export function validateUrl(url: string): boolean {
 /**
  * Sanitizes link nodes created while importing Markdown into the editor.
  *
- * Valid links are normalized in place. Invalid links are removed while their
- * child content is preserved as plain editor content.
+ * Valid web links are normalized in place. Supported non-web links, such as
+ * sanitized `mailto:` URLs, are preserved. Invalid links are removed while
+ * their child content is preserved as plain editor content.
  */
 export function $sanitizeImportedLinks() {
   const $visit = (node: ElementNode) => {
@@ -295,6 +300,12 @@ export function $sanitizeImportedLinks() {
         if (validation.valid) {
           child.setURL(validation.url)
         } else {
+          const sanitizedUrl = sanitizeSafeNonWebUrl(child.getURL())
+          if (sanitizedUrl) {
+            child.setURL(sanitizedUrl)
+            continue
+          }
+
           for (const linkChild of child.getChildren()) {
             child.insertBefore(linkChild)
           }
