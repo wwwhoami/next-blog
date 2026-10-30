@@ -9,27 +9,45 @@ type Props = {
   handleAdd: (category: Category[]) => void
 }
 
+const normalizeCategoryName = (name: string) => name.trim().toLowerCase()
+
 export default function MyCombobox({ categories, selected, handleAdd }: Props) {
   const [query, setQuery] = useState('')
 
   const inputRef = useRef<HTMLInputElement>(null)
 
   const mergedCategories = useMemo(
-    () => Array.from(new Set(categories.concat(selected))),
+    () => {
+      const uniqueCategories = new Map<string, Category>()
+
+      for (const category of selected.concat(categories)) {
+        const key = normalizeCategoryName(category.name)
+
+        if (!uniqueCategories.has(key)) {
+          uniqueCategories.set(key, category)
+        }
+      }
+
+      return Array.from(uniqueCategories.values())
+    },
     [categories, selected],
   )
 
   const filteredCategories = useMemo(
     () =>
       mergedCategories.filter((category) =>
-        category.name.toLowerCase().startsWith(query.toLowerCase()),
+        normalizeCategoryName(category.name).startsWith(
+          normalizeCategoryName(query),
+        ),
       ),
     [mergedCategories, query],
   )
 
   function isSelected(categoryName: string) {
-    return filteredCategories.some(
-      (category) => category.name.toLowerCase() === categoryName.toLowerCase(),
+    return mergedCategories.some(
+      (category) =>
+        normalizeCategoryName(category.name) ===
+        normalizeCategoryName(categoryName),
     )
   }
 
