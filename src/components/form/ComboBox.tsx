@@ -5,10 +5,11 @@ import {
   ComboboxInput,
   ComboboxOption,
   ComboboxOptions,
+  Label,
   Transition,
 } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid'
-import { Fragment, useMemo, useRef, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 
 type Props = {
   categories: Array<Category>
@@ -21,7 +22,8 @@ const normalizeCategoryName = (name: string) => name.trim().toLowerCase()
 export default function MyCombobox({ categories, selected, handleAdd }: Props) {
   const [query, setQuery] = useState('')
 
-  const inputRef = useRef<HTMLInputElement>(null)
+  const categoryName = query.trim()
+  const normalizedQuery = normalizeCategoryName(categoryName)
 
   const mergedCategories = useMemo(() => {
     const uniqueCategories = new Map<string, Category>()
@@ -40,11 +42,9 @@ export default function MyCombobox({ categories, selected, handleAdd }: Props) {
   const filteredCategories = useMemo(
     () =>
       mergedCategories.filter((category) =>
-        normalizeCategoryName(category.name).startsWith(
-          normalizeCategoryName(query),
-        ),
+        normalizeCategoryName(category.name).startsWith(normalizedQuery),
       ),
-    [mergedCategories, query],
+    [mergedCategories, normalizedQuery],
   )
 
   function isSelected(categoryName: string) {
@@ -60,10 +60,10 @@ export default function MyCombobox({ categories, selected, handleAdd }: Props) {
       <Combobox value={selected} onChange={handleAdd} multiple>
         <div className="relative mt-1">
           <div className="focus-ring-primary relative w-full cursor-default overflow-hidden rounded-xl border border-gray-200 bg-white text-left shadow-md focus-within:ring sm:text-sm dark:border-slate-700 dark:bg-slate-700">
+            <Label className="sr-only">Add category</Label>
             <ComboboxInput
               className="w-full border-none bg-transparent py-2 pr-10 pl-3 text-sm leading-5 text-gray-900 placeholder:text-gray-400 focus:ring-0 dark:text-gray-200 dark:placeholder:text-gray-400"
               onChange={(event) => setQuery(event.target.value)}
-              ref={inputRef}
               autoComplete="off"
             />
             <ComboboxButton className="absolute inset-y-0 right-0 flex items-center pr-2 text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-200">
@@ -81,9 +81,9 @@ export default function MyCombobox({ categories, selected, handleAdd }: Props) {
             afterLeave={() => setQuery('')}
           >
             <ComboboxOptions className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-xl border border-gray-200 bg-white py-1 text-base text-gray-900 shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-gray-200">
-              {query !== '' && !isSelected(query) && (
+              {normalizedQuery !== '' && !isSelected(normalizedQuery) && (
                 <ComboboxOption
-                  key={query}
+                  key={normalizedQuery}
                   className={({ focus }) =>
                     `relative cursor-default py-2 pr-4 pl-10 select-none ${
                       focus
@@ -92,12 +92,12 @@ export default function MyCombobox({ categories, selected, handleAdd }: Props) {
                     }`
                   }
                   value={{
-                    name: query,
+                    name: categoryName,
                     hexColor: null,
                     description: '',
                   }}
                 >
-                  <span className="block truncate">Create: {query}</span>
+                  <span className="block truncate">Create: {categoryName}</span>
                 </ComboboxOption>
               )}
               {filteredCategories.map((category) => (
