@@ -1,9 +1,16 @@
+'use client'
+
+import { Description, Field, Label, Textarea } from '@headlessui/react'
 import { useEffect, useRef } from 'react'
 import { tv, type VariantProps } from 'tailwind-variants'
 
 const textarea = tv({
-  base: 'focus-ring-primary my-2 w-full resize-none overflow-hidden rounded-md border-b-2 border-gray-300 p-2 text-3xl focus:outline-none dark:border-gray-600 dark:bg-gray-800',
+  base: 'my-2 w-full resize-none overflow-hidden rounded-md border-b-2 border-gray-300 p-2 text-3xl focus:outline-none dark:border-gray-600 dark:bg-gray-800',
   variants: {
+    invalid: {
+      true: 'focus-ring-danger border-red-500 dark:border-red-400',
+      false: 'focus-ring-primary',
+    },
     size: {
       sm: 'text-sm',
       md: 'text-base',
@@ -25,15 +32,19 @@ const textarea = tv({
       bold: 'font-bold',
     },
   },
-  defaultVariants: { size: 'md', weight: 'normal' },
+  defaultVariants: { invalid: false, size: 'md', weight: 'normal' },
 })
 
 type Props = VariantProps<typeof textarea> & {
   text: string
   setText: (s: string) => void
+  label?: string
+  description?: string
+  error?: string
   placeholder?: string
   rows?: number
   cols?: number
+  onBlur?: React.FocusEventHandler<HTMLTextAreaElement>
 }
 
 export function TextAreaAutoExpandControlled({
@@ -43,6 +54,10 @@ export function TextAreaAutoExpandControlled({
   size,
   rows,
   cols,
+  label,
+  description,
+  error,
+  onBlur,
   weight,
 }: Props) {
   const textareaRef = useRef<HTMLTextAreaElement>(null) // Add type for textareaRef
@@ -54,22 +69,36 @@ export function TextAreaAutoExpandControlled({
     }
   }, [])
 
-  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    e.target.style.height = 'auto'
-    e.target.style.height = `${e.target.scrollHeight}px`
+  const handleInput: React.InputEventHandler<HTMLTextAreaElement> = (e) => {
+    e.currentTarget.style.height = 'auto'
+    e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`
 
-    setText(e.target.value)
+    setText(e.currentTarget.value)
   }
 
   return (
-    <textarea
-      rows={rows || 1}
-      cols={cols}
-      placeholder={placeholder}
-      value={text}
-      onInput={handleInput}
-      className={textarea({ size, weight })}
-      ref={textareaRef}
-    />
+    <Field>
+      {label && <Label className="sr-only">{label}</Label>}
+      {description && (
+        <Description className="sr-only">{description}</Description>
+      )}
+      <Textarea
+        rows={rows || 1}
+        cols={cols}
+        placeholder={placeholder}
+        value={text}
+        aria-label={label || 'Text area'}
+        invalid={Boolean(error)}
+        onInput={handleInput}
+        onBlur={onBlur}
+        className={textarea({ invalid: Boolean(error), size, weight })}
+        ref={textareaRef}
+      />
+      {error && (
+        <Description className="text-sm text-red-600 dark:text-red-400">
+          {error}
+        </Description>
+      )}
+    </Field>
   )
 }
