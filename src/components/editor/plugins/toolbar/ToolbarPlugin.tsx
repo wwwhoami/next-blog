@@ -59,15 +59,11 @@ import {
   EXPORT_MARKDOWN_COMMAND,
   IMPORT_MARKDOWN_COMMAND,
 } from '../MarkdownImportExportPlugin'
+import TableCellActionMenuPlugin from '../TableCellActionMenuPlugin'
 import ToolbarButton from './ToolbarButton'
 import { BlockOptionsDropdownList } from './ToolbarDropDown'
 import ToolbarSelect from './ToolbarSelect'
-
-function ToolbarSeparator() {
-  return (
-    <span className="block h-6 w-px min-w-px bg-gray-300 dark:bg-gray-600"></span>
-  )
-}
+import { ToolbarSeparator } from './ToolbarSeparator'
 
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext()
@@ -420,6 +416,8 @@ export default function ToolbarPlugin() {
             <ToolbarSeparator />
           </>
         )}
+
+        {!isMarkdownMode && <TableCellActionMenuPlugin />}
 
         {blockType === 'code' && !isMarkdownMode && (
           <>

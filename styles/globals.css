@@ -65,6 +65,39 @@
 }
 
 @layer components {
+  .editor-table-scroll-wrapper {
+    @apply my-4 max-w-full overflow-x-auto;
+  }
+
+  .editor-table-scroll-wrapper table {
+    @apply border-collapse;
+  }
+
+  .editor-table-scroll-wrapper
+    table[data-lexical-row-striping='true']
+    tr:nth-child(even)
+    td {
+    @apply bg-gray-100 dark:bg-gray-600/50;
+  }
+
+  .editor-table-frozen-row tr:first-child > :is(th, td) {
+    @apply sticky top-0 z-10 border-b-2 border-gray-700 dark:border-gray-200;
+  }
+
+  .editor-table-frozen-column tr > :first-child {
+    @apply sticky left-0 z-10 border-r-2 border-gray-700 dark:border-gray-200;
+  }
+
+  .editor-table-frozen-row.editor-table-frozen-column
+    tr:first-child
+    > :first-child {
+    @apply z-20;
+  }
+
+  .editor-table-scroll-wrapper table th {
+    @apply bg-gray-200 font-semibold text-gray-950 transition-colors hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-50 dark:hover:bg-gray-600;
+  }
+
   .article {
     display: grid;
     grid-template-columns: 1fr min(65ch, calc(100% - 2rem)) 1fr;

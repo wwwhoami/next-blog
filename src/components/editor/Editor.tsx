@@ -141,8 +141,8 @@ const Editor = ({
           <KeyboardShortcutsPlugin />
           <TablePlugin
             hasCellMerge={true}
-            hasCellBackgroundColor={true}
-            hasHorizontalScroll={false}
+            hasCellBackgroundColor={false}
+            hasHorizontalScroll={true}
           />
           <TableInsertionPlugin />
           <ComponentPickerPlugin />

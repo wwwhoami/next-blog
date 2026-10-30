@@ -269,9 +269,7 @@ function sanitizeSafeNonWebUrl(url: string): string | null {
   const sanitizedUrl = sanitizeUnsafeUrl(url.trim())
   try {
     const parsedUrl = new URL(sanitizedUrl)
-    return SAFE_NON_WEB_PROTOCOLS.has(parsedUrl.protocol)
-      ? sanitizedUrl
-      : null
+    return SAFE_NON_WEB_PROTOCOLS.has(parsedUrl.protocol) ? sanitizedUrl : null
   } catch {
     return null
   }

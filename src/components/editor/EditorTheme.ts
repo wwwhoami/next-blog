@@ -68,10 +68,16 @@ const editorTheme: EditorThemeClasses = {
     variable: 'text-ctp-mauve',
     literal: 'text-ctp-peach',
   },
-  table: 'table-auto w-full text-left rtl:text-right',
-  tableRow: 'border-y border-gray-400',
-  tableCell: 'border-x p-2 border-gray-400',
-  tableHeader: 'p-3 font-bold text-md bg-gray-200 dark:bg-gray-500',
+  table: 'w-full min-w-max border-collapse text-left rtl:text-right',
+  tableRow: 'border-y border-gray-400 dark:border-gray-500',
+  tableCell: 'border border-gray-400 p-2 dark:border-gray-500',
+  tableCellSelected:
+    'bg-indigo-100/80 outline -outline-offset-1 outline-indigo-300 dark:bg-indigo-500/30 dark:outline-indigo-400',
+  tableHeader:
+    'border border-gray-400 bg-gray-200 p-3 text-md font-semibold text-gray-950 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-50',
+  tableScrollableWrapper: 'editor-table-scroll-wrapper',
+  tableFrozenRow: 'editor-table-frozen-row',
+  tableFrozenColumn: 'editor-table-frozen-column',
 }
 
 export default editorTheme
